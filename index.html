@@ -19,13 +19,20 @@
     <div id="results"></div>
 
     <script>
+        // Confirm if MiniSearch is loading
+        if (typeof MiniSearch === 'undefined') {
+            alert('MiniSearch failed to load. Check your internet connection.');
+        } else {
+            console.log('MiniSearch loaded successfully.');
+        }
+
         // File list: Add all the words and correct paths here
         const files = [
-            { id: 1, title: "ערהייט", url: "-ayin-\u05e2\u05d9\u05df/-\u05e2\u05e8\u05d4\u05d9\u05d8.html" },
-            { id: 2, title: "אפֿשר", url: "-ayin-\u05e2\u05d9\u05df/-\u05d0\u05e4\u05b0\u05e9\u05c1\u05e8.html" },
-            { id: 3, title: "עבֿד", url: "-ayin-\u05e2\u05d9\u05df/-\u05e2\u05d1\u05b6\u05d3.html" },
-            { id: 4, title: "עבֿודה", url: "-ayin-\u05e2\u05d9\u05df/-\u05e2\u05d1\u05b6\u05d5\u05d3\u05b0\u05d4.html" },
-            { id: 5, title: "עבֿודה־זרה", url: "-ayin-\u05e2\u05d9\u05df/-\u05e2\u05d1\u05b6\u05d5\u05d3\u05b0\u05d4\u05d6\u05e8\u05b8\u05d4.html" }
+            { id: 1, title: "ערהיט", url: "-ayin-עין/-ערהיט.html" },
+            { id: 2, title: "אפְשׁר", url: "-ayin-עין/-אפְשׁר.html" },
+            { id: 3, title: "עבֶד", url: "-ayin-עין/-עבֶד.html" },
+            { id: 4, title: "עבֶודְה", url: "-ayin-עין/-עבֶודְה.html" },
+            { id: 5, title: "עבֶודְהזרָה", url: "-ayin-עין/-עבֶודְהזרָה.html" }
         ];
 
         // Initialize MiniSearch
@@ -38,6 +45,8 @@
         // Add all files to the search index
         miniSearch.addAll(files);
 
+        console.log('MiniSearch index:', miniSearch); // Debugging output
+
         // DOM Elements
         const searchInput = document.getElementById('search');
         const resultsDiv = document.getElementById('results');
@@ -45,7 +54,10 @@
         // Search function
         searchInput.addEventListener('input', () => {
             const query = searchInput.value.trim(); // Get search query
+            console.log('Search query:', query); // Debugging output
+
             const results = miniSearch.search(query); // Perform search
+            console.log('Search results:', results); // Debugging output
 
             // Clear previous results
             resultsDiv.innerHTML = '';
