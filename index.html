@@ -1,46 +1,47 @@
 <script src="https://cdn.jsdelivr.net/npm/minisearch@6.1.0/dist/umd/index.min.js"></script>
 <script>
-    // Load the files list dynamically from files_index.json
-    fetch("files_index.json")
-        .then(response => response.json())
-        .then(files => {
-            console.log("Files loaded:", files);
+    document.addEventListener("DOMContentLoaded", () => {
+        // Load the files list dynamically from files_index.json
+        fetch("files_index.json")
+            .then(response => response.json())
+            .then(files => {
+                console.log("Files loaded:", files);
 
-            // Initialize MiniSearch
-            const miniSearch = new MiniSearch({
-                idField: 'id',          // Unique ID for each document
-                fields: ['title'],      // Fields to index for search
-                storeFields: ['title', 'url'] // Fields to return in results
+                // Initialize MiniSearch
+                const miniSearch = new MiniSearch({
+                    idField: 'id',          // Unique ID for each document
+                    fields: ['title'],      // Fields to index for search
+                    storeFields: ['title', 'url'] // Fields to return in results
+                });
+
+                miniSearch.addAll(files); // Add the list to the MiniSearch index
+
+                const searchInput = document.getElementById('search');
+                const resultsDiv = document.getElementById('results');
+
+                // Search function
+                searchInput.addEventListener('input', () => {
+                    const query = searchInput.value.trim();
+                    const results = miniSearch.search(query);
+
+                    resultsDiv.innerHTML = ''; // Clear old results
+                    if (results.length > 0) {
+                        results.forEach(result => {
+                            const link = document.createElement('a');
+                            link.href = result.url;
+                            link.textContent = result.title;
+                            link.target = '_blank';
+                            resultsDiv.appendChild(link);
+                            resultsDiv.appendChild(document.createElement('br'));
+                        });
+                    } else if (query) {
+                        resultsDiv.textContent = 'No results found.';
+                    }
+                });
+            })
+            .catch(error => {
+                console.error("Error loading files_index.json:", error);
+                alert("Failed to load search index. Please check the files.");
             });
-
-            miniSearch.addAll(files); // Add the list to the MiniSearch index
-
-            // DOM elements
-            const searchInput = document.getElementById('search');
-            const resultsDiv = document.getElementById('results');
-
-            // Search function
-            searchInput.addEventListener('input', () => {
-                const query = searchInput.value.trim();
-                const results = miniSearch.search(query);
-
-                resultsDiv.innerHTML = ''; // Clear old results
-                if (results.length > 0) {
-                    results.forEach(result => {
-                        const link = document.createElement('a');
-                        link.href = result.url;
-                        link.textContent = result.title;
-                        link.target = '_blank';
-                        resultsDiv.appendChild(link);
-                        resultsDiv.appendChild(document.createElement('br'));
-                    });
-                } else if (query) {
-                    resultsDiv.textContent = 'No results found.';
-                }
-            });
-        })
-        .catch(error => {
-            console.error("Error loading files_index.json:", error);
-            alert("Failed to load search index. Please check the files.");
-        });
+    });
 </script>
