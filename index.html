@@ -1,47 +1,77 @@
-<script src="https://cdn.jsdelivr.net/npm/minisearch@6.1.0/dist/umd/index.min.js"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        // Load the files list dynamically from files_index.json
-        fetch("files_index.json")
-            .then(response => response.json())
-            .then(files => {
-                console.log("Files loaded:", files);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yiddish Dialect Dictionary</title>
+    <script src="https://cdn.jsdelivr.net/npm/minisearch@6.1.0/dist/umd/index.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        input { margin-bottom: 20px; width: 300px; padding: 8px; }
+        #results { margin-top: 20px; }
+        a { text-decoration: none; color: blue; font-size: 18px; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h1>Yiddish Dialect Dictionary</h1>
+    <input type="text" id="search" placeholder="Search for words...">
+    <div id="results"></div>
 
-                // Initialize MiniSearch
-                const miniSearch = new MiniSearch({
-                    idField: 'id',          // Unique ID for each document
-                    fields: ['title'],      // Fields to index for search
-                    storeFields: ['title', 'url'] // Fields to return in results
-                });
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Load the files list dynamically from files_index.json
+            fetch("files_index.json")
+                .then(response => response.json())
+                .then(files => {
+                    console.log("Files loaded:", files);
+                    console.log("First file entry:", files[0]); // Debugging: Show the first file
 
-                miniSearch.addAll(files); // Add the list to the MiniSearch index
-
-                const searchInput = document.getElementById('search');
-                const resultsDiv = document.getElementById('results');
-
-                // Search function
-                searchInput.addEventListener('input', () => {
-                    const query = searchInput.value.trim();
-                    const results = miniSearch.search(query);
-
-                    resultsDiv.innerHTML = ''; // Clear old results
-                    if (results.length > 0) {
-                        results.forEach(result => {
-                            const link = document.createElement('a');
-                            link.href = result.url;
-                            link.textContent = result.title;
-                            link.target = '_blank';
-                            resultsDiv.appendChild(link);
-                            resultsDiv.appendChild(document.createElement('br'));
-                        });
-                    } else if (query) {
-                        resultsDiv.textContent = 'No results found.';
+                    // Check the format of the loaded files
+                    if (!files[0].id || !files[0].title || !files[0].url) {
+                        console.error("Error: File entries are missing required fields (id, title, url).\nFirst file:", files[0]);
+                        alert("Search index file is invalid. Please check 'files_index.json'.");
+                        return;
                     }
+
+                    // Initialize MiniSearch
+                    const miniSearch = new MiniSearch({
+                        idField: 'id',          // Unique ID for each document
+                        fields: ['title'],      // Fields to index for search
+                        storeFields: ['title', 'url'] // Fields to return in results
+                    });
+
+                    miniSearch.addAll(files); // Add the list to the MiniSearch index
+                    console.log("MiniSearch index created successfully.");
+
+                    const searchInput = document.getElementById('search');
+                    const resultsDiv = document.getElementById('results');
+
+                    // Search function
+                    searchInput.addEventListener('input', () => {
+                        const query = searchInput.value.trim();
+                        const results = miniSearch.search(query);
+
+                        resultsDiv.innerHTML = ''; // Clear old results
+                        if (results.length > 0) {
+                            results.forEach(result => {
+                                const link = document.createElement('a');
+                                link.href = result.url;
+                                link.textContent = result.title;
+                                link.target = '_blank';
+                                resultsDiv.appendChild(link);
+                                resultsDiv.appendChild(document.createElement('br'));
+                            });
+                        } else if (query) {
+                            resultsDiv.textContent = 'No results found.';
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error("Error loading files_index.json:", error);
+                    alert("Failed to load search index. Please check the files.");
                 });
-            })
-            .catch(error => {
-                console.error("Error loading files_index.json:", error);
-                alert("Failed to load search index. Please check the files.");
-            });
-    });
-</script>
+        });
+    </script>
+</body>
+</html>
