@@ -1,53 +1,55 @@
-fetch("files_index.json")
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(files => {
-        console.log("Files loaded:", files);
-        console.log("First file entry:", files[0]);
-
-        // Check file format
-        if (!files[0]?.id || !files[0]?.title || !files[0]?.url) {
-            console.error("Error: File entries are missing required fields.");
-            alert("Invalid search index file format. Please verify 'files_index.json'.");
-            return;
-        }
-
-        // Initialize MiniSearch
-        const miniSearch = new MiniSearch({
-            idField: 'id',
-            fields: ['title'],
-            storeFields: ['title', 'url']
-        });
-
-        miniSearch.addAll(files);
-
-        const searchInput = document.getElementById('search');
-        const resultsDiv = document.getElementById('results');
-
-        searchInput.addEventListener('input', () => {
-            const query = searchInput.value.trim();
-            const results = miniSearch.search(query);
-
-            resultsDiv.innerHTML = '';
-            if (results.length > 0) {
-                results.forEach(result => {
-                    const link = document.createElement('a');
-                    link.href = result.url;
-                    link.textContent = result.title;
-                    link.target = '_blank';
-                    resultsDiv.appendChild(link);
-                    resultsDiv.appendChild(document.createElement('br'));
-                });
-            } else if (query) {
-                resultsDiv.textContent = 'No results found.';
+<script>
+    fetch("files_index.json")
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
             }
+            return response.json();
+        })
+        .then(files => {
+            console.log("Files loaded:", files);
+            console.log("First file entry:", files[0]);
+
+            // Check file format
+            if (!files[0]?.id || !files[0]?.title || !files[0]?.url) {
+                console.error("Error: File entries are missing required fields.");
+                alert("Invalid search index file format. Please verify 'files_index.json'.");
+                return;
+            }
+
+            // Initialize MiniSearch
+            const miniSearch = new MiniSearch({
+                idField: 'id',
+                fields: ['title'],
+                storeFields: ['title', 'url']
+            });
+
+            miniSearch.addAll(files);
+
+            const searchInput = document.getElementById('search');
+            const resultsDiv = document.getElementById('results');
+
+            searchInput.addEventListener('input', () => {
+                const query = searchInput.value.trim();
+                const results = miniSearch.search(query);
+
+                resultsDiv.innerHTML = '';
+                if (results.length > 0) {
+                    results.forEach(result => {
+                        const link = document.createElement('a');
+                        link.href = result.url;
+                        link.textContent = result.title;
+                        link.target = '_blank';
+                        resultsDiv.appendChild(link);
+                        resultsDiv.appendChild(document.createElement('br'));
+                    });
+                } else if (query) {
+                    resultsDiv.textContent = 'No results found.';
+                }
+            });
+        })
+        .catch(error => {
+            console.error("Error loading files_index.json:", error);
+            alert(`Failed to load search index: ${error.message}`);
         });
-    })
-    .catch(error => {
-        console.error("Error loading files_index.json:", error);
-        alert(`Failed to load search index: ${error.message}`);
-    });
+</script>
