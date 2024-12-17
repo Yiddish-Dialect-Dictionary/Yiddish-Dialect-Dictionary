@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yiddish Dialect Dictionary</title>
+    <script src="https://cdn.jsdelivr.net/npm/minisearch@6.2.0/dist/minisearch.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; }
+        input { width: 100%; padding: 10px; margin-bottom: 10px; font-size: 1em; }
+        ul { list-style: none; padding: 0; }
+        li { margin-bottom: 5px; }
+        a { text-decoration: none; color: blue; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h1>Yiddish Dialect Dictionary</h1>
+    <input type="text" id="search" placeholder="Search for a headword...">
+    <ul id="results"></ul>
+
+    <script>
+        // List of dictionary entries (update with your subfolder structure)
+        const dictionaryEntries = [
+            { id: 1, title: "בת", url: "dictionary/beyza/-בת.html" },
+            { id: 2, title: "בתּים", url: "dictionary/beyza/-בתּים.html" },
+            { id: 3, title: "בתולה", url: "dictionary/beyza/-בתולה.html" },
+            { id: 4, title: "בת־קול", url: "dictionary/beyza/-בת־קול.html" },
+            { id: 5, title: "בת־יחידה", url: "dictionary/beyza/-בת־יחידה.html" },
+            { id: 6, title: "בת־זקונים", url: "dictionary/beyza/-בת־זקונים.html" },
+            { id: 7, title: "גוף", url: "dictionary/gimmel/-גוף.html" },
+            { id: 8, title: "גאולה", url: "dictionary/gimmel/-גאולה.html" }
+            // Add more entries here, matching your file structure
+        ];
+
+        // Initialize MiniSearch
+        const miniSearch = new MiniSearch({
+            fields: ['title'],  // Fields to index for searching
+            storeFields: ['title', 'url']  // Fields to return in search results
+        });
+
+        // Index the dictionary entries
+        miniSearch.addAll(dictionaryEntries);
+
+        // Search functionality
+        const searchInput = document.getElementById('search');
+        const resultsList = document.getElementById('results');
+
+        searchInput.addEventListener('input', () => {
+            const query = searchInput.value;
+            const results = miniSearch.search(query, { fuzzy: 0.2 });
+
+            // Display results
+            resultsList.innerHTML = '';
+            results.forEach(result => {
+                const li = document.createElement('li');
+                li.innerHTML = `<a href="${result.url}" target="_blank">${result.title}</a>`;
+                resultsList.appendChild(li);
+            });
+
+            if (results.length === 0 && query.length > 0) {
+                resultsList.innerHTML = '<li>No results found</li>';
+            }
+        });
+    </script>
+</body>
+</html>
