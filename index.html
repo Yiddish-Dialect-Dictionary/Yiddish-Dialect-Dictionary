@@ -15,9 +15,7 @@
 </head>
 <body>
     <h1>Yiddish Dialect Dictionary</h1>
-    <!-- Search Input -->
     <input type="text" id="search" placeholder="Search for words...">
-    <!-- Results Container -->
     <div id="results"></div>
 
     <script>
@@ -34,7 +32,12 @@
             }
 
             fetch("files_index.json")
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
                 .then(files => {
                     console.log("Files loaded:", files);
 
@@ -45,6 +48,7 @@
                     });
 
                     miniSearch.addAll(files);
+                    console.log("MiniSearch index built successfully.");
 
                     searchInput.addEventListener('input', () => {
                         const query = searchInput.value.trim();
@@ -67,7 +71,7 @@
                 })
                 .catch(error => {
                     console.error("Error loading files_index.json:", error);
-                    alert("Failed to load search index.");
+                    alert("Failed to load search index. Please check that 'files_index.json' exists and is accessible.");
                 });
         });
     </script>
