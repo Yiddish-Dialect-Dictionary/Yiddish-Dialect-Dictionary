@@ -1,67 +1,75 @@
-<script src="https://cdn.jsdelivr.net/npm/minisearch@6.1.0/dist/umd/index.min.js"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const searchInput = document.getElementById('search');
-        const resultsDiv = document.getElementById('results');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yiddish Dialect Dictionary</title>
+    <script src="https://cdn.jsdelivr.net/npm/minisearch@6.1.0/dist/umd/index.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        input { margin-bottom: 20px; width: 300px; padding: 8px; }
+        #results { margin-top: 20px; }
+        a { text-decoration: none; color: blue; font-size: 18px; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h1>Yiddish Dialect Dictionary</h1>
+    <!-- Search Input -->
+    <input type="text" id="search" placeholder="Search for words...">
+    <!-- Results Container -->
+    <div id="results"></div>
 
-        if (!searchInput || !resultsDiv) {
-            console.error("Error: Missing 'search' input or 'results' div in the HTML.");
-            alert("Search input or results container is missing. Check your HTML.");
-            return;
-        }
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            console.log("DOM fully loaded");
 
-        fetch("files_index.json")
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(files => {
-                console.log("Files loaded:", files);
+            const searchInput = document.getElementById('search');
+            const resultsDiv = document.getElementById('results');
 
-                const miniSearch = new MiniSearch({
-                    idField: 'id',
-                    fields: ['title'],
-                    storeFields: ['title', 'url']
+            if (!searchInput || !resultsDiv) {
+                console.error("Error: Missing 'search' input or 'results' div in the HTML.");
+                alert("Search input or results container is missing. Check your HTML.");
+                return;
+            }
+
+            fetch("files_index.json")
+                .then(response => response.json())
+                .then(files => {
+                    console.log("Files loaded:", files);
+
+                    const miniSearch = new MiniSearch({
+                        idField: 'id',
+                        fields: ['title'],
+                        storeFields: ['title', 'url']
+                    });
+
+                    miniSearch.addAll(files);
+
+                    searchInput.addEventListener('input', () => {
+                        const query = searchInput.value.trim();
+                        const results = miniSearch.search(query);
+
+                        resultsDiv.innerHTML = '';
+                        if (results.length > 0) {
+                            results.forEach(result => {
+                                const link = document.createElement('a');
+                                link.href = result.url;
+                                link.textContent = result.title;
+                                link.target = '_blank';
+                                resultsDiv.appendChild(link);
+                                resultsDiv.appendChild(document.createElement('br'));
+                            });
+                        } else if (query) {
+                            resultsDiv.textContent = 'No results found.';
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error("Error loading files_index.json:", error);
+                    alert("Failed to load search index.");
                 });
-
-                miniSearch.addAll(files);
-
-                searchInput.addEventListener('input', () => {
-                    const query = searchInput.value.trim();
-                    const results = miniSearch.search(query);
-
-                    resultsDiv.innerHTML = '';
-                    if (results.length > 0) {
-                        results.forEach(result => {
-                            // Dynamically adjust the path
-                            const adjustedUrl = adjustUrl(result.url);
-                            const link = document.createElement('a');
-                            link.href = adjustedUrl;
-                            link.textContent = result.title;
-                            link.target = '_blank';
-                            resultsDiv.appendChild(link);
-                            resultsDiv.appendChild(document.createElement('br'));
-                        });
-                    } else if (query) {
-                        resultsDiv.textContent = 'No results found.';
-                    }
-                });
-            })
-            .catch(error => {
-                console.error("Error loading files_index.json:", error);
-                alert("Failed to load search index.");
-            });
-
-        /**
-         * Adjust URL paths for dictionary files to include the proper relative links to lib resources
-         */
-        function adjustUrl(url) {
-            const parts = url.split("/");
-            const depth = parts.length - 2; // Calculate how deep the file is (relative to root)
-            const prefix = "../".repeat(depth); // Add the necessary "../" prefixes
-            return url.replace(/(dictionary\/.*)/, prefix + "$1");
-        }
-    });
-</script>
+        });
+    </script>
+</body>
+</html>
