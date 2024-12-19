@@ -1,0 +1,214 @@
+{
+  "main": {
+    "id": "866fb5a85175184a",
+    "type": "split",
+    "children": [
+      {
+        "id": "da553146b4046427",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "35d61f258b3282dd",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "ביטער.md/ביטער.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "ביטער"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "649718ef2d78408d",
+    "type": "split",
+    "children": [
+      {
+        "id": "033eef3892ca7498",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "13a8ad44679d065d",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "26334c683352c360",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "\"אוי וויי\"",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "cc02b22885d75196",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ],
+        "currentTab": 1
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "1535ddb3b4d4a26b",
+    "type": "split",
+    "children": [
+      {
+        "id": "9585545d8bcd0213",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "2f0ea35987fd818d",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks"
+            }
+          },
+          {
+            "id": "fb49c26032b246ff",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": " Beyz בית/ באָס.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from  באָס"
+            }
+          },
+          {
+            "id": "42a4d49c6d483d49",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "11772d25fab93c7d",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": " Beyz בית/ באָס.md"
+              },
+              "icon": "lucide-list",
+              "title": "Outline of  באָס"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false
+    }
+  },
+  "active": "35d61f258b3282dd",
+  "lastOpenFiles": [
+    "אוי/אוי וויי.md",
+    " אוי וויי.md",
+    "flattened/html_output_ סאַזשלקע.html",
+    "flattened/html_output_ סתּירה.html",
+    "flattened/html_output\nMem\nמם\nמער\n1_ מיין.html",
+    "flattened/html_output_ סתּם.html",
+    "flattened",
+    "project_structure.txt",
+    " Fey פֿא/פֿײַער.md",
+    " וואָלט.md",
+    " ווי.md",
+    "viazoykenmendostun.png",
+    " ווירע.md",
+    "aglaykhevire.png",
+    "arayn.png",
+    " וואַנט.md",
+    "vortsl.png",
+    " וואָרצל.md",
+    "vayslekh.png",
+    " ווײַסל 1.md",
+    " ווייסט.md",
+    " וויסן.md",
+    " וועש.md",
+    "varem.png",
+    " וואַרעם.md",
+    "vojlikes.png",
+    " וואָליק.md",
+    " וואַסער.md",
+    " וואַסער־רינע.md",
+    " ווײַמפּערל.md",
+    " ווידער 3.md",
+    " וואַך.md",
+    " וווילטאָג.md",
+    " וואָנצע.md",
+    " וויאָסלע.md",
+    " ווייקטאָפּ.md",
+    " ווײַן.md",
+    " וווּנד.md",
+    " וועגל .md",
+    "vendifishhetnfrishgeven.png",
+    "hoyzirer.png",
+    "havdoles.png",
+    "cache.json",
+    "dissertation.tex",
+    "neurips.tex",
+    "neurips.sty"
+  ]
+}

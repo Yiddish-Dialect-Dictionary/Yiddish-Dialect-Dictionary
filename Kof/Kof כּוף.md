@@ -1,0 +1,29 @@
+כּוף
+
+ETYMOLOGY
+===========
+Phoenician 𐤊 'palm of hand'
+
+WESTERN
+========
+
+Coph {PhilogLottus 1733}
+	•	Coph finale, schlechte Coph
+
+Krumekow, Krum̄ekow 'die Aussprache eines leisen ch als das ch in dem Wort gehorchen; 20' {Friedrich 1784: 6, I}
+
+Kaf {BURGENLAND, Stalek 1926: 269}
+
+koːf {WTCP, Dunajská Streda, 47179}
+	•	ɛ́ndəòˑf ענדע־כּוף
+
+CENTRAL
+========
+
+kůf {Birnbaum transcriptions}
+
+HASIDIC
+=======
+= AMERICA = 
+
+/kuf jəˈvuːnəs/ כּוף יוונית 'a Greek kof, a backwards kof'
