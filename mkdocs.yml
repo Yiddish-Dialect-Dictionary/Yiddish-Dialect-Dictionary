@@ -1,9 +1,0 @@
-site_name: Yiddish Dialect Dictionary
-theme:
-  name: material
-  features:
-    - search         # Adds a search bar to the site
-markdown_extensions:
-  - meta              # Supports YAML front matter in your entries
-nav:
-  - Home: index.md    # Optional, remove this line if no homepage
