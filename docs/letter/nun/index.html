@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="yi" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nun (נ) – Yiddish Dialect Dictionary</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #faf9f6;
+  --surface: #ffffff;
+  --border: #e0ddd5;
+  --text: #1c1b18;
+  --muted: #6b6860;
+  --accent: #1a4480;
+  --accent-light: #e8eef7;
+  --link: #1a4480;
+  --link-hover: #0d2a52;
+  --hebrew-font: 'Ezra SIL', 'SBL Hebrew', 'David', 'Frank Ruehl CLM', serif;
+  --body-font: Georgia, 'Times New Roman', serif;
+  --ui-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+body {
+  font-family: var(--body-font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  font-size: 16px;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--link-hover); text-decoration: underline; }
+
+/* ── Header ── */
+.site-header {
+  background: var(--accent);
+  color: white;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0,0,0,.25);
+}
+.site-header a { color: white; font-family: var(--ui-font); font-size: .9rem; }
+.site-header a.home { font-weight: 700; font-size: 1rem; white-space: nowrap; }
+.site-header a:hover { text-decoration: underline; }
+
+/* search in header */
+.header-search {
+  flex: 1;
+  max-width: 480px;
+  position: relative;
+}
+.header-search input {
+  width: 100%;
+  padding: .45rem .9rem .45rem 2.2rem;
+  border: none;
+  border-radius: 4px;
+  font-family: var(--ui-font);
+  font-size: .95rem;
+  background: rgba(255,255,255,.15);
+  color: white;
+  outline: none;
+}
+.header-search input::placeholder { color: rgba(255,255,255,.65); }
+.header-search input:focus { background: rgba(255,255,255,.25); }
+.header-search .icon {
+  position: absolute;
+  left: .6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: .7;
+  pointer-events: none;
+}
+.search-results {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.15);
+  max-height: 360px;
+  overflow-y: auto;
+  z-index: 200;
+}
+.search-results.show { display: block; }
+.search-result-item {
+  display: block;
+  padding: .6rem 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.search-result-item:last-child { border-bottom: none; }
+.search-result-item:hover { background: var(--accent-light); }
+.search-result-hw {
+  font-size: 1.1rem;
+  font-family: var(--hebrew-font);
+  direction: rtl;
+  display: inline-block;
+  margin-right: .5rem;
+}
+.search-result-gloss { color: var(--muted); font-style: italic; }
+.search-no-results { padding: .8rem 1rem; color: var(--muted); font-family: var(--ui-font); }
+
+/* ── Layout ── */
+.page-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+/* ── Alphabet nav (homepage + letter pages) ── */
+.alphabet-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin: 1.5rem 0;
+}
+.alphabet-nav a {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: .5rem .75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  text-decoration: none;
+  min-width: 52px;
+  transition: background .15s, border-color .15s;
+}
+.alphabet-nav a:hover, .alphabet-nav a.active {
+  background: var(--accent-light);
+  border-color: var(--accent);
+}
+.alphabet-nav a .heb {
+  font-family: var(--hebrew-font);
+  font-size: 1.4rem;
+  line-height: 1;
+  direction: rtl;
+}
+.alphabet-nav a .translit {
+  font-family: var(--ui-font);
+  font-size: .65rem;
+  color: var(--muted);
+  margin-top: .2rem;
+}
+
+/* ── Homepage ── */
+.hero {
+  text-align: center;
+  padding: 2.5rem 0 1.5rem;
+}
+.hero h1 {
+  font-size: 2.2rem;
+  color: var(--accent);
+  margin-bottom: .5rem;
+}
+.hero p {
+  color: var(--muted);
+  font-family: var(--ui-font);
+  font-size: 1rem;
+}
+.section-label {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 2rem 0 .75rem;
+}
+
+/* ── Letter page ── */
+.letter-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: .75rem;
+}
+.letter-header .heb-big {
+  font-family: var(--hebrew-font);
+  font-size: 3rem;
+  direction: rtl;
+  line-height: 1;
+  color: var(--accent);
+}
+.letter-header .info {
+  font-family: var(--ui-font);
+}
+.letter-header .translit-big { font-size: 1.4rem; font-weight: 600; }
+.letter-header .count { color: var(--muted); font-size: .9rem; }
+
+.entry-list {
+  list-style: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface);
+}
+.entry-list li {
+  border-bottom: 1px solid var(--border);
+}
+.entry-list li:last-child { border-bottom: none; }
+.entry-list a {
+  display: flex;
+  align-items: baseline;
+  gap: .75rem;
+  padding: .65rem 1rem;
+  color: var(--text);
+  text-decoration: none;
+}
+.entry-list a:hover { background: var(--accent-light); }
+.entry-list .hw {
+  font-family: var(--hebrew-font);
+  font-size: 1.15rem;
+  direction: rtl;
+  flex-shrink: 0;
+}
+.entry-list .gl {
+  font-style: italic;
+  color: var(--muted);
+  font-size: .9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Entry page ── */
+.entry-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--accent);
+}
+.entry-headword {
+  font-family: var(--hebrew-font);
+  font-size: 2.6rem;
+  direction: rtl;
+  line-height: 1.2;
+  color: var(--text);
+}
+.entry-gloss {
+  font-style: italic;
+  color: var(--muted);
+  font-size: 1.05rem;
+  margin-top: .3rem;
+}
+
+.entry-body h2 {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 1.8rem 0 .6rem;
+  padding-bottom: .3rem;
+  border-bottom: 1px solid var(--border);
+}
+.entry-body h3 {
+  font-family: var(--ui-font);
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin: 1rem 0 .4rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.entry-body p {
+  margin-bottom: .8rem;
+  line-height: 1.7;
+}
+.entry-body ul, .entry-body ol {
+  margin: .5rem 0 .8rem 1.5rem;
+}
+.entry-body li { margin-bottom: .3rem; }
+.entry-body audio {
+  display: block;
+  margin: .75rem 0;
+  max-width: 100%;
+}
+.entry-body img {
+  max-width: 100%;
+  height: auto;
+  margin: .75rem 0;
+  border-radius: 4px;
+}
+.entry-body blockquote {
+  border-left: 3px solid var(--border);
+  padding-left: 1rem;
+  color: var(--muted);
+  margin: .5rem 0;
+}
+
+/* back/nav bar above entry */
+.entry-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.entry-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .3rem .7rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--text);
+}
+.entry-nav a:hover {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  text-decoration: none;
+}
+
+/* ── Footer ── */
+footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  margin-top: 3rem;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .hero h1 { font-size: 1.6rem; }
+  .alphabet-nav a { min-width: 44px; padding: .4rem .55rem; }
+  .alphabet-nav a .heb { font-size: 1.2rem; }
+  .entry-headword { font-size: 2rem; }
+  .header-search { max-width: none; }
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <a href="/Yiddish-Dialect-Dictionary/" class="home">Yiddish Dialect Dictionary</a>
+  <div class="header-search">
+    <svg class="icon" width="16" height="16" fill="white" viewBox="0 0 16 16">
+      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.868-3.834zm-5.242 1.406a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+    </svg>
+    <input type="search" id="search-input" placeholder="Search entries…" autocomplete="off">
+    <div id="search-results" class="search-results"></div>
+  </div>
+</header>
+<main class="page-wrap">
+
+<div class="letter-header">
+  <span class="heb-big">נ</span>
+  <div class="info">
+    <div class="translit-big">Nun</div>
+    <div class="count">254 entries</div>
+  </div>
+</div>
+<ul class="entry-list">
+<li><a href="/Yiddish-Dialect-Dictionary/entry/Nun%20%D7%A0%D7%95%D7%9F/"><span class="hw">Nun נון</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9F%20langer%20nun/"><span class="hw">ן langer nun</span><span class="gl">‘long nun’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%22%D7%9A/"><span class="hw">נ"ך</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B7/"><span class="hw">נאַ</span><span class="gl">‘here, take (imperative)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B7%D7%92%D7%B2%D6%B7%D7%A7%D7%A2/"><span class="hw">נאַגײַקע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B7%D7%96%D7%A0%D7%93%D7%99%D7%A7/"><span class="hw">נאַזנדיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B7%D7%98%D7%95%D7%A8/"><span class="hw">נאַטור</span><span class="gl">‘nature’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B7%D7%98%D7%95%D7%A8%D7%A7%D7%A8%D7%90%D6%B7%D7%A4%D6%BF%D7%98/"><span class="hw">נאַטורקראַפֿט</span><span class="gl">‘natural force’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B7%D7%98%D7%99%D7%A8%D7%9C%D7%A2%D7%9A/"><span class="hw">נאַטירלעך</span><span class="gl">‘natural; naturally’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B7%D7%9B%D7%91%D7%90%D6%B7%D7%A8/"><span class="hw">נאַכבאַר</span><span class="gl">‘neighbor’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B7%D7%9B%D7%98/"><span class="hw">נאַכט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B7%D7%9B%D7%98%D7%94%D7%A2%D7%9E%D7%93/"><span class="hw">נאַכטהעמד</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B7%D7%9B%D7%98%D7%9E%D7%90%D6%B8%D7%9C/"><span class="hw">נאַכטמאָל</span><span class="gl">‘dinner’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B7%D7%9B%D7%A1%D7%90%D6%B8%D7%9C/"><span class="hw">נאַכסאָל</span><span class="gl">‘why’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B7%D7%9B%D7%A2%D7%A8/"><span class="hw">נאַכער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B7%D7%9D/"><span class="hw">נאַם</span><span class="gl">‘wetnurse’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B7%D7%A1/"><span class="hw">נאַס</span><span class="gl">‘wet’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B7%D7%A1%D7%A2%D7%A0%D7%99%D7%A2/"><span class="hw">נאַסעניע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B7%D7%A4%D6%BC%D7%A2%D7%A6%D7%9F/"><span class="hw">נאַפּעצן</span><span class="gl">‘to take a nap’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B7%D7%A4%D6%BF%D7%98/"><span class="hw">נאַפֿט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B7%D7%A4%D6%BF%D7%A2%D7%A6%D7%9F/"><span class="hw">נאַפֿעצן</span><span class="gl">‘to doze’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B7%D7%A6%D7%99/"><span class="hw">נאַצי</span><span class="gl">‘Nazi’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B7%D7%A6%D7%99%D7%A2/"><span class="hw">נאַציע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B7%D7%A7%D7%9F/"><span class="hw">נאַקן</span><span class="gl">‘neck’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B7%D7%A7%D7%A2%D7%98/"><span class="hw">נאַקעט</span><span class="gl">‘naked’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B7%D7%A7%D7%A2%D7%98%D7%A2%D7%A8%D7%94%D7%99%D7%99%D7%98/"><span class="hw">נאַקעטערהייט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B7%D7%A8/"><span class="hw">נאַר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B7%D7%A8%D7%90%D6%B7%D7%A0%D7%98%D7%A9/"><span class="hw">נאַראַנטש</span><span class="gl">‘orange (fruit)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B7%D7%A8%D7%91/"><span class="hw">נאַרב</span><span class="gl">‘scar’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B7%D7%A8%D7%98%D7%A2/"><span class="hw">נאַרטע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B7%D7%A8%D7%98%D7%A2%D7%95%D7%95%D7%A2%D7%9F/"><span class="hw">נאַרטעווען</span><span class="gl">‘to ski’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B7%D7%A8%D7%99%D7%A0%D7%98%D7%A2/"><span class="hw">נאַרינטע</span><span class="gl">‘fool (female)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B7%D7%A8%D7%99%D7%A9/"><span class="hw">נאַריש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B7%D7%A8%D7%99%D7%A9%D7%A7%D7%99%D7%99%D7%98/"><span class="hw">נאַרישקייט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B7%D7%A8%D7%9F/"><span class="hw">נאַרן</span><span class="gl">‘to fool’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B7%D7%A8%D7%A0%D7%94%D7%95%D7%99%D7%96/"><span class="hw">נאַרנהויז</span><span class="gl">‘madhouse’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B7%D7%A9%D7%9F/"><span class="hw">נאַשן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B7%D7%A9%D7%A2%D7%A8/"><span class="hw">נאַשער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%20%D7%9E%D7%90%D6%B8%D7%A8/"><span class="hw">נאָ מאָר</span><span class="gl">‘no more’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%91%D7%9C/"><span class="hw">נאָבל</span><span class="gl">‘noble’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%91%D7%A2%D7%9C/"><span class="hw">נאָבעל</span><span class="gl">‘noble’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%92%D7%9C/"><span class="hw">נאָגל</span><span class="gl">‘nail’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%92%D7%9F/"><span class="hw">נאָגן</span><span class="gl">‘gnaw’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%93%D7%9C/"><span class="hw">נאָדל</span><span class="gl">‘needle’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%95%D7%95%D7%99%D7%A8%D7%90%D6%B8%D7%A7/"><span class="hw">נאָוויראָק</span><span class="gl">‘New Year's’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%95%D7%95%D7%A2%D7%A0%D7%A2/"><span class="hw">נאָווענע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%96/"><span class="hw">נאָז</span><span class="gl">‘nose’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%96%D7%93%D7%A8%D7%A2/"><span class="hw">נאָזדרע</span><span class="gl">‘nostril’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%96%D7%98%D7%99%D7%9B%D7%9C/"><span class="hw">נאָזטיכל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%96%D7%9C%D7%A2%D7%9B%D7%A2%D7%A8/"><span class="hw">נאָזלעכער</span><span class="gl">‘nostrils’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%98/"><span class="hw">נאָט</span><span class="gl">‘seam’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%98%D7%A2%D7%A8/"><span class="hw">נאָטער</span><span class="gl">‘adder’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%9A%201/"><span class="hw">נאָך 1</span><span class="gl">‘after; according to’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%9A%202/"><span class="hw">נאָך 2</span><span class="gl">‘still more’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%9A%20%D7%90%D6%B7%20%D7%9E%D7%90%D6%B8%D7%9C/"><span class="hw">נאָך אַ מאָל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%9A%20%D7%90%D6%B7%D7%A0%D7%90%D6%B7%D7%A0%D7%93/"><span class="hw">נאָך אַנאַנד</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%9A%20%D7%93%D7%A2%D7%9D/"><span class="hw">נאָך דעם</span><span class="gl">‘after that, then’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%9B%D7%91%D7%90%D6%B7%D7%92%D7%9C%D7%99%D7%99%D7%98%D7%9F/"><span class="hw">נאָכבאַגלייטן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%9B%D7%92%D7%A2%D7%91%D7%9F/"><span class="hw">נאָכגעבן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%9B%D7%93%D7%A2%D7%A0%D7%A7%D7%A2%D7%9F/"><span class="hw">נאָכדענקען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%9B%D7%96%D7%90%D6%B8%D7%92%D7%9F/"><span class="hw">נאָכזאָגן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%9B%D7%96%D7%95%D7%9B%D7%9F/"><span class="hw">נאָכזוכן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%9B%D7%98%D7%A8%D7%90%D6%B8%D7%92%D7%9F/"><span class="hw">נאָכטראָגן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%9B%D7%99%D7%90%D6%B8%D7%92%D7%9F/"><span class="hw">נאָכיאָגן</span><span class="gl">‘to chase after’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%9B%D7%9C%D7%90%D6%B8%D7%96%D7%9F/"><span class="hw">נאָכלאָזן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%9B%D7%9C%D7%95%D7%99%D7%A4%D6%BF%D7%9F/"><span class="hw">נאָכלויפֿן</span><span class="gl">‘to run after’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%9B%D7%9C%D7%A2%D7%A8%D7%A0%D7%A2%D7%9F/"><span class="hw">נאָכלערנען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%9B%D7%9E%D7%90%D6%B7%D7%9B%D7%9F/"><span class="hw">נאָכמאַכן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%9B%D7%9E%D7%99%D7%98%D7%90%D6%B8%D7%92/"><span class="hw">נאָכמיטאָג</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%9B%D7%A4%D6%BC%D7%9C%D7%90%D6%B7%D7%A4%D6%BC%D7%9C%D7%A2%D7%9F/"><span class="hw">נאָכפּלאַפּלען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%9B%D7%A4%D6%BF%D7%90%D6%B8%D7%A8%D7%9F/"><span class="hw">נאָכפֿאָרן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%9B%D7%A7%D7%95%D7%9E%D7%A2%D7%9F/"><span class="hw">נאָכקומען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%9B%D7%A7%D7%95%D7%A7%D7%9F/"><span class="hw">נאָכקוקן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%9B%D7%A9%D7%A4%D6%BC%D7%99%D7%9C/"><span class="hw">נאָכשפּיל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%9B%D7%A9%D7%A8%D7%B2%D6%B7%D7%91%D7%9F/"><span class="hw">נאָכשרײַבן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%9C/"><span class="hw">נאָל</span><span class="gl">‘awl’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%9E%D7%A2%D7%9F/"><span class="hw">נאָמען</span><span class="gl">‘name’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%A0%D7%98%D7%9C/"><span class="hw">נאָנטל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%A0%D7%99%D7%A2/"><span class="hw">נאָניע</span><span class="gl">‘schnoz, big nose (hum.)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%A1%D7%99%D7%A7%2C%20%E2%80%A6%D7%A1%D7%A7%D7%A2%D7%A1/"><span class="hw">נאָסיק, …סקעס</span><span class="gl">‘tip (shoe)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%A2%D7%A0%D7%98/"><span class="hw">נאָענט</span><span class="gl">‘close, nearby’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%A2%D7%A0%D7%98%D7%A7%D7%99%D7%99%D7%98/"><span class="hw">נאָענטקייט</span><span class="gl">‘closeness’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%A4%D6%BC%D7%9C/"><span class="hw">נאָפּל</span><span class="gl">‘navel, bellybutton’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%A7%D7%A2%D7%9C%D7%A2%D7%9A/"><span class="hw">נאָקעלעך</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%A8/"><span class="hw">נאָר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%A8%20%D7%95%D7%95%D7%90%D6%B8%D7%A1/"><span class="hw">נאָר וואָס</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%A8%D7%95%D7%95%D7%A2%D7%92%D7%99%D7%A9/"><span class="hw">נאָרוועגיש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%A8%D7%9E%D7%90%D6%B7%D7%9C/"><span class="hw">נאָרמאַל</span><span class="gl">‘normal’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%A8%D7%9E%D7%90%D6%B7%D7%9C%D7%A2%D7%A8%D7%94%D7%99%D7%99%D7%98/"><span class="hw">נאָרמאַלערהייט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%A8%D7%A2/"><span class="hw">נאָרע</span><span class="gl">‘den’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D6%B8%D7%A9%D7%A2%D7%9C%D7%A2/"><span class="hw">נאָשעלע</span><span class="gl">‘rope handle (from a bucket)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%90%D7%9E%D7%A0%D7%95%D7%AA/"><span class="hw">נאמנות</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%91%D6%BF%D7%95%D7%90%D7%94/"><span class="hw">נבֿואה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%91%D6%BF%D7%95%D7%9B%D7%93%D7%A0%D7%A6%D7%A8/"><span class="hw">נבֿוכדנצר</span><span class="gl">‘Nebuchadnezzar II (king of Babylon, lived 562-634 BCE)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%91%D6%BF%D7%99%D7%90/"><span class="hw">נבֿיא</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%91%D6%BF%D7%99%D7%90%D7%94/"><span class="hw">נבֿיאה</span><span class="gl">‘prophetess’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%91%D6%BF%D7%99%D7%9C%D7%94/"><span class="hw">נבֿילה</span><span class="gl">‘carcass’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%91%D6%BF%D7%9C%D7%94/"><span class="hw">נבֿלה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%91%D7%9C%D7%A2%D7%9F/"><span class="hw">נבלען</span><span class="gl">‘to make obscene remarks, to speak evil’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%92%D7%93/"><span class="hw">נגד</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%92%D7%99%D7%93/"><span class="hw">נגיד</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%92%D7%99%D7%A0%D7%94/"><span class="hw">נגינה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%93%D7%91%D6%BF%D7%94/"><span class="hw">נדבֿה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%93%D7%95%D7%A0%D7%99%D7%90/"><span class="hw">נדוניא</span><span class="gl">‘dowry’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%93%D7%9F/"><span class="hw">נדן</span><span class="gl">‘dowry’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%93%D7%A7%D7%95%D7%93%D7%94/"><span class="hw">נדקודה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%93%D7%A8/"><span class="hw">נדר</span><span class="gl">‘oath’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%95/"><span class="hw">נו</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%95%D7%90%D7%A3%20/"><span class="hw">נואף </span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%95%D7%90%D7%A4%D6%BF%D7%AA/"><span class="hw">נואפֿת</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%95%D7%92%D7%A2/"><span class="hw">נוגע</span><span class="gl">‘relevant’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%95%D7%93%D7%9C/"><span class="hw">נודל</span><span class="gl">‘noodle’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%95%D7%94%D7%92%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">נוהג זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%95%D7%98%D7%A8%D7%99%D7%A7%D7%95%D7%9F/"><span class="hw">נוטריקון</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%95%D7%99%D7%98/"><span class="hw">נויט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%95%D7%99%D7%98%D7%91%D7%90%D6%B7%D7%93%D7%A2%D7%A8%D7%A4%D6%BF%D7%98%D7%99%D7%A7/"><span class="hw">נויטבאַדערפֿטיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%95%D7%9B%D7%A8%D7%99/"><span class="hw">נוכרי</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%95%D7%9C/"><span class="hw">נול</span><span class="gl">‘zero, null’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%95%D7%9E%D7%A2/"><span class="hw">נומע</span><span class="gl">‘only, just, nothing but’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%95%D7%9F%D6%BE%D7%99%D7%95%D7%93/"><span class="hw">נון־יוד</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%95%D7%A0%D7%93%D7%A2%D7%A8%D7%A9%D7%98/"><span class="hw">נונדערשט</span><span class="gl">‘nowhere’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%95%D7%A1/"><span class="hw">נוס</span><span class="gl">‘nut’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%95%D7%A1%D7%97/"><span class="hw">נוסח</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%95%D7%A1%D7%A0%D7%91%D7%95%D7%99%D7%9D/"><span class="hw">נוסנבוים</span><span class="gl">‘nut tree’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%95%D7%A1%D7%A0%D7%94%D7%90%D6%B8%D7%9C%D7%A5/"><span class="hw">נוסנהאָלץ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%95%D7%A6%D7%9F/"><span class="hw">נוצן</span><span class="gl">‘use’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%95%D7%A9%D7%82%D7%90/"><span class="hw">נושׂא</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%95%D7%AA%D7%A0%D7%A2%D7%9F/"><span class="hw">נותנען</span><span class="gl">‘give’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%96%D7%99%D7%93%20%D7%A2%D7%93%D7%A9%D7%99%D7%9D/"><span class="hw">נזיד עדשים</span><span class="gl">‘lentil soup’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%96%D7%99%D7%A8/"><span class="hw">נזיר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%97/"><span class="hw">נח</span><span class="gl">‘Noah’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%97%D7%95%D7%9D/"><span class="hw">נחום</span><span class="gl">‘Nahum (man's name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%97%D7%9C/"><span class="hw">נחל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%97%D7%9E%D7%94/"><span class="hw">נחמה</span><span class="gl">‘consolation’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%97%D7%9E%D7%99%D7%94/"><span class="hw">נחמיה</span><span class="gl">‘Nehemiah (name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%97%D7%9E%D7%9F/"><span class="hw">נחמן</span><span class="gl">‘Nachman (name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%97%D7%A9/"><span class="hw">נחש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%97%D7%AA/"><span class="hw">נחת</span><span class="gl">‘satisfaction, joy, (spiritual) pleasure’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%97%D7%AA%D6%BE%D7%A8%D7%95%D7%97/"><span class="hw">נחת־רוח</span><span class="gl">‘satisfaction, pleasure’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99/"><span class="hw">ני</span><span class="gl">‘never’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%90%D6%B7%D7%A0%D7%A7%D7%A2/"><span class="hw">ניאַנקע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%91%D7%95%D7%9C%D6%BE%D7%A4%D6%BC%D7%94/"><span class="hw">ניבול־פּה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%92%D7%95%D7%9F/"><span class="hw">ניגון</span><span class="gl">‘tune, melody’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%93%D7%94/"><span class="hw">נידה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%93%D7%A2%D7%A8%D7%98%D7%A8%D7%A2%D7%9B%D7%98%D7%99%D7%A7/"><span class="hw">נידערטרעכטיק</span><span class="gl">‘contemptible’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%93%D7%A2%D7%A8%D7%99%D7%A7/"><span class="hw">נידעריק</span><span class="gl">‘low, short’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%93%D7%A2%D7%A8%D7%9F/"><span class="hw">נידערן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%95%D7%95%D7%A2%D7%A5/"><span class="hw">ניוועץ</span><span class="gl">‘be lost’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%97%D7%90/"><span class="hw">ניחא</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%98%D7%90%D6%B8/"><span class="hw">ניטאָ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%98%D7%9C/"><span class="hw">ניטל</span><span class="gl">‘Christmas’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%98%D7%A2%202/"><span class="hw">ניטע 2</span><span class="gl">‘ no! (interjection)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%99%D7%98%D7%99%D7%A7/"><span class="hw">נייטיק</span><span class="gl">‘necessary’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%99%D7%98%D7%9F/"><span class="hw">נייטן</span><span class="gl">‘to force, compel’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%99%D7%9F/"><span class="hw">ניין</span><span class="gl">‘no’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%99%D7%A2%D7%9F/"><span class="hw">נייען</span><span class="gl">‘to sew’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%9B%D6%BC%D7%A8/"><span class="hw">ניכּר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%9B%D7%98%D7%A2/"><span class="hw">ניכטע</span><span class="gl">‘niece’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%9B%D7%98%D7%A2%D7%A8/"><span class="hw">ניכטער</span><span class="gl">‘sober’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%9B%D7%9C%D7%9C/"><span class="hw">ניכלל</span><span class="gl">‘included’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%9B%D7%A4%D6%BC%D7%94/"><span class="hw">ניכפּה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%9C%D7%95%D7%A1/"><span class="hw">נילוס</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%9E%D7%A6%D7%90/"><span class="hw">נימצא</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%9E%D7%A8%D7%95%D7%93/"><span class="hw">נימרוד</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%A0%D7%95%D7%94/"><span class="hw">נינוה</span><span class="gl">‘Nineveh (Assyrian city)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%A1%201/"><span class="hw">ניס 1</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%A1%202/"><span class="hw">ניס 2</span><span class="gl">‘niece’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%A1%D7%9F%201/"><span class="hw">ניסן 1</span><span class="gl">‘to sneeze’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%A1%D7%9F%202/"><span class="hw">ניסן 2</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%A2%D7%9E%D7%90%D6%B7%D7%9F/"><span class="hw">ניעמאַן</span><span class="gl">‘Neman river (in Belarus, Lithuania)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%A4%D6%BF%D7%9C%D7%90%D6%B8%D7%95%D7%AA/"><span class="hw">ניפֿלאָות</span><span class="gl">‘wonders, miracles’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%A6%D7%95%D7%9C%20%D7%95%D7%95%D7%A2%D7%A8%D7%9F/"><span class="hw">ניצול ווערן</span><span class="gl">‘to be saved’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%A6%D7%95%D7%A5/"><span class="hw">ניצוץ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%A6%D7%9F%201/"><span class="hw">ניצן 1</span><span class="gl">‘to use’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%A7%D7%9C%D7%A1%D7%91%D7%90%D6%B8%D7%A8%D7%92/"><span class="hw">ניקלסבאָרג</span><span class="gl">‘Mikulov; German Nikolsburg (city in South Moravia, Czechia)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%A7%D7%9C%D7%A1%D7%91%D7%90%D6%B8%D7%A8%D7%92%D7%A2%D7%A8/"><span class="hw">ניקלסבאָרגער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%A7%D7%A1/"><span class="hw">ניקס</span><span class="gl">‘nothing; not’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%A7%D7%A1%D7%A0%D7%95%D7%A5/"><span class="hw">ניקסנוץ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%A9%D7%98%201/"><span class="hw">נישט 1</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%A9%D7%98%202/"><span class="hw">נישט 2</span><span class="gl">‘nothing’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%A9%D7%98%20%D7%90%D7%99%D7%99%D7%9F%20%D7%9E%D7%90%D6%B8%D7%9C/"><span class="hw">נישט איין מאָל</span><span class="gl">‘more than once, repeatedly’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%A9%D7%98%20%D7%92%D7%A2%D7%A7%D7%95%D7%A7%D7%98%20%D7%90%D7%95%D7%99%D7%A3/"><span class="hw">נישט געקוקט אויף</span><span class="gl">‘regardless of’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%A9%D7%98%20%D7%A7%D7%95%D7%A7%D7%A0%D7%93%D7%99%D7%A7%20%D7%90%D7%95%D7%99%D7%A3/"><span class="hw">נישט קוקנדיק אויף</span><span class="gl">‘despite, in spite of’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%A9%D7%98%D6%BE%D7%92%D7%95%D7%98/"><span class="hw">נישט־גוט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%A9%D7%98%D6%BE%D7%99%D7%99%D6%B4%D7%93/"><span class="hw">נישט־ייִד</span><span class="gl">‘non-Jew’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%A9%D7%98%D7%90%D6%B8/"><span class="hw">נישטאָ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%A9%D7%98%D7%90%D6%B8%20%D7%92%D7%A2%D7%93%D7%90%D6%B7%D7%9B%D7%98/"><span class="hw">נישטאָ געדאַכט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%A9%D7%98%D7%99%D7%A7/"><span class="hw">נישטיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%99%D7%A9%D7%A7%D7%A9%D7%94/"><span class="hw">נישקשה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%9B%D7%91%D7%93/"><span class="hw">נכבד</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%9E%D7%A9%D7%9C/"><span class="hw">נמשל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A1/"><span class="hw">נס</span><span class="gl">‘miracle, wonder’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A1%D7%99%D7%95%D7%9F/"><span class="hw">נסיון</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A2%D6%BE%D7%95%D7%A0%D7%93/"><span class="hw">נע־ונד</span><span class="gl">‘wandering’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A2%D7%91%D7%A2%D7%9A/"><span class="hw">נעבעך</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A2%D7%93%D7%99%D7%96%D7%A0%D7%A2/"><span class="hw">נעדיזנע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A2%D7%9B%D7%98%D7%99%D7%A7/"><span class="hw">נעכטיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A2%D7%9B%D7%98%D7%99%D7%A7%D7%9F/"><span class="hw">נעכטיקן</span><span class="gl">‘to spend the night’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A2%D7%9B%D7%98%D7%9F/"><span class="hw">נעכטן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A2%D7%9B%D7%B2%D6%B7/"><span class="hw">נעכײַ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A2%D7%9C%D7%99%D7%99%D7%9D/"><span class="hw">נעליים</span><span class="gl">‘shoes’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A2%D7%9C%D7%9D%20%D7%95%D7%95%D7%A2%D7%A8%D7%9F/"><span class="hw">נעלם ווערן</span><span class="gl">‘to disappear’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A2%D7%9E%D7%99/"><span class="hw">נעמי</span><span class="gl">‘Naomi (name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A2%D7%9E%D7%9C%D7%A2%D7%9A/"><span class="hw">נעמלעך</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A2%D7%9E%D7%A2%D7%9F/"><span class="hw">נעמען</span><span class="gl">‘to take’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A2%D7%A0%D7%98%D7%A2%D7%A8%D7%9F/"><span class="hw">נענטערן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A2%D7%A0%D7%A2%D7%9F/"><span class="hw">נענען</span><span class="gl">‘to name’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A2%D7%A1%D7%98/"><span class="hw">נעסט</span><span class="gl">‘nest’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A2%D7%A4%D6%BC%D7%9C/"><span class="hw">נעפּל</span><span class="gl">‘fog’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A2%D7%A4%D6%BF%D7%99%D7%95/"><span class="hw">נעפֿיו</span><span class="gl">‘nephew’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A2%D7%A4%D6%BF%D7%A2/"><span class="hw">נעפֿע</span><span class="gl">‘nephew’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A2%D7%A5/"><span class="hw">נעץ</span><span class="gl">‘net’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A2%D7%A7%D7%A1%D7%98/"><span class="hw">נעקסט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A2%D7%A8/"><span class="hw">נער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A2%D7%A8%D7%94/"><span class="hw">נערה</span><span class="gl">‘girl’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A2%D7%A8%D7%95%D7%95/"><span class="hw">נערוו</span><span class="gl">‘nerve’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A2%D7%A8%D7%95%D7%95%D7%A2%D7%96/"><span class="hw">נערוועז</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A2%D7%A8%D7%9F/"><span class="hw">נערן</span><span class="gl">‘to nourish’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A2%D7%A9%D7%82%D7%94%20%D7%95%D7%A0%D7%A9%D7%9E%D7%A2/"><span class="hw">נעשׂה ונשמע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A4%D6%BF%D7%98%D7%A8/"><span class="hw">נפֿטר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A4%D6%BF%D7%98%D7%A8%20%D7%95%D7%95%D7%A2%D7%A8%D7%9F/"><span class="hw">נפֿטר ווערן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A4%D6%BF%D7%98%D7%A8%D7%AA/"><span class="hw">נפֿטרת</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A4%D6%BF%D7%A7%D7%90/"><span class="hw">נפֿקא</span><span class="gl">‘prostitute’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A4%D6%BF%D7%A7%D7%90%D7%A0%D7%A2%D7%9F/"><span class="hw">נפֿקאנען</span><span class="gl">‘to whore’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A4%D6%BF%D7%A7%D7%90%D7%A0%D7%A2%D7%A8/"><span class="hw">נפֿקאנער</span><span class="gl">‘one who frequents prostitutes’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A4%D6%BF%D7%A9/"><span class="hw">נפֿש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A4%D6%BF%D7%AA%D6%BC%D7%9C%D7%99/"><span class="hw">נפֿתּלי</span><span class="gl">‘Naftali (name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A5/"><span class="hw">נץ</span><span class="gl">‘sunrise’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A6%D7%97%D7%95%D7%9F/"><span class="hw">נצחון</span><span class="gl">‘victory, triumph’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A6%D7%97%D7%99%D7%95%D7%AA/"><span class="hw">נצחיות</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A7%D7%91%D6%BF%D7%94/"><span class="hw">נקבֿה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A7%D7%91%D6%BF%D7%99%D7%9D/"><span class="hw">נקבֿים</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A7%D7%9E%D7%94/"><span class="hw">נקמה</span><span class="gl">‘revenge’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A8/"><span class="hw">נר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A8%D7%93%D7%A3/"><span class="hw">נרדף</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A9%D7%82%D7%99%D7%90/"><span class="hw">נשׂיא</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A9%D7%9E%D7%94/"><span class="hw">נשמה</span><span class="gl">‘soul’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A9%D7%9E%D7%94%D6%BE%D7%9C%D7%99%D7%9B%D7%98/"><span class="hw">נשמה־ליכט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%A9%D7%A8/"><span class="hw">נשר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%AA%D6%BC%D7%A0%D7%99%D7%94%D7%95/"><span class="hw">נתּניהו</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%AA%D7%91%D7%A7%D7%A9%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">נתבקש זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%AA%D7%9F/"><span class="hw">נתן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%AA%D7%A4%D6%BC%D7%A2%D7%9C%20%D7%95%D7%95%D7%A2%D7%A8%D7%9F/"><span class="hw">נתפּעל ווערן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%B2%D6%B7/"><span class="hw">נײַ</span><span class="gl">‘new’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%B2%D6%B7%D6%BE%D7%99%D7%90%D6%B8%D7%A8/"><span class="hw">נײַ־יאָר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%B2%D6%B7%D7%92%D7%A2%D7%A8%D7%99%D7%A7/"><span class="hw">נײַגעריק</span><span class="gl">‘curious’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%B2%D6%B7%D7%98%D7%A8%D7%A2/"><span class="hw">נײַטרע</span><span class="gl">‘Nitra (city in Slovakia)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%B2%D6%B7%D7%9F/"><span class="hw">נײַן</span><span class="gl">‘nine’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%B2%D6%B7%D7%A0%D7%98/"><span class="hw">נײַנט</span><span class="gl">‘ninth’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%B2%D6%B7%D7%A0%D7%A2/"><span class="hw">נײַנע</span><span class="gl">‘nine o'clock’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%B2%D6%B7%D7%A0%D7%A6%D7%99%D7%A7/"><span class="hw">נײַנציק</span><span class="gl">‘ninety’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%B2%D6%B7%D7%A0%D7%A6%D7%A2%D7%98/"><span class="hw">נײַנצעט</span><span class="gl">‘nineteenth’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%B2%D6%B7%D7%A2%D7%A1/"><span class="hw">נײַעס</span><span class="gl">‘news’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A0%D7%B2%D6%B7%D7%A4%D6%BC%D7%A2%D7%A9%D7%98/"><span class="hw">נײַפּעשט</span><span class="gl">‘Újpest (section of Budapest)’</span></a></li>
+
+</ul>
+
+</main>
+<footer>
+  Yiddish Dialect Dictionary &nbsp;·&nbsp; 10,034 entries
+</footer>
+<script>const BASE_URL = '/Yiddish-Dialect-Dictionary';</script>
+<script>
+(function() {
+  let index = null;
+  const input = document.getElementById('search-input');
+  const results = document.getElementById('search-results');
+  if (!input) return;
+
+  async function loadIndex() {
+    if (index) return;
+    try {
+      const r = await fetch(BASE_URL + '/search-index.json');
+      index = await r.json();
+    } catch(e) { console.error('Could not load search index', e); }
+  }
+
+  function search(q) {
+    q = q.trim().toLowerCase();
+    if (!q || !index) return [];
+    return index
+      .filter(e =>
+        e.hw.toLowerCase().includes(q) ||
+        (e.gl && e.gl.toLowerCase().includes(q))
+      )
+      .slice(0, 20);
+  }
+
+  function renderResults(items, q) {
+    if (!items.length) {
+      results.innerHTML = '<div class="search-no-results">No results found.</div>';
+      results.classList.add('show');
+      return;
+    }
+    results.innerHTML = items.map(e => `
+      <a class="search-result-item" href="${e.url}">
+        <span class="search-result-hw">${e.hw}</span>
+        ${e.gl ? `<span class="search-result-gloss">'${e.gl}'</span>` : ''}
+      </a>`).join('');
+    results.classList.add('show');
+  }
+
+  let timer;
+  input.addEventListener('input', async () => {
+    clearTimeout(timer);
+    const q = input.value;
+    if (!q.trim()) { results.classList.remove('show'); return; }
+    await loadIndex();
+    timer = setTimeout(() => renderResults(search(q), q), 120);
+  });
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.header-search')) results.classList.remove('show');
+  });
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { results.classList.remove('show'); input.blur(); }
+  });
+})();
+</script>
+</body>
+</html>

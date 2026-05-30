@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="yi" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>דאָרף – Yiddish Dialect Dictionary</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #faf9f6;
+  --surface: #ffffff;
+  --border: #e0ddd5;
+  --text: #1c1b18;
+  --muted: #6b6860;
+  --accent: #1a4480;
+  --accent-light: #e8eef7;
+  --link: #1a4480;
+  --link-hover: #0d2a52;
+  --hebrew-font: 'Ezra SIL', 'SBL Hebrew', 'David', 'Frank Ruehl CLM', serif;
+  --body-font: Georgia, 'Times New Roman', serif;
+  --ui-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+body {
+  font-family: var(--body-font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  font-size: 16px;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--link-hover); text-decoration: underline; }
+
+/* ── Header ── */
+.site-header {
+  background: var(--accent);
+  color: white;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0,0,0,.25);
+}
+.site-header a { color: white; font-family: var(--ui-font); font-size: .9rem; }
+.site-header a.home { font-weight: 700; font-size: 1rem; white-space: nowrap; }
+.site-header a:hover { text-decoration: underline; }
+
+/* search in header */
+.header-search {
+  flex: 1;
+  max-width: 480px;
+  position: relative;
+}
+.header-search input {
+  width: 100%;
+  padding: .45rem .9rem .45rem 2.2rem;
+  border: none;
+  border-radius: 4px;
+  font-family: var(--ui-font);
+  font-size: .95rem;
+  background: rgba(255,255,255,.15);
+  color: white;
+  outline: none;
+}
+.header-search input::placeholder { color: rgba(255,255,255,.65); }
+.header-search input:focus { background: rgba(255,255,255,.25); }
+.header-search .icon {
+  position: absolute;
+  left: .6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: .7;
+  pointer-events: none;
+}
+.search-results {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.15);
+  max-height: 360px;
+  overflow-y: auto;
+  z-index: 200;
+}
+.search-results.show { display: block; }
+.search-result-item {
+  display: block;
+  padding: .6rem 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.search-result-item:last-child { border-bottom: none; }
+.search-result-item:hover { background: var(--accent-light); }
+.search-result-hw {
+  font-size: 1.1rem;
+  font-family: var(--hebrew-font);
+  direction: rtl;
+  display: inline-block;
+  margin-right: .5rem;
+}
+.search-result-gloss { color: var(--muted); font-style: italic; }
+.search-no-results { padding: .8rem 1rem; color: var(--muted); font-family: var(--ui-font); }
+
+/* ── Layout ── */
+.page-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+/* ── Alphabet nav (homepage + letter pages) ── */
+.alphabet-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin: 1.5rem 0;
+}
+.alphabet-nav a {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: .5rem .75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  text-decoration: none;
+  min-width: 52px;
+  transition: background .15s, border-color .15s;
+}
+.alphabet-nav a:hover, .alphabet-nav a.active {
+  background: var(--accent-light);
+  border-color: var(--accent);
+}
+.alphabet-nav a .heb {
+  font-family: var(--hebrew-font);
+  font-size: 1.4rem;
+  line-height: 1;
+  direction: rtl;
+}
+.alphabet-nav a .translit {
+  font-family: var(--ui-font);
+  font-size: .65rem;
+  color: var(--muted);
+  margin-top: .2rem;
+}
+
+/* ── Homepage ── */
+.hero {
+  text-align: center;
+  padding: 2.5rem 0 1.5rem;
+}
+.hero h1 {
+  font-size: 2.2rem;
+  color: var(--accent);
+  margin-bottom: .5rem;
+}
+.hero p {
+  color: var(--muted);
+  font-family: var(--ui-font);
+  font-size: 1rem;
+}
+.section-label {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 2rem 0 .75rem;
+}
+
+/* ── Letter page ── */
+.letter-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: .75rem;
+}
+.letter-header .heb-big {
+  font-family: var(--hebrew-font);
+  font-size: 3rem;
+  direction: rtl;
+  line-height: 1;
+  color: var(--accent);
+}
+.letter-header .info {
+  font-family: var(--ui-font);
+}
+.letter-header .translit-big { font-size: 1.4rem; font-weight: 600; }
+.letter-header .count { color: var(--muted); font-size: .9rem; }
+
+.entry-list {
+  list-style: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface);
+}
+.entry-list li {
+  border-bottom: 1px solid var(--border);
+}
+.entry-list li:last-child { border-bottom: none; }
+.entry-list a {
+  display: flex;
+  align-items: baseline;
+  gap: .75rem;
+  padding: .65rem 1rem;
+  color: var(--text);
+  text-decoration: none;
+}
+.entry-list a:hover { background: var(--accent-light); }
+.entry-list .hw {
+  font-family: var(--hebrew-font);
+  font-size: 1.15rem;
+  direction: rtl;
+  flex-shrink: 0;
+}
+.entry-list .gl {
+  font-style: italic;
+  color: var(--muted);
+  font-size: .9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Entry page ── */
+.entry-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--accent);
+}
+.entry-headword {
+  font-family: var(--hebrew-font);
+  font-size: 2.6rem;
+  direction: rtl;
+  line-height: 1.2;
+  color: var(--text);
+}
+.entry-gloss {
+  font-style: italic;
+  color: var(--muted);
+  font-size: 1.05rem;
+  margin-top: .3rem;
+}
+
+.entry-body h2 {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 1.8rem 0 .6rem;
+  padding-bottom: .3rem;
+  border-bottom: 1px solid var(--border);
+}
+.entry-body h3 {
+  font-family: var(--ui-font);
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin: 1rem 0 .4rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.entry-body p {
+  margin-bottom: .8rem;
+  line-height: 1.7;
+}
+.entry-body ul, .entry-body ol {
+  margin: .5rem 0 .8rem 1.5rem;
+}
+.entry-body li { margin-bottom: .3rem; }
+.entry-body audio {
+  display: block;
+  margin: .75rem 0;
+  max-width: 100%;
+}
+.entry-body img {
+  max-width: 100%;
+  height: auto;
+  margin: .75rem 0;
+  border-radius: 4px;
+}
+.entry-body blockquote {
+  border-left: 3px solid var(--border);
+  padding-left: 1rem;
+  color: var(--muted);
+  margin: .5rem 0;
+}
+
+/* back/nav bar above entry */
+.entry-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.entry-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .3rem .7rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--text);
+}
+.entry-nav a:hover {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  text-decoration: none;
+}
+
+/* ── Footer ── */
+footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  margin-top: 3rem;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .hero h1 { font-size: 1.6rem; }
+  .alphabet-nav a { min-width: 44px; padding: .4rem .55rem; }
+  .alphabet-nav a .heb { font-size: 1.2rem; }
+  .entry-headword { font-size: 2rem; }
+  .header-search { max-width: none; }
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <a href="/Yiddish-Dialect-Dictionary/" class="home">Yiddish Dialect Dictionary</a>
+  <div class="header-search">
+    <svg class="icon" width="16" height="16" fill="white" viewBox="0 0 16 16">
+      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.868-3.834zm-5.242 1.406a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+    </svg>
+    <input type="search" id="search-input" placeholder="Search entries…" autocomplete="off">
+    <div id="search-results" class="search-results"></div>
+  </div>
+</header>
+<main class="page-wrap">
+
+<div class="entry-nav">
+  <a href="/Yiddish-Dialect-Dictionary/letter/dalet/">← Dalet</a>
+  <a href="/Yiddish-Dialect-Dictionary/">Home</a>
+</div>
+<div class="entry-header">
+  <div class="entry-headword" dir="rtl">דאָרף</div>
+  <div class="entry-gloss">‘village’</div>
+</div>
+<div class="entry-body" dir="auto">
+<p>דאָרף<br />
+דערפֿער<br />
+דאָס<br />
+'village'</p>
+<h2>ETYMOLOGY</h2>
+<p 2011:="2011:" 2013:="2013:" 212_="212," 553_="553," 617="617" 87_="87," Casaretto="Casaretto" Kluge_Seebold="Kluge/Seebold" Kroonen="Kroonen" Vries="Vries" de="de">Got. þaurp 'farmland', ON þorp 'isolated settlement' (cf. þyrpast 'to crowd, throng'), OE þorp 'crowd', OS thorp 'village', OHG (Lex Alemannica) troppo (&gt; French troupe [!}), dorf, MHG dorf; from PGmc ✱þurpa- 'crowd (?)' &lt; EUR ✱trb-o-; cf. Lithuanian trobà 'cottage', <br /></p>
+<p><img alt="" src="https://archive.org/download/Yiddish-Dialect-Maps/Herzog5-112-115-QualityOfL-BorvesFinfDorfBargMilx-227.jpg" /></p>
+<h2>WESTERN</h2>
+<p FRANKFURT_="FRANKFURT," Tendlau="Tendlau" №112="№112">Das sen polnische Dörfer für mich! 'totally unfamiliar'<br /></p>
+<h3>Alsace (France)</h3>
+<p>dɔrᵊf {ALSACE, 47075 Mulhouse 007-020}<br />
+ - deʁ̥fəʁ̥ (pl.) {007-021}</p>
+<h3>Switzerland</h3>
+<p>dɔr(ə)f {SWITZERLAND, Fleischer 2005}</p>
+<h3>Oyberland (West Transcarpathian)</h3>
+<p>dǫrf {WTCP, Budapest, Hutterer 1965: 123, 137}</p>
+<p>dɔrf {WTCP, Dunajská Streda, 47179}<br />
+-   dɛ́rfʌ, darfɔ, darfə דערפֿער<br />
+-   in də dárfɔ iz mɛŋ gəgáŋᶢə cy dα bryn אין די דערפֿער איז מען געגאַמנגען צו דער ברון</p>
+<p>ajn dɔrf {WTCP, Vác, 47197}<br />
+-   dɛrfər דערפֿער<br />
+-   fyn ɛk dɔrf פֿון עק דאָרף</p>
+<p>jeˑdəs dɔrf יעדעס דאָרף {WTCP, Berettyó-Újfalu, 47212}<br />
+-   ouzərn dɔrf אויסערן דאָרף</p>
+<h2>CENTRAL</h2>
+<h3>Unterland (East Transcarpathian)</h3>
+<p>dɔrf {ETCP, Teiuș, 46233}<br />
+-   derfr̩ דערפֿער</p>
+<p>dɔrf {ETCP, Sîg Felső Szek, 47223}<br />
+-   dɛrfər דערפֿער<br />
+-   ɩn mɛnɩg dɔrf אין מעניג דאָרף</p>
+<p>dɔrf {ETCP, Mănăștur 47236}<br />
+-   dɛrfr דערפֿער</p>
+<p>dɔrf {ETCP, Bistriţa, 47241}<br />
+-   dɛrfər דערפֿער</p>
+<p>dorf {ETCP, Mukachevo, 48226}</p>
+<p>dɔrf {ETCP, Nyzhnya Apsha, 48233}<br />
+-   ejr vojnt arous osn dɔrf ער וווינט אַרויס אויסן דאָרף<br />
+-   dɛrfər דערפֿער</p>
+<p>s doʀf {POLAND, Wolbrom, 50196}<br />
+-   dɛʀfə דערפֿער</p>
+<p>mɛ-z arãkimɛ tsᵻ-nᵻm ᵻn dɔrf arã מע איז אַרײַנגעקומען צו אים אין דאָרף אַרײַן {Warsaw, Geller 2001: 221}<br />
+-   ɔ-x uɳgɔm [!} tsᵻ arãkɔjf-ᵻn dɔrf a kaɬb אויך אָנגעהויבן צו אַרײַנקויפֿן אין דאָרף אַ קאַלב {p. 231}<br />
+-   vaːɬ-ᵻx-ɔ daːfn tsᵻ ɬɔjfn tsᵻ fis-n dɔrf arã ווײַל איך האָב דאַרפֿן [!} צו לויפֿן צו פֿוס אין דאָרף אַרײַן {p. 233}<br />
+-   x-zɔɬ nᵻʃ gajn tsᵻ fis ᵻn dɔrf arã איך זאָל נישט גיין צו פֿוס אין דאָרף אַרײַן {p. 237}<br />
+-   jix bᵻn jan avɛk' ᵻn dɔrf arã איך בין געגאַנגען אַוועק אין דאָרף אַרײַן {p. 269}<br />
+-   mᵻ-n gᵻvɛj-nᵻ dɔrf מיר זענען געווען אין דאָרף {p. 269}<br />
+-   dᵻ frɔː mᵻ-dᵻ kindɛ zɛnɛ giɛvɛjn ᵻn dɔrf nɔx די פֿרוי מיט די קינדער זענען געווען אין דאָרף נאָך {p. 275}<br />
+-   naxɛj bᵻn-ax avɛjaɲgiɛ ᵻn dɔrf arã נאַכער בין איך אַוועקגעגאַנגען אין דאָרף אַרײַן {p. 275}<br />
+-   bi-jan-ᵻn dɔrf-a, zixn-an-ɔrt ɔfn kind maːn בין געגאַנגען אין דאָרף אַרײַן זוכן אַן אָרט אויפֿן קינד מײַן {p. 295}<br />
+-   mᵻ-dᵻ krᵻstn ᵻn dɔrf מיט די קריסטן אין דאָרף {p. 297}<br />
+-   azɔj vᵻ-m-ɔt giɛfnt a frᵻʃ' giɛtɔ, ɔt-mɛ giɛːjbm a tsᵻ... ɔf dᵻ dɛrfɛ אַזוי ווי מע האָט געעפֿנט אַ פֿריש געטאָ, האָט מען געגעבן [!} אַ צי... אויף די דערפֿער {p. 297}<br />
+-   ba rᵻkimɛ tsrᵻk' k'ɛn maː dɔrf arã, maːnɛ dɛrf arã בין אַרײַנגעקומען [?} צוריק אין מײַן דאָרף אַרײַן, מײַנע דערפֿער אַרײַן {p. 315}<br />
+-   bᵻn-ɔx ja-nᵻ tsvajtn dɔrf ara בין איך געגאַנגען אין אַ צווייטן דאָרף אַרײַן {p. 317}<br />
+-   x-ɔb mɛjɛ ᵻbɛgiɛɬɛjpt ɔf dᵻ dɔrf איך האָב מער איבערגעלעבט אויף די דאָרף {p. 323}<br />
+-   azɔj bᵻn-ɛx arᵻmgaɲgiɛ-n aɬɛ dɔrfɛ אַזוי בין איך אַרומגעגאַנגען אין אַלע דערפֿער {p. 335}<br />
+-   xaːnt bᵻn-ax giɛvɛjn ᵻn dɛjm dɔrf, morg'ɲ bᵻn-ax giɛvɛjn ᵻn dɛjm dɔrf, ᵻbɛmɔrg'ɲ ᵻn dᵻrᵻtn dɔrf  [!} הײַנט בין איך געווען אין דעם דאָרף, מאָרגן בין איך געווען אין דעם דאָרף, איבערמאָרגן אין דריטן דאָרף<br />
+-   x-bᵻn giɛvɛj ɛfʃɛ ɔfn tsvɔntsᵻk dɛfɛ, vus... vu-zɔ-mɛ-x giɛkiɛnt כ'בין געווען אפֿשר אויפֿן צוואָנציק דערפֿער, וואָס... וואָס זיי האָבן מיך געקענט {p. 335}<br />
+-   giɛgaɲgiɛ ᵻn a dɔrf... dᵻs gantsɛ dɔrf געגאַנגען אין אַ דאָרף... דאָס גאַנצע דאָרף {p. 337}<br />
+-   azɔj vɛ-ɬ-ɛx adurxjan-s gantsɛ dɔrf, ᵻn ajnɛ an andɛ, kiɛ-nᵻʃ-ɔn masɛrn אַזוי וועל איך אַדורכגיין דאָס גאַנצע דאָרף, און איינער אַן אַנדערן קען נישט אָנמסרן {p. 337}<br />
+dorɩf {POLAND, Warsaw, 52211}<br />
+-   derfə&lt;, darfə&lt; דערפֿער</p>
+<h2>NORTHEASTERN</h2>
+<h3>Lithuania</h3>
+<p>dorf {LITHUANIA, Vilnius, 54257}<br />
+-   derfər דערפֿער</p>
+<p>dor̥f {BELARUS, Gomel, 52314}<br />
+-   ˈderfər̥ דערפֿער</p>
+<h2>SOUTHEASTERN</h2>
+<p>dorf {ROMANIA, Brăila, 45273}<br />
+-   derfərʲ דערפֿער</p>
+<p><audio controls src="https://archive.org/download/MangerLexicon/Manger%20-%20Afn%20Sheydveg%20-%20der%20veg%20vos%20firt%20tsum%20shtiln%20dorf.mp3"></audio><br />
+AUDIO Itzik Manger [Czernowitz / Chernivtsi, BUKOVINA}<br />
+dorf<br />
+דער וועג וואָס פֿירט צום שטילן דאָרף<br />
+<audio controls src="https://archive.org/download/MangerLexicon/Manger%20-%20Afn%20Sheydveg%20-%20eyn%20veg%20tsum%20dorf.mp3"></audio><br />
+איין וועג צום דאָרף<br />
+<audio controls src="https://archive.org/download/MangerLexicon/Manger%20-%20Der%20Shnayder-gezeln%20Note%20Manger%20-%20a%20knak%20mitn%20zilbernem%20baytshl%20un%20es%20nemt%20zikh%20dreyen%20di%20erd%20shtet%20un%20derfer%20un%20velder%20un%20ot%20iz%20dos%20Beymishe%20land.mp3"></audio><br />
+ˈderfər<br />
+אַ קנאַק מיטן זילבערנעם בײַטשל און עס נעמט זיך דרייען די ערד, שטעט, און דערפֿער, און וועלדער און אָט איז דאָס ביימישע לאַנד</p>
+</div>
+
+</main>
+<footer>
+  Yiddish Dialect Dictionary &nbsp;·&nbsp; 10,034 entries
+</footer>
+<script>const BASE_URL = '/Yiddish-Dialect-Dictionary';</script>
+<script>
+(function() {
+  let index = null;
+  const input = document.getElementById('search-input');
+  const results = document.getElementById('search-results');
+  if (!input) return;
+
+  async function loadIndex() {
+    if (index) return;
+    try {
+      const r = await fetch(BASE_URL + '/search-index.json');
+      index = await r.json();
+    } catch(e) { console.error('Could not load search index', e); }
+  }
+
+  function search(q) {
+    q = q.trim().toLowerCase();
+    if (!q || !index) return [];
+    return index
+      .filter(e =>
+        e.hw.toLowerCase().includes(q) ||
+        (e.gl && e.gl.toLowerCase().includes(q))
+      )
+      .slice(0, 20);
+  }
+
+  function renderResults(items, q) {
+    if (!items.length) {
+      results.innerHTML = '<div class="search-no-results">No results found.</div>';
+      results.classList.add('show');
+      return;
+    }
+    results.innerHTML = items.map(e => `
+      <a class="search-result-item" href="${e.url}">
+        <span class="search-result-hw">${e.hw}</span>
+        ${e.gl ? `<span class="search-result-gloss">'${e.gl}'</span>` : ''}
+      </a>`).join('');
+    results.classList.add('show');
+  }
+
+  let timer;
+  input.addEventListener('input', async () => {
+    clearTimeout(timer);
+    const q = input.value;
+    if (!q.trim()) { results.classList.remove('show'); return; }
+    await loadIndex();
+    timer = setTimeout(() => renderResults(search(q), q), 120);
+  });
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.header-search')) results.classList.remove('show');
+  });
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { results.classList.remove('show'); input.blur(); }
+  });
+})();
+</script>
+</body>
+</html>

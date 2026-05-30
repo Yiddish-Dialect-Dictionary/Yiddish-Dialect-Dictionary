@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="yi" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>טאָג – Yiddish Dialect Dictionary</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #faf9f6;
+  --surface: #ffffff;
+  --border: #e0ddd5;
+  --text: #1c1b18;
+  --muted: #6b6860;
+  --accent: #1a4480;
+  --accent-light: #e8eef7;
+  --link: #1a4480;
+  --link-hover: #0d2a52;
+  --hebrew-font: 'Ezra SIL', 'SBL Hebrew', 'David', 'Frank Ruehl CLM', serif;
+  --body-font: Georgia, 'Times New Roman', serif;
+  --ui-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+body {
+  font-family: var(--body-font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  font-size: 16px;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--link-hover); text-decoration: underline; }
+
+/* ── Header ── */
+.site-header {
+  background: var(--accent);
+  color: white;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0,0,0,.25);
+}
+.site-header a { color: white; font-family: var(--ui-font); font-size: .9rem; }
+.site-header a.home { font-weight: 700; font-size: 1rem; white-space: nowrap; }
+.site-header a:hover { text-decoration: underline; }
+
+/* search in header */
+.header-search {
+  flex: 1;
+  max-width: 480px;
+  position: relative;
+}
+.header-search input {
+  width: 100%;
+  padding: .45rem .9rem .45rem 2.2rem;
+  border: none;
+  border-radius: 4px;
+  font-family: var(--ui-font);
+  font-size: .95rem;
+  background: rgba(255,255,255,.15);
+  color: white;
+  outline: none;
+}
+.header-search input::placeholder { color: rgba(255,255,255,.65); }
+.header-search input:focus { background: rgba(255,255,255,.25); }
+.header-search .icon {
+  position: absolute;
+  left: .6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: .7;
+  pointer-events: none;
+}
+.search-results {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.15);
+  max-height: 360px;
+  overflow-y: auto;
+  z-index: 200;
+}
+.search-results.show { display: block; }
+.search-result-item {
+  display: block;
+  padding: .6rem 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.search-result-item:last-child { border-bottom: none; }
+.search-result-item:hover { background: var(--accent-light); }
+.search-result-hw {
+  font-size: 1.1rem;
+  font-family: var(--hebrew-font);
+  direction: rtl;
+  display: inline-block;
+  margin-right: .5rem;
+}
+.search-result-gloss { color: var(--muted); font-style: italic; }
+.search-no-results { padding: .8rem 1rem; color: var(--muted); font-family: var(--ui-font); }
+
+/* ── Layout ── */
+.page-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+/* ── Alphabet nav (homepage + letter pages) ── */
+.alphabet-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin: 1.5rem 0;
+}
+.alphabet-nav a {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: .5rem .75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  text-decoration: none;
+  min-width: 52px;
+  transition: background .15s, border-color .15s;
+}
+.alphabet-nav a:hover, .alphabet-nav a.active {
+  background: var(--accent-light);
+  border-color: var(--accent);
+}
+.alphabet-nav a .heb {
+  font-family: var(--hebrew-font);
+  font-size: 1.4rem;
+  line-height: 1;
+  direction: rtl;
+}
+.alphabet-nav a .translit {
+  font-family: var(--ui-font);
+  font-size: .65rem;
+  color: var(--muted);
+  margin-top: .2rem;
+}
+
+/* ── Homepage ── */
+.hero {
+  text-align: center;
+  padding: 2.5rem 0 1.5rem;
+}
+.hero h1 {
+  font-size: 2.2rem;
+  color: var(--accent);
+  margin-bottom: .5rem;
+}
+.hero p {
+  color: var(--muted);
+  font-family: var(--ui-font);
+  font-size: 1rem;
+}
+.section-label {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 2rem 0 .75rem;
+}
+
+/* ── Letter page ── */
+.letter-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: .75rem;
+}
+.letter-header .heb-big {
+  font-family: var(--hebrew-font);
+  font-size: 3rem;
+  direction: rtl;
+  line-height: 1;
+  color: var(--accent);
+}
+.letter-header .info {
+  font-family: var(--ui-font);
+}
+.letter-header .translit-big { font-size: 1.4rem; font-weight: 600; }
+.letter-header .count { color: var(--muted); font-size: .9rem; }
+
+.entry-list {
+  list-style: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface);
+}
+.entry-list li {
+  border-bottom: 1px solid var(--border);
+}
+.entry-list li:last-child { border-bottom: none; }
+.entry-list a {
+  display: flex;
+  align-items: baseline;
+  gap: .75rem;
+  padding: .65rem 1rem;
+  color: var(--text);
+  text-decoration: none;
+}
+.entry-list a:hover { background: var(--accent-light); }
+.entry-list .hw {
+  font-family: var(--hebrew-font);
+  font-size: 1.15rem;
+  direction: rtl;
+  flex-shrink: 0;
+}
+.entry-list .gl {
+  font-style: italic;
+  color: var(--muted);
+  font-size: .9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Entry page ── */
+.entry-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--accent);
+}
+.entry-headword {
+  font-family: var(--hebrew-font);
+  font-size: 2.6rem;
+  direction: rtl;
+  line-height: 1.2;
+  color: var(--text);
+}
+.entry-gloss {
+  font-style: italic;
+  color: var(--muted);
+  font-size: 1.05rem;
+  margin-top: .3rem;
+}
+
+.entry-body h2 {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 1.8rem 0 .6rem;
+  padding-bottom: .3rem;
+  border-bottom: 1px solid var(--border);
+}
+.entry-body h3 {
+  font-family: var(--ui-font);
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin: 1rem 0 .4rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.entry-body p {
+  margin-bottom: .8rem;
+  line-height: 1.7;
+}
+.entry-body ul, .entry-body ol {
+  margin: .5rem 0 .8rem 1.5rem;
+}
+.entry-body li { margin-bottom: .3rem; }
+.entry-body audio {
+  display: block;
+  margin: .75rem 0;
+  max-width: 100%;
+}
+.entry-body img {
+  max-width: 100%;
+  height: auto;
+  margin: .75rem 0;
+  border-radius: 4px;
+}
+.entry-body blockquote {
+  border-left: 3px solid var(--border);
+  padding-left: 1rem;
+  color: var(--muted);
+  margin: .5rem 0;
+}
+
+/* back/nav bar above entry */
+.entry-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.entry-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .3rem .7rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--text);
+}
+.entry-nav a:hover {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  text-decoration: none;
+}
+
+/* ── Footer ── */
+footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  margin-top: 3rem;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .hero h1 { font-size: 1.6rem; }
+  .alphabet-nav a { min-width: 44px; padding: .4rem .55rem; }
+  .alphabet-nav a .heb { font-size: 1.2rem; }
+  .entry-headword { font-size: 2rem; }
+  .header-search { max-width: none; }
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <a href="/Yiddish-Dialect-Dictionary/" class="home">Yiddish Dialect Dictionary</a>
+  <div class="header-search">
+    <svg class="icon" width="16" height="16" fill="white" viewBox="0 0 16 16">
+      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.868-3.834zm-5.242 1.406a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+    </svg>
+    <input type="search" id="search-input" placeholder="Search entries…" autocomplete="off">
+    <div id="search-results" class="search-results"></div>
+  </div>
+</header>
+<main class="page-wrap">
+
+<div class="entry-nav">
+  <a href="/Yiddish-Dialect-Dictionary/letter/tes/">← Tes</a>
+  <a href="/Yiddish-Dialect-Dictionary/">Home</a>
+</div>
+<div class="entry-header">
+  <div class="entry-headword" dir="rtl">טאָג</div>
+  <div class="entry-gloss">‘day’</div>
+</div>
+<div class="entry-body" dir="auto">
+<p>טאָג<br />
+טעג<br />
+דער<br />
+'day'</p>
+<h2>ETYMOLOGY</h2>
+<p 145="145" Fliciński="Fliciński">{Why was the vowel shortened in CY /tuk/? It remained long in the plural /tejk/}<br />
+The idiom מאָרגן איז אויך אַ טאָג 'tomorrow is also a day (i.e., something can be done later)' may be a calque of Polish jutro też jest dzień. <br /></p>
+<p 104="104" 1990:="1990:" 2011:="2011:" 2013:="2013:" 21:="21:" 27_="27;" 2_="2;" 35_="35," 3:="3:" 51_="51;" 86_="86;" 904_="904;" BMZ="BMZ" Bammesberger="Bammesberger" DW_="DW¹" FNHDW="FNHDW" Kluge_Seebold="Kluge/Seebold" Kroonen="Kroonen" Magnússon="Magnússon" _tag_="&quot;tag&quot;;">Got. dags, ON dagr, OE dæg, English day, OS dag, OHG tag, MHG tac, tag, NHG Tag; from PGmc ✱dagaz or ✱đaǥ-a- or ✱daga- 'day'; from PIE ✱dʰogʷʰ-o- (or ✱dʰoǵʰ-o-) perhaps 'bright, hot time of day', from the root ✱dʰegʷʰ- 'to burn'; cf. Lithuanian dègti 'to burn', Sanskrit ni-dhāgás 'heat, summer', dāha- 'heat, fire', Lithuanian dãgas 'harvest time, summer heat', Old Prussian dagis 'summer', Latin fovēre 'to warm', Russian де́жа́ 'kneeding trough', Ukrainian діжа́, дежа́ (see דייזשע).<br />
+Originally {when?} referred to the day from sunup to sundown, later to the 24-hour day.<br />
+In MHG and NHG, umlauted plural täge is found since the 14th c. {But the citations for MHG and ENHG show almost no umlauted plurals. It was only natural that Yiddish would adopt the umlauted plural after apocope removed the old plural ending -e (when?).}<br /></p>
+<p 1982:="1982:" 60="60" Katz="Katz">Vowel 13, Proto-Yiddish ✱a<br /></p>
+<p 1="1" 1931_="1931," Atlas="Atlas" Language="Language" Soviet="Soviet" Union="Union" Yiddish="Yiddish" map="map" of="of" the="the"><img alt="" src="https://archive.org/download/shprakhatlas/ShprakhatlasKarte1-Optimized.jpg" /><br /></p>
+<h2>WESTERN</h2>
+<h3>Old Literary Yiddish (ca. 1100-1800)</h3>
+<p>גוּט טַק אִים בְּטַגְֿא שְ וַיר דּיש מַחֲזור אין בּיתֿ הכְּנֶסֶתֿ טְרַגְֿא<br />
+{Worms Mahzor couplet, ca. 1272-1273; Frakes (2004): 3-4}<br />
+'May he have a good day whoever brings this holiday prayer book into the synagogue'<br />
+Approximate pronunciation: /gut tak im bətáɣə swer dis máxzər in bejs-haknésəs tráɣə/<br />
+Notable that the letter gimel is marked as a fricative (probably /ɣ/) which is not characteristic of any known Yiddish dialect.</p>
+<p>tôg {Schnitzler, Prager Judendeutsch, 19}</p>
+<p 1696_="1696," 308="308" מעשׂה="מעשׂה" ניקלסבורג="ניקלסבורג">אונ' אן גיהובן מתֿוודה צו זיין וואש ער זיין טאג פֿר חטאים האט גיטאן<br />
+'and began confessing what sort of sins he had done in his life'<br /></p>
+<p>têg טעג {Schnitzler, Prager Judendeutsch, 18}</p>
+<p>Es is nit alle Tog Johrmark in Himmel.<br />
+{Maißim un Schnokes vun e Handelewos, LEIPZIG 1845: 39}<br />
+-   Such 'n gestrigen Tog. {46}</p>
+<h3>Holland (Netherlands)</h3>
+<p>toog (pronounced took) {HOLLAND, Beem, Jerosche, №39}</p>
+<h3>Switzerland</h3>
+<p>taːg, daːg {SWITZERLAND, Fleischer 2005}<br />
+-   teːg, deːg טעג<br />
+-   di nain teːg די נײַן טעג</p>
+<h3>Oyberland (West Transcarpathian)</h3>
+<p>tǭg {WTCP, Budapest, Hutterer 1965: 126, 141}</p>
+<p>foα fyɱv̥ teˑg פֿאָר פֿינף טעג {WTCP, Dunajská Streda, 47179}<br />
+-   ə gʲyt͡n̩ toˑg אַ גוטן טאָג<br />
+-   ymə fiːrə fatóːg̥s אום פֿירע פֿאַרטאָגס<br />
+-   diːstəg ə mazldɩgə toˑg דינסטיק אַ מזלדיקע טאָג<br />
+-   fiα teːg פֿיר טעג<br />
+-   najn teˑg̥ נײַן טעג<br />
+-   in də næjn teˑg אין די נײַן טעג {WTCP, Dunajská Streda, 47179}<br />
+-   də talmətɔ́jrə-kʲindα gʲəmaxt xacɔ́s bæj toːg די תּלמוד־תּורה־קינדער געמאַכט חצות בײַ טאָג<br />
+-   deː teːg̥ hɔt yns dɔ rɛbə nɩks gʲəšloˑg͡ŋ̩ די טעג האָט אודז דער רבי ניקס געשלאָגן</p>
+<p>foˑr fyɱf toˑg פֿאָר פֿינף טאָג {WTCP, Vác, 47197}<br />
+-   ə póː toˑg אַ פּאָר טאָג<br />
+-   ɩn áxtóˑg ərým אין אַכט טאָג אַרום<br />
+-   najn toːk נײַן טאָג</p>
+<p>toˑg {WTCP, Berettyó-Újfalu, 47212}<br />
+-   far fýnəf toˑg פֿאַר פֿינעף טאָג {!} 'five days ago'<br />
+-   gʲytn̩ tóˑg גוטן טאָג (afternoon greeting)<br />
+-   najn toˑg נײַן טאָג {note: אָבער: די נײַן טעג}</p>
+<p>gəgʲɛ́sn téːg געגעסן טעג {WTCP, Bratislava, 48171A} </p>
+<h2>CENTRAL</h2>
+<p>tuk {Hutterer 1965: 141}</p>
+<p>{tuːk} {WEST CENTRAL, Jacobs 107, Bin-Nun 187}<br />
+{tuk} {EAST CENTRAL, Jacobs 107, Bin-Nun 187}<br />
+tug in naxt, {tugənaxt} טאָג און נאַכט {Jacobs 115}</p>
+<h3>Unterland (East Transcarpathian)</h3>
+<p>mit finəf tug̥/k friˑjər מיט פֿינעף טאָג פֿריִער {ETCP, Sîg Felső Szek, 47223}<br />
+-   najn tug̥ נײַן טאָג {note: אָבער די נײַן טעג}<br />
+-   fərtuks פֿאַר טאָגס 'very early'<br />
+-   najn tejg̥ נײַן טעג</p>
+<p>far fɩ́nəf tejg פֿאַר פֿינעף טעג {ETCP, Nyzhnya Apsha, 48233}<br />
+-   friˑjr̩ / bəfúˑr mit fɩnəf tejg̰ פֿריִער / בעפֿאָר מיט פֿינעף טעג</p>
+<p>mɩt fɩnəf tejk cəʀɩ́kʲ מיט פֿינף טעג צוריק {POLAND, Wolbrom, 50196}<br />
+-   fiˑəᴿ tejk פֿיר טעג<br />
+-   tejg ɩn xojdɩšʲ טעג אין חודש<br />
+-   dɩ naːn teːk די נײַן טעג</p>
+<p>{tu.k} {Warsaw, Geller 2001: 69}<br />
+-   dɛm tuk דעם טאָג {p. 179}<br />
+-   alts xajst lɛjbm, ɔbɛ mɛ lɛjpt, bᵻzn haːn-tuk אַלץ הייסן לעבן, אָבער מע לעבט ביזן הײַנטיקן טאָג {p. 181}<br />
+-   tsvaj tuk far dɛ mᵻxum-ɔt-mɛ-r gɛvɔlt nɛmɛ ka mɔskvɛ צוויי טעג פֿאַר דער מלחמה האָט מען איר געוואָלט נעמען קיין מאָסקווע {p. 187}<br />
+-   bᵻzn haːntᵻgn tuk ɬaː-tsɛ ביזן הײַנטיקן טאָג לײַט זי {p. 193}<br />
+-   bᵻzn haːntᵻgn tuk takiɛ ɬaː-tse ɔf dᵻ lɛjbɔ ביזן הײַנטיקן טאָג לײַד זי אויף די לעבער {p. 195}<br />
+-   m-ɔt giɛɬɛjpt a gitn tug aɬɛ naxt מע האָט געלעבט אַ גוטן טאָג אַלע נאַכט {p. 243}<br />
+-   ᵻz-ᵻ giɛvɛj ʃtᵻl', ax-tuk' איז עס געווען שטיל אַכט טאָג {p. 259}<br />
+-   az-ᵻs giɛvɔrn tuk אַז עס איז געוואָרן טאָג {p. 263}<br />
+-   nɔː, zuktɛ, vɛstu zãː baː maː-puu̯ tuk, bᵻs ɛt vɛrn ʃtᵻl נאָר, זאָגט ער, וועסטו זײַן בײַ מיר אַ פּאָר טאָג ביז עס וועט ווערן שטיל {p. 277}<br />
+-   ᵻn vᵻɬgiɛ bᵻn-ɔx giɛvɛjzᵻ-n-ax-tuk, tsvaj vɔxn אין ווילגע בין איך געוועזן אַכט טאָג, צוויי וואָכן {p. 287}<br />
+-   m-ɔt zᵻ giɛjbm abᵻ... ᵻbɛtsᵻlɛjbm dɛm tuk מע האָט זיי געגעבן אַבי... איבערצולעבן דעם טאָג {p. 299}<br />
+-   an-andɛ tuk vɛt mɛn arɔːsfirn fᵻn giɛtɔ אַן אַנדער טאָג וועט מען אַרויספֿירן פֿון געטאָ {p. 301}<br />
+-   zɔɬt visn, az anadɛ tuk fijt mɛn arɔːs fᵻndanɛt ka trɛblinkiɛ זאָלט וויסן, אַז אַן אַנדער טאָג פֿירט מען אַרויס פֿון דאַנעט קיין טרעבלינקע {p. 303}<br />
+-   m-ɔt giɛfijɛt batuk i... ba dᵻ na... מע האָט געפֿירט בײַ טאָג און... בײַ די נאַ{כט} {p. 313}<br />
+-   bᵻn-ɔx giɛgaɲgiɛ a gantsɛ naxt, dur-a gantsɛ tuk בין איך געגאַנגען אַ גאַנצע נאַכט, דורך אַ גאַנצע טאָג {p. 315}<br />
+-   x-bᵻ fᵻ, fᵻ, fᵻn giɛfrɔrnkajt mᵻt aɬn, bᵻn ᵻx upgiɛɬɛjg'n fijɛ tug איך בין פֿון געפֿראָרנקייט מיט אַלן, בין איך אָפּגעלעגן פֿיר טאָג {p. 315}<br />
+-   batuk bᵻ-x ʃɔj nᵻʃ giɛgaɲgiɛn בײַ טאָג בין איך שוין נישט געגאַנגען {p. 321}<br />
+-   batuk ɛt-dɛ kajnɛ nᵻʃ tʃ'ɛpɛ בײַ טאָג וועט דיך קיינער נישט טשעפּען {p. 327}<br />
+fiˑer tejg פֿיר טעג {POLAND, Warsaw, 52211}<br />
+-   dandəre tajk / tejk די אַנדערע טעג (last days of Passover)</p>
+<p><audio controls src="https://archive.org/download/MiriamHoffman/Miriam%20Hoffman%2025%20August%202018%20-%20a%20por%20tog%20a%20vokh.mp3"></audio><br />
+AUDIO Miriam Hoffman {parents from Łódź, POLAND} 25 August 2018<br />
+pur tug<br />
+אַ פּאָר טאָג אַ וואָך</p>
+<h2>HASIDIC</h2>
+<h3>AMERICA</h3>
+<p>&lt;פארטאגס&gt; 'very early, before dawn'<br />
+saj ba tug ɩn saj ba naxt סײַ בײַ טאָג און סײַ בײַ נאַכט<br />
+ˈɩnəm ˈeˑrštn̩ tug̥ אינעם ערשטן טאָג<br />
+ɩn dɛm ˈzɩbətn̩ tug̥ אין דעם זיבעטן טאָג<br />
+aza ˈglɩkləxə tug̥ אַזאַ גליקלעכע טאָג<br />
+ajn tug̥ cvaj tug̥ ɔdər draj tug̥ איין טאָג, צוויי טאָג, אָדער דרײַ טאָג<br />
+ˈlejbm̩ a ˈgɩtn̩ tug̥ לעבן אַ גוטן טאָג<br />
+ˈfɛrcɩk tejk &lt;פערציג טעג&gt;<br />
+nux axtug נאָך אַכט טאָג<br />
+a ˈgɩtn̩ tuk אַ גוטן טאָג 'a good time'<br />
+er vert alt axt tug̥ ער ווערט אַלט אַכט טאָג<br />
+a sax tejg̥ אַ סך טעג<br />
+dɩ haˑntɩgŋ̩ tuk די הײַנטיקן טאָג<br />
+ajn tuk ɩn juˑr zɔl mɛ fastn̩ איין טאָג אין יאָר זאָל מען פֿאַסטן<br />
+gəkɩmən ɩn di tejg̥ געקומען אין די טעג<br />
+bɩ-sɔf tuk ביז סוף טאָג<br />
+a gancn̩ tug אַ גאַנצן טאָג</p>
+<h3>EUROPE</h3>
+<p>saj ba tug saj ba naxt סײַ בײַ טאָג, סײַ בײַ נאַכט {Antwerp, Mendy Cahan}<br />
+dɩ gancə vɛlt hɔt gɔt bašafɱ̩ ɩn zɛks tejg̥ די גאַנצע וועלט האָט גאָט באַשאַפֿן אין זעקס טעג</p>
+<h2>SOUTHEASTERN</h2>
+<p><audio controls src="https://archive.org/download/MangerLexicon/Manger%20-%20A%20Lid%20Vegn%20Eliyohu%20Hanovi%20-%20a%20klezmer%20fun%20nekhtike%20teg.mp3"></audio><br />
+AUDIO Itzik Manger {Czernowitz / Chernivtsi, BUKOVINA}<br />
+tejk<br />
+אַ כּלי־זמר פֿון נעכטיקע טעג</p>
+<h2>NORTHEASTERN</h2>
+<h3>Lithuania</h3>
+<p>fiʀ tɛg פֿיר טעג {LITHUANIA, Vilnius, 54257}<br />
+-   mit füɱf tek curɩ́k מיט פֿינף טעג צוריק</p>
+</div>
+
+</main>
+<footer>
+  Yiddish Dialect Dictionary &nbsp;·&nbsp; 10,034 entries
+</footer>
+<script>const BASE_URL = '/Yiddish-Dialect-Dictionary';</script>
+<script>
+(function() {
+  let index = null;
+  const input = document.getElementById('search-input');
+  const results = document.getElementById('search-results');
+  if (!input) return;
+
+  async function loadIndex() {
+    if (index) return;
+    try {
+      const r = await fetch(BASE_URL + '/search-index.json');
+      index = await r.json();
+    } catch(e) { console.error('Could not load search index', e); }
+  }
+
+  function search(q) {
+    q = q.trim().toLowerCase();
+    if (!q || !index) return [];
+    return index
+      .filter(e =>
+        e.hw.toLowerCase().includes(q) ||
+        (e.gl && e.gl.toLowerCase().includes(q))
+      )
+      .slice(0, 20);
+  }
+
+  function renderResults(items, q) {
+    if (!items.length) {
+      results.innerHTML = '<div class="search-no-results">No results found.</div>';
+      results.classList.add('show');
+      return;
+    }
+    results.innerHTML = items.map(e => `
+      <a class="search-result-item" href="${e.url}">
+        <span class="search-result-hw">${e.hw}</span>
+        ${e.gl ? `<span class="search-result-gloss">'${e.gl}'</span>` : ''}
+      </a>`).join('');
+    results.classList.add('show');
+  }
+
+  let timer;
+  input.addEventListener('input', async () => {
+    clearTimeout(timer);
+    const q = input.value;
+    if (!q.trim()) { results.classList.remove('show'); return; }
+    await loadIndex();
+    timer = setTimeout(() => renderResults(search(q), q), 120);
+  });
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.header-search')) results.classList.remove('show');
+  });
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { results.classList.remove('show'); input.blur(); }
+  });
+})();
+</script>
+</body>
+</html>

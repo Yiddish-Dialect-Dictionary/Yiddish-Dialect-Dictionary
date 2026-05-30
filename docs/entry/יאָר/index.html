@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="yi" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>יאָר – Yiddish Dialect Dictionary</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #faf9f6;
+  --surface: #ffffff;
+  --border: #e0ddd5;
+  --text: #1c1b18;
+  --muted: #6b6860;
+  --accent: #1a4480;
+  --accent-light: #e8eef7;
+  --link: #1a4480;
+  --link-hover: #0d2a52;
+  --hebrew-font: 'Ezra SIL', 'SBL Hebrew', 'David', 'Frank Ruehl CLM', serif;
+  --body-font: Georgia, 'Times New Roman', serif;
+  --ui-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+body {
+  font-family: var(--body-font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  font-size: 16px;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--link-hover); text-decoration: underline; }
+
+/* ── Header ── */
+.site-header {
+  background: var(--accent);
+  color: white;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0,0,0,.25);
+}
+.site-header a { color: white; font-family: var(--ui-font); font-size: .9rem; }
+.site-header a.home { font-weight: 700; font-size: 1rem; white-space: nowrap; }
+.site-header a:hover { text-decoration: underline; }
+
+/* search in header */
+.header-search {
+  flex: 1;
+  max-width: 480px;
+  position: relative;
+}
+.header-search input {
+  width: 100%;
+  padding: .45rem .9rem .45rem 2.2rem;
+  border: none;
+  border-radius: 4px;
+  font-family: var(--ui-font);
+  font-size: .95rem;
+  background: rgba(255,255,255,.15);
+  color: white;
+  outline: none;
+}
+.header-search input::placeholder { color: rgba(255,255,255,.65); }
+.header-search input:focus { background: rgba(255,255,255,.25); }
+.header-search .icon {
+  position: absolute;
+  left: .6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: .7;
+  pointer-events: none;
+}
+.search-results {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.15);
+  max-height: 360px;
+  overflow-y: auto;
+  z-index: 200;
+}
+.search-results.show { display: block; }
+.search-result-item {
+  display: block;
+  padding: .6rem 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.search-result-item:last-child { border-bottom: none; }
+.search-result-item:hover { background: var(--accent-light); }
+.search-result-hw {
+  font-size: 1.1rem;
+  font-family: var(--hebrew-font);
+  direction: rtl;
+  display: inline-block;
+  margin-right: .5rem;
+}
+.search-result-gloss { color: var(--muted); font-style: italic; }
+.search-no-results { padding: .8rem 1rem; color: var(--muted); font-family: var(--ui-font); }
+
+/* ── Layout ── */
+.page-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+/* ── Alphabet nav (homepage + letter pages) ── */
+.alphabet-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin: 1.5rem 0;
+}
+.alphabet-nav a {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: .5rem .75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  text-decoration: none;
+  min-width: 52px;
+  transition: background .15s, border-color .15s;
+}
+.alphabet-nav a:hover, .alphabet-nav a.active {
+  background: var(--accent-light);
+  border-color: var(--accent);
+}
+.alphabet-nav a .heb {
+  font-family: var(--hebrew-font);
+  font-size: 1.4rem;
+  line-height: 1;
+  direction: rtl;
+}
+.alphabet-nav a .translit {
+  font-family: var(--ui-font);
+  font-size: .65rem;
+  color: var(--muted);
+  margin-top: .2rem;
+}
+
+/* ── Homepage ── */
+.hero {
+  text-align: center;
+  padding: 2.5rem 0 1.5rem;
+}
+.hero h1 {
+  font-size: 2.2rem;
+  color: var(--accent);
+  margin-bottom: .5rem;
+}
+.hero p {
+  color: var(--muted);
+  font-family: var(--ui-font);
+  font-size: 1rem;
+}
+.section-label {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 2rem 0 .75rem;
+}
+
+/* ── Letter page ── */
+.letter-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: .75rem;
+}
+.letter-header .heb-big {
+  font-family: var(--hebrew-font);
+  font-size: 3rem;
+  direction: rtl;
+  line-height: 1;
+  color: var(--accent);
+}
+.letter-header .info {
+  font-family: var(--ui-font);
+}
+.letter-header .translit-big { font-size: 1.4rem; font-weight: 600; }
+.letter-header .count { color: var(--muted); font-size: .9rem; }
+
+.entry-list {
+  list-style: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface);
+}
+.entry-list li {
+  border-bottom: 1px solid var(--border);
+}
+.entry-list li:last-child { border-bottom: none; }
+.entry-list a {
+  display: flex;
+  align-items: baseline;
+  gap: .75rem;
+  padding: .65rem 1rem;
+  color: var(--text);
+  text-decoration: none;
+}
+.entry-list a:hover { background: var(--accent-light); }
+.entry-list .hw {
+  font-family: var(--hebrew-font);
+  font-size: 1.15rem;
+  direction: rtl;
+  flex-shrink: 0;
+}
+.entry-list .gl {
+  font-style: italic;
+  color: var(--muted);
+  font-size: .9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Entry page ── */
+.entry-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--accent);
+}
+.entry-headword {
+  font-family: var(--hebrew-font);
+  font-size: 2.6rem;
+  direction: rtl;
+  line-height: 1.2;
+  color: var(--text);
+}
+.entry-gloss {
+  font-style: italic;
+  color: var(--muted);
+  font-size: 1.05rem;
+  margin-top: .3rem;
+}
+
+.entry-body h2 {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 1.8rem 0 .6rem;
+  padding-bottom: .3rem;
+  border-bottom: 1px solid var(--border);
+}
+.entry-body h3 {
+  font-family: var(--ui-font);
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin: 1rem 0 .4rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.entry-body p {
+  margin-bottom: .8rem;
+  line-height: 1.7;
+}
+.entry-body ul, .entry-body ol {
+  margin: .5rem 0 .8rem 1.5rem;
+}
+.entry-body li { margin-bottom: .3rem; }
+.entry-body audio {
+  display: block;
+  margin: .75rem 0;
+  max-width: 100%;
+}
+.entry-body img {
+  max-width: 100%;
+  height: auto;
+  margin: .75rem 0;
+  border-radius: 4px;
+}
+.entry-body blockquote {
+  border-left: 3px solid var(--border);
+  padding-left: 1rem;
+  color: var(--muted);
+  margin: .5rem 0;
+}
+
+/* back/nav bar above entry */
+.entry-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.entry-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .3rem .7rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--text);
+}
+.entry-nav a:hover {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  text-decoration: none;
+}
+
+/* ── Footer ── */
+footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  margin-top: 3rem;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .hero h1 { font-size: 1.6rem; }
+  .alphabet-nav a { min-width: 44px; padding: .4rem .55rem; }
+  .alphabet-nav a .heb { font-size: 1.2rem; }
+  .entry-headword { font-size: 2rem; }
+  .header-search { max-width: none; }
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <a href="/Yiddish-Dialect-Dictionary/" class="home">Yiddish Dialect Dictionary</a>
+  <div class="header-search">
+    <svg class="icon" width="16" height="16" fill="white" viewBox="0 0 16 16">
+      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.868-3.834zm-5.242 1.406a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+    </svg>
+    <input type="search" id="search-input" placeholder="Search entries…" autocomplete="off">
+    <div id="search-results" class="search-results"></div>
+  </div>
+</header>
+<main class="page-wrap">
+
+<div class="entry-nav">
+  <a href="/Yiddish-Dialect-Dictionary/letter/yud/">← Yud</a>
+  <a href="/Yiddish-Dialect-Dictionary/">Home</a>
+</div>
+<div class="entry-header">
+  <div class="entry-headword" dir="rtl">יאָר</div>
+  
+</div>
+<div class="entry-body" dir="auto">
+<p>יאָר<br />
+־ן<br />
+דאָס</p>
+<h2>ETYMOLOGY</h2>
+<p 1982:="1982:" 59="59" Katz="Katz">Got. jer, ON ár, OE gēar, OS gēr ~ jār, OHG jār; from PGmc ✱jēraⁿ<br />
+{Ringe &amp; Taylor 12}<br />
+Vowel 12, Proto-Yiddish ✱ɔ̄<br /></p>
+<h2>WESTERN</h2>
+<p>jôr {Schnitzler, Prager Judendeutsch, 24}</p>
+<p 1696_="1696," 307="307" מעשׂה="מעשׂה" ניקלסבורג="ניקלסבורג">אז אפשר אין פֿיל הונדרט יארין ניט גישעהין איז<br />
+'such as perhaps in many hundred years did not happen'<br /></p>
+<p 1845:="1845:" 47="47" Handelewos_="Handelewos," LEIPZIG="LEIPZIG" Maißim="Maißim" Schnokes="Schnokes" e="e" un="un" vun="vun">Siebn Jahr übr' e Arbssüpp gekocht dernach verschitt.<br /></p>
+<p FRANKFURT_="FRANKFURT," Tendlau="Tendlau" №57="№57">Der füttert Aan das ganze Johr mit Eezes.<br /></p>
+<h3>Holland (Netherlands)</h3>
+<p>joor; jooren [HOLLAND, Beem, Jerosche]<br />
+-   Das ganze joor niks ze toon, un 'erew jomkipper e boks machen. 'Nothing to do all year, and before Yom Kippur make pants. Never have anything to do, but to be busy at the most inopportune moments.' {Jerosche №405}<br />
+-   Komt er nit, komt e gut joor. 'Let him stay away, I don't care.' {Jerosche №406}<br />
+Zivy 243.<br />
+-   Sie sellen ire jooren ouslebben, as das woor is. 'I don't believe any of it.' {Jerosche №407}</p>
+<h3>Switzerland</h3>
+<p>jɔːr {SWITZERLAND, Fleischer 2005}</p>
+<h3>Czechia</h3>
+<p>E ganz Juhr schicker, Pürim  nüchtern אַ גאַנץ יאָר שיכּור, פּורים ניכטערן{CZECHIA, Trost 1965: 88}</p>
+<h3>Oyberland (West Transcarpathian)</h3>
+<p>jōr {WTCP, SOUTH-CENTRAL HUNGARY, Garvin 1965: 99}</p>
+<p>yūr {WTCP, NORTHWESTERN HUNGARIAN, Garvin 1965: 103}</p>
+<p>jɔˑr alt דרײַ יאָר אַלט {WTCP, Dunajská Streda, 47179}<br />
+-   gʲyt joα dəra˰uf גוט יאָר דערויף<br />
+-   cyn joα hɔtə álʲəvæjlʲ ɛpəz ə matóːnə gʲəgʲeˑb͡m̩ צום יאָר האָט ער אַלעווײַל עפּעס אַ מתּנה געגעבן<br />
+-   far ə jóˑα פֿאַר אַ יאָר<br />
+-   ýbaz jóα איבערס יאָר 'next year'<br />
+-   fyn aː joˑ om ándαn joˑr פֿון איין יאָר אָם אַנדערן יאָר 'from one year to the next'<br />
+-   axcənər joˑr אַכצענער יאָר</p>
+<p>for ə gyt joˑr פֿאָר אַ גוט יאָר {WTCP, Vác, 47197}<br />
+-   ɩ́bər ə jóˑr איבער אַ יאָר<br />
+-   fórɩks jɔ́ˑr פֿאָריקס יאָר<br />
+-   fríˑjor פֿריִיאָר 'Spring'</p>
+<p>ɩ́bərəjoˑ/ʊˑr איבער אַ יאָר 'next year' {WTCP, Vác, 47197}<br />
+-   skɩ́ŋftəgə joˑr דאָס קינפֿטיקע יאָר 'next year'</p>
+<h2>CENTRAL</h2>
+<p>juːr {Jacobs 97}</p>
+<h3>Unterland (East Transcarpathian)</h3>
+<p>fərjúˑər פֿאַריאָר 'next year' {ETCP, Sîg Felső Szek, 47223}<br />
+-   ɩbərəjúər mɛ́rcɩšəm איבער אַ יאָר אם־ירצה־השם 'next year God willing'</p>
+<p>faʀjúʀŋ פֿאַריאָרן 'next year' {POLAND, Wolbrom, 50196}<br />
+-   ɔfs júˑɛ אויפֿס יאָר 'next year</p>
+<p>[juu̯ɛ] {Warsaw, Geller 2001: 69}<br />
+-   bᵻz naːnᵻndraːsᵻkstn juu̯e ביז נײַן־און־דרײַסיקסטן יאָר {p. 157}<br />
+-   bᵻz-n-ajnᵻfɛrtsᵻkstn juue ביזן איין־און־פֿערציקסטן יאָר {p. 159}<br />
+-   na, z-ᵻs firᵻndraːsikstɛ juu̯ɛr ניין, זי איז פֿיר און דרײַסיקסטע יאָר {p. 165}<br />
+-   tsɛn juu̯ɛ i-ʃᵻ giɛvɛjn צען יאָר איז שוין געווען {p. 167}<br />
+-   naːnᵻdraːsᵻkstn juu̯ɛ נײַן און דרײַסיקסטן יאָר {p. 183}<br />
+-   nu, azɔj zᵻnᵻ jɛganᵻ dᵻ juu̯rn נו, אַזוי זענען געגאַנגען די יאָרן {p. 185}<br />
+-   s-axtnzɛxtsᵻkstɛ juu̯ɛr-ᵻz bakant דאָס אַכט און זעכציקסטע יאָר איז באַקאַנט {p. 195}<br />
+-   ɛr-i giɛfuu̯n ᵻn zᵻbnᵻfᵻftsᵻkstn juu̯ɛ nɔx ער איז געפֿאָרן אין זיבן און פֿופֿציקסטן יאָר נאָך {p. 211}<br />
+-   vusɛ-rᵻz aɬt xᵻndɛtntsvantsᵻk juu̯ɛ וואָס ער איז אַלט הונדערט און צוואַנציק יאָר {p. 217}<br />
+-   fᵻ-n-ᵻndɛt juu̯ɛ tsrᵻk' פֿון הונדערט יאָר צוריק {p. 223}<br />
+-   fᵻn ᵻndɛtntsɛjn juu̯e tsrᵻk' פֿון הונדער און צען יאָר צוריק {p. 223}<br />
+-   ɛfʃɛ giɛdɛɲk' s ɔx-fᵻn tsɛjn juu̯ɛ אפֿשר געדענקסט אויך פֿון צען יאָר {p. 223}<br />
+-   nᵻʃ mɛj vᵻ-n-a haɬb juu̯ɛ נישט מער ווי אַ האַלב יאָר  {p. 225}<br />
+-   a-haɬb ja-aɬt ix giɛvɛjzn אַ האַלב יאָר אַלט [בין] איך געוועזן {p. 227}<br />
+-   x-bi ʃ'ᵻ giɛvɔrn aɬt axtsᵻn juu̯ɛ איך בין שוין געוואָרן אַלט אַכצן יאָר {p. 239}<br />
+-   upgiɛdɔːr tsvajt jɔːr אָפּגעדויערט צווייט יאָר {p. 275}<br />
+-   bᵻsn ... ajnᵻfɛrtsᵻkstn juu̯ɛ ביזן איין און פֿערציקסטן יאָר {p. 279}<br />
+-   z-aɬt giɛvɛj fijɛ juu̯ɛ עס איז אַלט געווען פֿיר יאָר {p. 307}<br />
+-   vifil juu̯ɛn... mɛ ɬɛjpt, azoj fil juu̯ɛ naːt mᵻn ᵻnts up mᵻt gɔt וויפֿל יאָרן... מע לעבט, אַזוי פֿיל יאָרן נאַרט מען אונדז אָפּ מיט גאָט {p. 309}<br />
+macə mejl a ganc juˑə מצה־מעל אַ גאַנץ יאָר {POLAND, Warsaw, 52211}</p>
+<p><audio controls src="https://archive.org/download/Gosia-and-Luza-Pod/Luza%20Pod%205%20August%202018%20-%20ikh%20bin%2096%20yor.mp3"></audio><br />
+AUDIO Luza Pod [Skalat, East Galicia] August 5, 2018<br />
+juːʳ<br />
+איך בין זעקס-און-נײַנציק יאָר.</p>
+<video controls src="https://archive.org/download/FilmLexicon/Dzigan-ViAYidHotGezogt-MaynFroyLebtShoynNishtTsveyYor-BizHundertUnTsvantsik.mp4"></video>
+<p>VIDEO Shimon Dzigan [Łódź, Poland]<br />
+juə<br />
+ווי אַ ייִד האָט געזאָגט: מײַן פֿרוי לעבט שוין נישט צוויי יאָר — ביז הונדערט און צוואַנציק<br />
+צו אַל די גוטע יאָר</p>
+<h2>HASIDIC</h2>
+<h3>AMERICA</h3>
+<p>&lt;פאריאר&gt; ~ &lt;פאראיאר&gt; 'last year' <br />
+juːər ~ juːr<br />
+juːrn̥ יאָרן<br />
+nɛkst juːr נעקסט יאָר 'next year'<br />
+tɔwzn̩t juːr טויזנט יאָר<br />
+far ˈhɪndərt juːr cəˈrɪk פֿאַר הונדערט יאָר צוריק<br />
+far ˈhɩndətər ˈjuːrn̩ פֿאַר הונדערטער יאָרן<br />
+nux ˈɛləv jur נאָך עלעף יאָר<br />
+nux ˈzɩbəxɩg jur נאָך זיבעציק יאָר<br />
+zɩbm̩ zatə juˑrn̩ זיבן זאַטע יאָרן<br />
+uɱfaŋg yur אָנפֿאַנג יאָר<br />
+juˑrn̩ crɩk יאָרן צוריק<br />
+cvɛləv jur צוועלעף יאָר<br />
+ajn tuk ɩn juˑr zɔl mɛ fastn̩ איין טאָג אין יאָר זאָל מען פֿאַסטן<br />
+ɩbər fɩfcɩg juˑr איבער פֿופֿציק יאָר</p>
+<video controls src="https://archive.org/download/Hasidic-Media/Yidish%20nakhes%202018%20-%20a%20gut%20yor%2C%20a%20zis%20yor%2C%20a%20likhtik%20yor.mp4"></video>
+<p>VIDEO Yiddish nakhes Rosh Hashanah greeting, 2018<br />
+juːr</p>
+<h3>ISRAEL</h3>
+<p>ba dʀaj juʀ בײַ דרײַ יאָר [Bnei Brak, Eli Benedict (Karlin)]</p>
+<p>di letste por yur {HASIDIC, Assouline 2017: 117}</p>
+<h2>NORTHEASTERN</h2>
+<p _1951_:461־462="(1951):461־462" _אונדזער="&quot;אונדזער" ייִדיש_="ייִדיש&quot;" ליטווישער="ליטווישער" מאַרק_="מאַרק,">ווען מען האָט איראָניש געוואָלט זאָגן: "וויי צו די יאָרן — איז פֿון דעם געוואָרן — "ווייצענע יאָרן"; און אויב די יאָרן זײַנען ווייצענע, זײַנען דאָך די טעג — קאָרענע, איז אַרויסגעקומען דאָס פּאָפּולערע ווערטל: "ווייצענע יאָרן מיט קאָרענע טעג".<br /></p>
+<h3>Lithuania</h3>
+<p>faʀajɔ́ʀŋ פֿאַר אַ יאָרן {LITHUANIA, Vilnius, 54257}<br />
+-   ibɛʀajɔ́ʀ איבער אַ יאָר</p>
+<h2>SOUTHEASTERN</h2>
+<p><audio controls src="https://archive.org/download/MangerLexicon/Manger%20-%20A%20Lid%20Vegn%20Eliyohu%20Hanovi%20-%20zint%20yorn%20iber%20der%20velt.mp3"></audio><br />
+AUDIO Itzik Manger [Czernowitz / Chernivtsi, BUKOVINA]<br />
+jurn̩<br />
+זינט יאָרן איבער דער וועלט<br />
+<audio controls src="https://archive.org/download/MangerLexicon/Manger%20-%20Afn%20Sheydveg%20-%20ikh%20hob%20aykh%20yorn%20getray%20gedint.mp3"></audio><br />
+איך האָב אײַך יאָרן געטרײַ געדינט<br />
+𝐓𝐇𝐄𝐀𝐓𝐄𝐑 𝐃𝐈𝐀𝐋𝐄𝐂𝐓 ({SOUTHEASTERN})</p>
+<video controls src="https://archive.org/download/FilmLexicon/Dybbuk1937-TsuAlDiGuteYor-HostDokhShierNishtIbergefornDemBokher.mp4"></video>
+<p>The Dybbuk (Poland, 1937)<br />
+צו אַל די גוטע יאָר, האָסט דאָך שיִער נישט איבערגעפֿאָרן דעם בחור</p>
+</div>
+
+</main>
+<footer>
+  Yiddish Dialect Dictionary &nbsp;·&nbsp; 10,034 entries
+</footer>
+<script>const BASE_URL = '/Yiddish-Dialect-Dictionary';</script>
+<script>
+(function() {
+  let index = null;
+  const input = document.getElementById('search-input');
+  const results = document.getElementById('search-results');
+  if (!input) return;
+
+  async function loadIndex() {
+    if (index) return;
+    try {
+      const r = await fetch(BASE_URL + '/search-index.json');
+      index = await r.json();
+    } catch(e) { console.error('Could not load search index', e); }
+  }
+
+  function search(q) {
+    q = q.trim().toLowerCase();
+    if (!q || !index) return [];
+    return index
+      .filter(e =>
+        e.hw.toLowerCase().includes(q) ||
+        (e.gl && e.gl.toLowerCase().includes(q))
+      )
+      .slice(0, 20);
+  }
+
+  function renderResults(items, q) {
+    if (!items.length) {
+      results.innerHTML = '<div class="search-no-results">No results found.</div>';
+      results.classList.add('show');
+      return;
+    }
+    results.innerHTML = items.map(e => `
+      <a class="search-result-item" href="${e.url}">
+        <span class="search-result-hw">${e.hw}</span>
+        ${e.gl ? `<span class="search-result-gloss">'${e.gl}'</span>` : ''}
+      </a>`).join('');
+    results.classList.add('show');
+  }
+
+  let timer;
+  input.addEventListener('input', async () => {
+    clearTimeout(timer);
+    const q = input.value;
+    if (!q.trim()) { results.classList.remove('show'); return; }
+    await loadIndex();
+    timer = setTimeout(() => renderResults(search(q), q), 120);
+  });
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.header-search')) results.classList.remove('show');
+  });
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { results.classList.remove('show'); input.blur(); }
+  });
+})();
+</script>
+</body>
+</html>

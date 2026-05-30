@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="yi" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>אונדז – Yiddish Dialect Dictionary</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #faf9f6;
+  --surface: #ffffff;
+  --border: #e0ddd5;
+  --text: #1c1b18;
+  --muted: #6b6860;
+  --accent: #1a4480;
+  --accent-light: #e8eef7;
+  --link: #1a4480;
+  --link-hover: #0d2a52;
+  --hebrew-font: 'Ezra SIL', 'SBL Hebrew', 'David', 'Frank Ruehl CLM', serif;
+  --body-font: Georgia, 'Times New Roman', serif;
+  --ui-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+body {
+  font-family: var(--body-font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  font-size: 16px;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--link-hover); text-decoration: underline; }
+
+/* ── Header ── */
+.site-header {
+  background: var(--accent);
+  color: white;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0,0,0,.25);
+}
+.site-header a { color: white; font-family: var(--ui-font); font-size: .9rem; }
+.site-header a.home { font-weight: 700; font-size: 1rem; white-space: nowrap; }
+.site-header a:hover { text-decoration: underline; }
+
+/* search in header */
+.header-search {
+  flex: 1;
+  max-width: 480px;
+  position: relative;
+}
+.header-search input {
+  width: 100%;
+  padding: .45rem .9rem .45rem 2.2rem;
+  border: none;
+  border-radius: 4px;
+  font-family: var(--ui-font);
+  font-size: .95rem;
+  background: rgba(255,255,255,.15);
+  color: white;
+  outline: none;
+}
+.header-search input::placeholder { color: rgba(255,255,255,.65); }
+.header-search input:focus { background: rgba(255,255,255,.25); }
+.header-search .icon {
+  position: absolute;
+  left: .6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: .7;
+  pointer-events: none;
+}
+.search-results {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.15);
+  max-height: 360px;
+  overflow-y: auto;
+  z-index: 200;
+}
+.search-results.show { display: block; }
+.search-result-item {
+  display: block;
+  padding: .6rem 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.search-result-item:last-child { border-bottom: none; }
+.search-result-item:hover { background: var(--accent-light); }
+.search-result-hw {
+  font-size: 1.1rem;
+  font-family: var(--hebrew-font);
+  direction: rtl;
+  display: inline-block;
+  margin-right: .5rem;
+}
+.search-result-gloss { color: var(--muted); font-style: italic; }
+.search-no-results { padding: .8rem 1rem; color: var(--muted); font-family: var(--ui-font); }
+
+/* ── Layout ── */
+.page-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+/* ── Alphabet nav (homepage + letter pages) ── */
+.alphabet-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin: 1.5rem 0;
+}
+.alphabet-nav a {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: .5rem .75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  text-decoration: none;
+  min-width: 52px;
+  transition: background .15s, border-color .15s;
+}
+.alphabet-nav a:hover, .alphabet-nav a.active {
+  background: var(--accent-light);
+  border-color: var(--accent);
+}
+.alphabet-nav a .heb {
+  font-family: var(--hebrew-font);
+  font-size: 1.4rem;
+  line-height: 1;
+  direction: rtl;
+}
+.alphabet-nav a .translit {
+  font-family: var(--ui-font);
+  font-size: .65rem;
+  color: var(--muted);
+  margin-top: .2rem;
+}
+
+/* ── Homepage ── */
+.hero {
+  text-align: center;
+  padding: 2.5rem 0 1.5rem;
+}
+.hero h1 {
+  font-size: 2.2rem;
+  color: var(--accent);
+  margin-bottom: .5rem;
+}
+.hero p {
+  color: var(--muted);
+  font-family: var(--ui-font);
+  font-size: 1rem;
+}
+.section-label {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 2rem 0 .75rem;
+}
+
+/* ── Letter page ── */
+.letter-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: .75rem;
+}
+.letter-header .heb-big {
+  font-family: var(--hebrew-font);
+  font-size: 3rem;
+  direction: rtl;
+  line-height: 1;
+  color: var(--accent);
+}
+.letter-header .info {
+  font-family: var(--ui-font);
+}
+.letter-header .translit-big { font-size: 1.4rem; font-weight: 600; }
+.letter-header .count { color: var(--muted); font-size: .9rem; }
+
+.entry-list {
+  list-style: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface);
+}
+.entry-list li {
+  border-bottom: 1px solid var(--border);
+}
+.entry-list li:last-child { border-bottom: none; }
+.entry-list a {
+  display: flex;
+  align-items: baseline;
+  gap: .75rem;
+  padding: .65rem 1rem;
+  color: var(--text);
+  text-decoration: none;
+}
+.entry-list a:hover { background: var(--accent-light); }
+.entry-list .hw {
+  font-family: var(--hebrew-font);
+  font-size: 1.15rem;
+  direction: rtl;
+  flex-shrink: 0;
+}
+.entry-list .gl {
+  font-style: italic;
+  color: var(--muted);
+  font-size: .9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Entry page ── */
+.entry-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--accent);
+}
+.entry-headword {
+  font-family: var(--hebrew-font);
+  font-size: 2.6rem;
+  direction: rtl;
+  line-height: 1.2;
+  color: var(--text);
+}
+.entry-gloss {
+  font-style: italic;
+  color: var(--muted);
+  font-size: 1.05rem;
+  margin-top: .3rem;
+}
+
+.entry-body h2 {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 1.8rem 0 .6rem;
+  padding-bottom: .3rem;
+  border-bottom: 1px solid var(--border);
+}
+.entry-body h3 {
+  font-family: var(--ui-font);
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin: 1rem 0 .4rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.entry-body p {
+  margin-bottom: .8rem;
+  line-height: 1.7;
+}
+.entry-body ul, .entry-body ol {
+  margin: .5rem 0 .8rem 1.5rem;
+}
+.entry-body li { margin-bottom: .3rem; }
+.entry-body audio {
+  display: block;
+  margin: .75rem 0;
+  max-width: 100%;
+}
+.entry-body img {
+  max-width: 100%;
+  height: auto;
+  margin: .75rem 0;
+  border-radius: 4px;
+}
+.entry-body blockquote {
+  border-left: 3px solid var(--border);
+  padding-left: 1rem;
+  color: var(--muted);
+  margin: .5rem 0;
+}
+
+/* back/nav bar above entry */
+.entry-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.entry-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .3rem .7rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--text);
+}
+.entry-nav a:hover {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  text-decoration: none;
+}
+
+/* ── Footer ── */
+footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  margin-top: 3rem;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .hero h1 { font-size: 1.6rem; }
+  .alphabet-nav a { min-width: 44px; padding: .4rem .55rem; }
+  .alphabet-nav a .heb { font-size: 1.2rem; }
+  .entry-headword { font-size: 2rem; }
+  .header-search { max-width: none; }
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <a href="/Yiddish-Dialect-Dictionary/" class="home">Yiddish Dialect Dictionary</a>
+  <div class="header-search">
+    <svg class="icon" width="16" height="16" fill="white" viewBox="0 0 16 16">
+      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.868-3.834zm-5.242 1.406a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+    </svg>
+    <input type="search" id="search-input" placeholder="Search entries…" autocomplete="off">
+    <div id="search-results" class="search-results"></div>
+  </div>
+</header>
+<main class="page-wrap">
+
+<div class="entry-nav">
+  <a href="/Yiddish-Dialect-Dictionary/letter/aleph/">← Aleph</a>
+  <a href="/Yiddish-Dialect-Dictionary/">Home</a>
+</div>
+<div class="entry-header">
+  <div class="entry-headword" dir="rtl">אונדז</div>
+  <div class="entry-gloss">‘us (first person plural accusative/dative pronoun; in CENTRAL also sometimes used for the nominative, sometimes in conjunction with מיר)’</div>
+</div>
+<div class="entry-body" dir="auto">
+<p>אונדז<br />
+'us (first person plural accusative/dative pronoun; in CENTRAL also sometimes used for the nominative, sometimes in conjunction with מיר)'</p>
+<p><img alt="" src="https://archive.org/download/shprakhatlas/ShprakhatlasKarte73-Optimized.jpg" /><br />
+{Yiddish Language Atlas of the Soviet Union 1931, map 73}<br />
+<img alt="" src="https://archive.org/download/Yiddish-Dialect-Maps/Herzog4-79-FirstPersoSuffix-MirMuzn-149.jpg" /></p>
+<h2>WESTERN</h2>
+<h3>Alsace (France)</h3>
+<p>ʊns {ALSACE, Zuckerman 1969, 59}<br />
+<img alt="" src="https://archive.org/download/Yiddish-Dialect-Maps/map%20-%20FoY3-54%20-%20Alsace%20-%20personal%20pronouns%20copy.jpg" /><br />
+TABLE {ALSACE}</p>
+<h3>Oyberland (West Transcarpathian)</h3>
+<p>ündz ~ ünts ~ üns {WTCP, Budapest, Hutterer 1965: 138}</p>
+<p>yns {WTCP, Dunajská Streda, 47179}<br />
+-   nɔjt cy yns נאָענט צו אונדז<br />
+-   cvɩšn yns cvaˑj צווישן אונדז צוויי<br />
+-   dyˑ gʲɛst ynz ə ɛpl דו געסט אונדז אַ עפּל<br />
+-   gʲɛ́c fa ynz̥ də ɛpl! געטס פֿאַר אונדז די עפּל <br />
+-   cy ync kýmt mə nɩ̀ks yn bæj ýns ɛ́st mø nɩ̀ks צו אונדז קומט מען ניקס און בײַ אונדז עסט מען ניקס</p>
+<p>cišn yndz cvaˑjə צווישן אונדז צוויי {WTCP, Vác, 47197}<br />
+-   dy gʲɛst əs fər ynᵈz̥ דו געסט עס פֿאַר אונדז<br />
+-   kindɛr gʲɛpc / gʲɛc yndz dɛ/ə ɛpl̩ʲ קינדער, געטס אונדז דע עפּל<br />
+-   nɛ̀m ɩx óˑn ləmóˑšl baj yns נעם איך אָן למשל בײַ אונדז</p>
+<p>ync ajlmər zɔx אונדז אײַלן מיר זיך {WTCP, Berettyó-Újfalu, 47212}<br />
+-   yndz brouxmr̩ cy zyˑxŋ ən andərə vɔjnyŋk אונדז ברויכן מיר צו זוכן אַן אַנדער וווינונג<br />
+-   ynzəmr̩ gʲəzɛ́sn ɔf ə baŋk אונדז זענען מיר געזעסן אויף אַ באַנק <br />
+-   ync hɔ́mərəs nɩ̀š gənýct אונדז האָבן מיר עס נישט גענוצט<br />
+-   yndz gʲɛbmr̩s far zej אונדז געבן מיר עס פֿאַר זיי<br />
+-   cy ynz kʲymən zə nɩšt yn zə ɛsn nɩšt baj yns צו אונדז קומען זיי נישט און זיי עסן נישט בײַ אונדז<br />
+-   ync vajs mər nɩšt אונדז ווײַסן מיר נישט <br />
+-   yns haˑsmər dɔx aškʲənéːzəm אונדז הייסן מיר דאָך אַשכּנזים<br />
+-   ync ɔmr gʲəgʲɛsn ɩn də sýkʲə אונדז האָבן מיר געגעסן אין די סוכּה</p>
+<h2>CENTRAL</h2>
+<p>ïndz, jndz {Birnbaum transcription}</p>
+<h3>Unterland (East Transcarpathian)</h3>
+<p>cɩ ɩnc kimən zaj nɩšt ɩn ba ɩnc ésn zaj nɩšt צו אונדז קומען זיי נישט און בײַ אונדז עסן זיי נישט {ETCP, Teiuș, 46233}<br />
+-   viˑ ɩnc fleˑgmər ɛs maxŋ ווי אונדז פֿלעגן מיר עס מאַכן<br />
+-   azoj maxmər ɩndz אַזוי מאַכן מיר אונדז</p>
+<p>cɩ inc kʲɩmt mənɩš צו אונדז קומט מען נישט {ETCP, Sîg Felső Szek, 47223}<br />
+-   inc gʲɛmər fr̩ zaj də ɛpl אונדז געבן מיר פֿאַר זיי די עפּל<br />
+-   incomər gəhát ə mešuːrəs אונדז האָבן מיר געהאַט אַ משרת<br />
+-   cɩšn inc bajdə צווישן אונדז ביידע<br />
+-   di gʲɛst ɩndz də ɛplʲ דו געסט אונדז די עפּל<br />
+-   azoj maxt eːr ɩn azɔj maxmər iˑndz אַזוי מאַכט ער און אַזוי מאַכמיר אונדז<br />
+-   ci íˑnc kimt mənɩš in m̩ɛst baìnc nɩš צו אונדז קומט מען נישט און מע עסט בײַ אונדז נישט<br />
+-   azɔj tiːən zaj ɩn azɔj tijəmər ɩndz אַזוי טוען זיי און אַזוי טוען מיר אונדז</p>
+<p>cɩ ʔɩnc kɩmən zə nɩš ɩn bəɩ́nc ɛsn zə nɩšt צו אונדז קומען זיי נישט און בײַ אונדז עסן זיי נישט {ETCP, Bistriţa, 47241}</p>
+<p>ɩnc haːɫmər zəx אונדז אײַלן מיר זיך {ETCP, Nyzhnya Apsha, 48233}<br />
+-   ɩnc darf mər ziˑxŋ an andərə štiːb̥ אונדז דאַרפֿן מיר זוכן אַן אַנדערע שטוב<br />
+-   cɩšn ɩndz cvaj צווישן אונדז צוויי<br />
+-   ba ɩnc ɔt mən əs nɩš g̠ənɩ́ct בײַ אונדז האָט מען עס נישט געניצט<br />
+-   ɩnc gɩmər əs far zaj אונדז גיבן מיר עס פֿאַר זיי<br />
+-   cɩninc kɩmtmənɩšt ɩn bɩnc ɛst mənɩštt צו אונדז קומט מען נישט און בײַ אונדז עסט מען נישט<br />
+-   ɩndz vajsmər ništ אונדז ווייסן מיר נישט</p>
+<p>kɩmc cɩ ɩnc קומטס צו אונדז {POLAND, Wolbrom, 50196}<br />
+-   cvɩšn ɩndz bajdə̃ צווישן אונדז ביידן<br />
+-   gec ɩnc də epɫ געטס אונדז  דעם עפּל<br />
+-   cɩ ʔɩnc kɩmt mənɩš ɩn ba ʔɩnc ɛst mənɩš צו אונדז קומט מען נישט און בײַ אונדז עסט מען נישט<br />
+-   ɩnc ɔməzə bag. אונדז האָבן מיר זיך באַגעגנט<br />
+-   ʔɪnc ɛsnə אונדז עסן מיר אין דער סוכּה</p>
+<p>vɛn m-ɔt ᵻnts faʃikt', i-ʃɔjn giɛvɛjn git' ווען מע האָט אונדז פֿאַרשיקט, איז שוין געווען גוט {Warsaw, Geller 2001: 163}<br />
+-   m-ɔt-a-nᵻs giɛʃ'ᵻk't' מע האָט אונדז געשיקט {p. 189}<br />
+-   a-zuu̯ nᵻʃ't-ajsn, az-ᵻnts nɛmɛn אַז עס זאָל נישט הייסן, אַז אונדז נעמען {p. 191}<br />
+-   nɔr s-i ʃ'ɔj tsᵻ ʃ'pɛjt fa-j-ᵻnts נאָר ס'איז שוין צו שפּעט פֿאַר אונדז {p. 195}<br />
+-   ᵻn-zɛm ajnzam אונדז זענען מיר איינזאַם {p. 197}<br />
+-   ᵻnts-ɔm lip-a jidiʃ'ɛ sfivɛ אונדז האָבן ליב אַ ייִדישע סבֿיבֿה {p. 197}<br />
+-   ɛfʃɛ r-ɛtɛ r-ɛpɛ-zugn ᵻnts אפֿשר וועט ער עפּעס זאָגן אונדז {p. 219}<br />
+-   vus-ɛ-t ᵻnts dɛtsajɬn וואָס ער וועט אונדז דערציילן {p. 219}<br />
+-   zug ɛpᵻs ᵻnts זאָג עפּעס אונדז {p. 223}<br />
+-   dɛtsajɬ ᵻnts דערצייל אונדז {p. 223}<br />
+-   ᵻnts tsᵻvᵻlɛ mɛɲtʃ'n zɛ-mɛ nᵻʃ ʃᵻɬdᵻ-g-uu̯ nᵻʃt אונדז ציווילע מענטשן זענען מיר נישט שולדיק געווען גאָרנישט {p. 265}<br />
+-   ᵻnts umᵻ nᵻʃ giɛvɔɬt arbɛtn אונדז האָבן מיר נישט געוואָלט אַרבעטן {p. 311}<br />
+barɩnc oxɩt  בײַ אונדז אויכעט {POLAND, Warsaw, 52211}<br />
+-   diˑ gest dəm epl ɩnc דו געסט דעם עפּל אונדז<br />
+-   gɩc ɩnc / gɩt ɩnc dɩ epalax גיטס אונדז / גיט אונדז די עפּעלעך<br />
+-   dər zajdə ɩz gəvejn a xazn ba/r/ɩnc דער זיידע איז געווען אַ חזן בײַ(ר) אונדז</p>
+<p><audio controls src="https://archive.org/download/Gosia-and-Luza-Pod/Gosia%20Pod%205%20August%202018%20-%20bay%20undz%20hot%20men%20nisht%20geredt%20keyn%20yidish%20because%20di%20eltern%20hobn%20gevolt%20undz%20zoln%20mir%20redn%20poylish,%20me%20zol%20kenen%20geyn%20in%20poylisher%20school.mp3"></audio><br />
+AUDIO Gosia Pod [Mikulintse / Mikulińce / Микулинці, East Galicia} August 5, 2018<br />
+בײַ אונדז האָט מען נישט גערעדט קיין ייִדיש because די עלטערן האָבן געוואָלט אונדז זאָלן מיר רעדן פּויליש, מע זאָל קענען גיין אין פּוילישער school</p>
+<h2>HASIDIC</h2>
+<h3>AMERICA</h3>
+<p>&lt;אונז&gt; ~ &lt;אינז&gt; (rarer)<br />
+aˈzoj vi ɩnz &lt;אזוי ווי אונז&gt;<br />
+ɩnc gaj mir jɛct lernən אונדז גייען מיר יעצט לערנען</p>
+<p>az indz zolmir zayn vi a kind אַז אונדז זאָלמיר זײַן ווי אַ קינד 'that we should be like a child' {Assouline 2014: 180}</p>
+<h3>EUROPE</h3>
+<p>ɩnc gajn cɩm hɔˑz אונדז גייען צום הויז [Vienna, Eidel Malowicki}</p>
+<h3>ISRAEL</h3>
+<p>ɩnc kɛnɛn unhajbm̩ אונדז קענען אָנהייבן [Bnei Brak, Eli Benedict (Karlin)}</p>
+<p>undz is used as the nominative pronoun in JERUSALEMITE 1%-5% of the time (as opposed to mir). In HASIDIC the proportion is reversed, with indz used 85%-95% and mir 5%-15%. undz is used in JERUSALEMITE to refer to a specific group of people (often in opposition to another group, "us" versus "them"), while mir is a generic "we" equivalent to men 'one.' undz is typically stressed in this usage, while mir is typically clitic and unstressed. In HASIDIC, on the other hand, the pronouns alternate freely: mir gayen ~ indz gayen ~ indz gaymer מיר גייען ~ אונדז גייען ~ אונדז גיימער 'we go'.  {Assouline 2010: 5, 6, 7, 8, 10, 16}<br />
+-   undz darfn veln az zi zol vern oys אונדז דאַרפֿן וועלן אַז זי זאָל ווערן אויס 'We should want it to cease to exist' {JERUSALEMITE}<br />
+-   undz betn bakoshes dem eybershtn אונדז בעטן בקשות דעם אייבערשטן 'we make requests of the Lord' {JERUSALEMITE}<br />
+-   undz veysn nisht אונדז ווייסן נישט 'we do not know' {JERUSALEMITE}<br />
+-   undz zol im dinen אונדז זאָלן אים דינען 'we should serve him' {JERUSALEMITE}<br />
+-   azey zenen undz mames אַזוי זענען אונדז מאַמעס 'we mothers are the same' {JERUSALEMITE}<br />
+-   undz tuen teúsim אונדז טוען טעותים {JERUSALEMITE}<br />
+-   undz redn vos, aykh redn vus אונדז רעדן וואָס, אײַך רעדן וווּס 'we say vos, you say vus' {JERUSALEMITE}</p>
+<h2>NORTHEASTERN</h2>
+<h3>Lithuania</h3>
+<p>c̀u unc kúmt menit un ba undz est menit צו אונדז קומט מען ניט און בײַ אונדז עסט מען ניט {LITHUANIA, Vilnius, 54257}</p>
+<h2>SOUTHEASTERN</h2>
+<p>ɯnz velʲmər אונדז וועלן מיר {ROMANIA, Brăila, 45273}<br />
+-   ɩndz mɩz / dærf mər zəx ziˑᵊxn an ɔndərə štiˑp אונדז מוזן / דאַרפֿן מיר זוכן אַן אַנדערע שטוב</p>
+</div>
+
+</main>
+<footer>
+  Yiddish Dialect Dictionary &nbsp;·&nbsp; 10,034 entries
+</footer>
+<script>const BASE_URL = '/Yiddish-Dialect-Dictionary';</script>
+<script>
+(function() {
+  let index = null;
+  const input = document.getElementById('search-input');
+  const results = document.getElementById('search-results');
+  if (!input) return;
+
+  async function loadIndex() {
+    if (index) return;
+    try {
+      const r = await fetch(BASE_URL + '/search-index.json');
+      index = await r.json();
+    } catch(e) { console.error('Could not load search index', e); }
+  }
+
+  function search(q) {
+    q = q.trim().toLowerCase();
+    if (!q || !index) return [];
+    return index
+      .filter(e =>
+        e.hw.toLowerCase().includes(q) ||
+        (e.gl && e.gl.toLowerCase().includes(q))
+      )
+      .slice(0, 20);
+  }
+
+  function renderResults(items, q) {
+    if (!items.length) {
+      results.innerHTML = '<div class="search-no-results">No results found.</div>';
+      results.classList.add('show');
+      return;
+    }
+    results.innerHTML = items.map(e => `
+      <a class="search-result-item" href="${e.url}">
+        <span class="search-result-hw">${e.hw}</span>
+        ${e.gl ? `<span class="search-result-gloss">'${e.gl}'</span>` : ''}
+      </a>`).join('');
+    results.classList.add('show');
+  }
+
+  let timer;
+  input.addEventListener('input', async () => {
+    clearTimeout(timer);
+    const q = input.value;
+    if (!q.trim()) { results.classList.remove('show'); return; }
+    await loadIndex();
+    timer = setTimeout(() => renderResults(search(q), q), 120);
+  });
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.header-search')) results.classList.remove('show');
+  });
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { results.classList.remove('show'); input.blur(); }
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="yi" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mem (מ) – Yiddish Dialect Dictionary</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #faf9f6;
+  --surface: #ffffff;
+  --border: #e0ddd5;
+  --text: #1c1b18;
+  --muted: #6b6860;
+  --accent: #1a4480;
+  --accent-light: #e8eef7;
+  --link: #1a4480;
+  --link-hover: #0d2a52;
+  --hebrew-font: 'Ezra SIL', 'SBL Hebrew', 'David', 'Frank Ruehl CLM', serif;
+  --body-font: Georgia, 'Times New Roman', serif;
+  --ui-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+body {
+  font-family: var(--body-font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  font-size: 16px;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--link-hover); text-decoration: underline; }
+
+/* ── Header ── */
+.site-header {
+  background: var(--accent);
+  color: white;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0,0,0,.25);
+}
+.site-header a { color: white; font-family: var(--ui-font); font-size: .9rem; }
+.site-header a.home { font-weight: 700; font-size: 1rem; white-space: nowrap; }
+.site-header a:hover { text-decoration: underline; }
+
+/* search in header */
+.header-search {
+  flex: 1;
+  max-width: 480px;
+  position: relative;
+}
+.header-search input {
+  width: 100%;
+  padding: .45rem .9rem .45rem 2.2rem;
+  border: none;
+  border-radius: 4px;
+  font-family: var(--ui-font);
+  font-size: .95rem;
+  background: rgba(255,255,255,.15);
+  color: white;
+  outline: none;
+}
+.header-search input::placeholder { color: rgba(255,255,255,.65); }
+.header-search input:focus { background: rgba(255,255,255,.25); }
+.header-search .icon {
+  position: absolute;
+  left: .6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: .7;
+  pointer-events: none;
+}
+.search-results {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.15);
+  max-height: 360px;
+  overflow-y: auto;
+  z-index: 200;
+}
+.search-results.show { display: block; }
+.search-result-item {
+  display: block;
+  padding: .6rem 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.search-result-item:last-child { border-bottom: none; }
+.search-result-item:hover { background: var(--accent-light); }
+.search-result-hw {
+  font-size: 1.1rem;
+  font-family: var(--hebrew-font);
+  direction: rtl;
+  display: inline-block;
+  margin-right: .5rem;
+}
+.search-result-gloss { color: var(--muted); font-style: italic; }
+.search-no-results { padding: .8rem 1rem; color: var(--muted); font-family: var(--ui-font); }
+
+/* ── Layout ── */
+.page-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+/* ── Alphabet nav (homepage + letter pages) ── */
+.alphabet-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin: 1.5rem 0;
+}
+.alphabet-nav a {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: .5rem .75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  text-decoration: none;
+  min-width: 52px;
+  transition: background .15s, border-color .15s;
+}
+.alphabet-nav a:hover, .alphabet-nav a.active {
+  background: var(--accent-light);
+  border-color: var(--accent);
+}
+.alphabet-nav a .heb {
+  font-family: var(--hebrew-font);
+  font-size: 1.4rem;
+  line-height: 1;
+  direction: rtl;
+}
+.alphabet-nav a .translit {
+  font-family: var(--ui-font);
+  font-size: .65rem;
+  color: var(--muted);
+  margin-top: .2rem;
+}
+
+/* ── Homepage ── */
+.hero {
+  text-align: center;
+  padding: 2.5rem 0 1.5rem;
+}
+.hero h1 {
+  font-size: 2.2rem;
+  color: var(--accent);
+  margin-bottom: .5rem;
+}
+.hero p {
+  color: var(--muted);
+  font-family: var(--ui-font);
+  font-size: 1rem;
+}
+.section-label {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 2rem 0 .75rem;
+}
+
+/* ── Letter page ── */
+.letter-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: .75rem;
+}
+.letter-header .heb-big {
+  font-family: var(--hebrew-font);
+  font-size: 3rem;
+  direction: rtl;
+  line-height: 1;
+  color: var(--accent);
+}
+.letter-header .info {
+  font-family: var(--ui-font);
+}
+.letter-header .translit-big { font-size: 1.4rem; font-weight: 600; }
+.letter-header .count { color: var(--muted); font-size: .9rem; }
+
+.entry-list {
+  list-style: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface);
+}
+.entry-list li {
+  border-bottom: 1px solid var(--border);
+}
+.entry-list li:last-child { border-bottom: none; }
+.entry-list a {
+  display: flex;
+  align-items: baseline;
+  gap: .75rem;
+  padding: .65rem 1rem;
+  color: var(--text);
+  text-decoration: none;
+}
+.entry-list a:hover { background: var(--accent-light); }
+.entry-list .hw {
+  font-family: var(--hebrew-font);
+  font-size: 1.15rem;
+  direction: rtl;
+  flex-shrink: 0;
+}
+.entry-list .gl {
+  font-style: italic;
+  color: var(--muted);
+  font-size: .9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Entry page ── */
+.entry-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--accent);
+}
+.entry-headword {
+  font-family: var(--hebrew-font);
+  font-size: 2.6rem;
+  direction: rtl;
+  line-height: 1.2;
+  color: var(--text);
+}
+.entry-gloss {
+  font-style: italic;
+  color: var(--muted);
+  font-size: 1.05rem;
+  margin-top: .3rem;
+}
+
+.entry-body h2 {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 1.8rem 0 .6rem;
+  padding-bottom: .3rem;
+  border-bottom: 1px solid var(--border);
+}
+.entry-body h3 {
+  font-family: var(--ui-font);
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin: 1rem 0 .4rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.entry-body p {
+  margin-bottom: .8rem;
+  line-height: 1.7;
+}
+.entry-body ul, .entry-body ol {
+  margin: .5rem 0 .8rem 1.5rem;
+}
+.entry-body li { margin-bottom: .3rem; }
+.entry-body audio {
+  display: block;
+  margin: .75rem 0;
+  max-width: 100%;
+}
+.entry-body img {
+  max-width: 100%;
+  height: auto;
+  margin: .75rem 0;
+  border-radius: 4px;
+}
+.entry-body blockquote {
+  border-left: 3px solid var(--border);
+  padding-left: 1rem;
+  color: var(--muted);
+  margin: .5rem 0;
+}
+
+/* back/nav bar above entry */
+.entry-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.entry-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .3rem .7rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--text);
+}
+.entry-nav a:hover {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  text-decoration: none;
+}
+
+/* ── Footer ── */
+footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  margin-top: 3rem;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .hero h1 { font-size: 1.6rem; }
+  .alphabet-nav a { min-width: 44px; padding: .4rem .55rem; }
+  .alphabet-nav a .heb { font-size: 1.2rem; }
+  .entry-headword { font-size: 2rem; }
+  .header-search { max-width: none; }
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <a href="/Yiddish-Dialect-Dictionary/" class="home">Yiddish Dialect Dictionary</a>
+  <div class="header-search">
+    <svg class="icon" width="16" height="16" fill="white" viewBox="0 0 16 16">
+      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.868-3.834zm-5.242 1.406a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+    </svg>
+    <input type="search" id="search-input" placeholder="Search entries…" autocomplete="off">
+    <div id="search-results" class="search-results"></div>
+  </div>
+</header>
+<main class="page-wrap">
+
+<div class="letter-header">
+  <span class="heb-big">מ</span>
+  <div class="info">
+    <div class="translit-big">Mem</div>
+    <div class="count">724 entries</div>
+  </div>
+</div>
+<ul class="entry-list">
+<li><a href="/Yiddish-Dialect-Dictionary/entry/Mem%20%D7%9E%D7%9D/"><span class="hw">Mem מם</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9D%20Shlosmem/"><span class="hw">ם Shlosmem</span><span class="gl">‘shlosmem’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%92%D7%9C%D7%A2%D7%95%D7%95%D7%A2%D7%9F/"><span class="hw">מאַגלעווען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%93/"><span class="hw">מאַד</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%96%D7%90%D6%B8%D7%9C%D7%99%D7%A2/"><span class="hw">מאַזאָליע</span><span class="gl">‘callus’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%96%D7%95%D7%99%D7%A2%D7%A8/"><span class="hw">מאַזויער</span><span class="gl">‘a big person’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%98%D7%A2%D7%A1/"><span class="hw">מאַטעס</span><span class="gl">‘Mates (man's name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%98%D7%A2%D7%A1%D7%93%D7%90%D6%B8%D7%A8%D7%A3/"><span class="hw">מאַטעסדאָרף</span><span class="gl">‘Mattersburg (formerly Mattersdorf, in Burgenland, Austria)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%98%D7%A2%D7%A1%D7%93%D7%90%D6%B8%D7%A8%D7%A4%D6%BF%D7%A2%D7%A8/"><span class="hw">מאַטעסדאָרפֿער</span><span class="gl">‘of Mattersburg (formerly Mattersdorf, in Burgenland, Austria)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%98%D7%A2%D7%A8%D7%99%D7%90%D6%B7%D7%9C/"><span class="hw">מאַטעריאַל</span><span class="gl">‘material’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%98%D7%A2%D7%A8%D7%99%D7%A2/"><span class="hw">מאַטעריע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%98%D7%A2%D7%A8%D7%9F%20%D7%96%D7%99%D7%9A/"><span class="hw">מאַטערן זיך</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%98%D7%A2%D7%A8%D7%A1%D7%93%D7%90%D6%B8%D7%A8%D7%A3/"><span class="hw">מאַטערסדאָרף</span><span class="gl">‘Mattersburg (formerly Mattersdorf, Hungarian Nagymarton, a town in the Burgenland, easternmost Austria)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%98%D7%A8%D7%90%D6%B7%D7%A5/"><span class="hw">מאַטראַץ</span><span class="gl">‘mattress’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%98%D7%A8%D7%A2%D7%A0%D7%92%D7%A2/"><span class="hw">מאַטרענגע</span><span class="gl">‘flood’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%98%D7%A9%D7%A2%D7%99%D7%95%D6%BC%D7%95%D7%95%D7%A7%D7%A2/"><span class="hw">מאַטשעיוּווקע</span><span class="gl">‘cloth cap with visor’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%99%D7%90%D6%B8%D7%A0%D7%98%D7%99%D7%A7/"><span class="hw">מאַיאָנטיק</span><span class="gl">‘feudal estate, manor; a fortune’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%9B%D7%98/"><span class="hw">מאַכט</span><span class="gl">‘power’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%9B%D7%9F/"><span class="hw">מאַכן</span><span class="gl">‘make, do; wave’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%9B%D7%A2%D7%A8%D7%B2%D6%B7%D7%A7%D7%A2/"><span class="hw">מאַכערײַקע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%9C%D7%90%D6%B7%D7%A8%D7%99%D7%A2/"><span class="hw">מאַלאַריע</span><span class="gl">‘malaria’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%9C%D7%90%D6%B8%D7%98%D7%A9%D7%A2/"><span class="hw">מאַלאָטשע</span><span class="gl">‘junior member’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%9C%D7%99%D7%A0%D7%A2%201/"><span class="hw">מאַלינע 1</span><span class="gl">‘raspberry’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%9C%D7%A2/"><span class="hw">מאַלע</span><span class="gl">‘nearly’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%9C%D7%A2%D7%95%D7%95%D7%A2%D7%9F/"><span class="hw">מאַלעווען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%9C%D7%A2%D7%A8/"><span class="hw">מאַלער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%9C%D7%A4%D6%BC%D7%A2/"><span class="hw">מאַלפּע</span><span class="gl">‘ape’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%9C%D7%A4%D6%BC%D7%A2%D7%95%D7%95%D7%A2%D7%9F/"><span class="hw">מאַלפּעווען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%9C%D7%B2%D6%B7/"><span class="hw">מאַלײַ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%9E%D7%A2/"><span class="hw">מאַמע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%9E%D7%A2%D6%BE%D7%9C%D7%A9%D7%95%D7%9F/"><span class="hw">מאַמע־לשון</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%9E%D7%A2%D7%9C%D7%A2/"><span class="hw">מאַמעלע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%9E%D7%A2%D7%A9%D7%99/"><span class="hw">מאַמעשי</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%9F/"><span class="hw">מאַן</span><span class="gl">‘man; Man (name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%A0%D7%92%D7%9C%D7%A2%D7%9F/"><span class="hw">מאַנגלען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%A0%D7%92%D7%9C%E2%80%8F%202/"><span class="hw">מאַנגל‏ 2</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%A0%D7%93%D7%9C/"><span class="hw">מאַנדל</span><span class="gl">‘almond’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%A0%D7%94%D7%95%D7%99%D7%96/"><span class="hw">מאַנהויז</span><span class="gl">‘madhouse’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%A0%D7%94%D7%A2%D7%98%D7%9F/"><span class="hw">מאַנהעטן</span><span class="gl">‘Manhattan (borough of New York City)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%A0%D7%98%D7%9C/"><span class="hw">מאַנטל</span><span class="gl">‘coat’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%A0%D7%9B%D7%9E%D7%90%D6%B8%D7%9C/"><span class="hw">מאַנכמאָל</span><span class="gl">‘sometimes’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%A0%D7%9B%D7%A2%D7%A8/"><span class="hw">מאַנכער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%A0%D7%A1%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מאַנס זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%A0%D7%A1%D7%A4%D6%BC%D7%90%D6%B7%D7%A8%D7%A9%D7%95%D7%99%D7%9F/"><span class="hw">מאַנספּאַרשוין</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%A0%D7%A6%D7%91%D7%99%D7%9C/"><span class="hw">מאַנצביל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%A0%D7%A7/"><span class="hw">מאַנק</span><span class="gl">‘among (preposition)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%A0%D7%A8%D7%90%D6%B8/"><span class="hw">מאַנראָ</span><span class="gl">‘Monroe (town in Orange County, New York, home to many Hasidic Jews, next to the Satmar village Kiryas Joel)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%A1%D7%9C%D7%99%D7%A0%D7%A7%D7%A2/"><span class="hw">מאַסלינקע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%A1%D7%A7%D7%99%D7%A8%D7%9F/"><span class="hw">מאַסקירן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%A1%D7%A7%D7%A2/"><span class="hw">מאַסקע</span><span class="gl">‘mask’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%A4%D6%BC%D7%A2%20%D7%9E%D7%A4%D6%BC%D7%94%20%3F/"><span class="hw">מאַפּע מפּה ?</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%A7%D7%90%D6%B7%D7%A8%D7%90%D6%B7/"><span class="hw">מאַקאַראַ</span><span class="gl">‘sewing thread; yarn {?}’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%A8%D7%90%D6%B8%D7%96%D7%A9%D7%A2%D7%A0%D7%A2/"><span class="hw">מאַראָזשענע</span><span class="gl">‘ice cream’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%A8%D7%99%D7%A0%D7%90%D6%B7%D7%A8%D7%A7%D7%A2/"><span class="hw">מאַרינאַרקע</span><span class="gl">‘jacket’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%A8%D7%99%D7%A0%D7%99%D7%A8%D7%9F/"><span class="hw">מאַרינירן</span><span class="gl">‘to marinate, pickle’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%A8%D7%9A/"><span class="hw">מאַרך</span><span class="gl">‘marrow; brain’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%A8%D7%9B%D7%91%D7%99%D7%99%D7%9F/"><span class="hw">מאַרכביין</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%A8%D7%9E%D7%A2%D7%9C%D7%90%D6%B7%D7%93/"><span class="hw">מאַרמעלאַד</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%A8%D7%9E%D7%A2%D7%A8%D7%90%D6%B8%D7%A9/"><span class="hw">מאַרמעראָש</span><span class="gl">‘Maramureș (area in northern Romania and western Ukraine)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%A8%D7%A1/"><span class="hw">מאַרס</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%A8%D7%A2%D7%9C/"><span class="hw">מאַרעל</span><span class="gl">‘apricot’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%A8%D7%A5/"><span class="hw">מאַרץ</span><span class="gl">‘(month of) March’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%A8%D7%A7%201/"><span class="hw">מאַרק 1</span><span class="gl">‘market’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%A8%D7%A7%202/"><span class="hw">מאַרק 2</span><span class="gl">‘Mark (German currency)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%A8%D7%A7%D7%98%D7%90%D6%B8%D7%92/"><span class="hw">מאַרקטאָג</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%A8%D7%A9/"><span class="hw">מאַרש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%A8%D7%A9%D7%A2%D7%9C%D7%99%D7%A7/"><span class="hw">מאַרשעליק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%A9%20%5B%3F%5D/"><span class="hw">מאַש [?]</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%A9%D7%99%D7%9F/"><span class="hw">מאַשין</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%A9%D7%9C/"><span class="hw">מאַשל</span><span class="gl">‘bow’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B7%D7%A9%D7%A2/"><span class="hw">מאַשע</span><span class="gl">‘Masha (women's name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%92%D7%9F/"><span class="hw">מאָגן</span><span class="gl">‘stomach’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%92%D7%A0%D7%93%D7%90%D6%B8%D7%A8%D7%A3/"><span class="hw">מאָגנדאָרף</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%92%D7%A2%D7%A8/"><span class="hw">מאָגער</span><span class="gl">‘thin’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%93%20%5B%3F%5D/"><span class="hw">מאָד [?]</span><span class="gl">‘worm’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%93%D7%96%D7%A9%D7%99%D7%A6%D7%A2%D7%A8/"><span class="hw">מאָדזשיצער</span><span class="gl">‘of Modzhitz (Hasidic dynasty of Modrzyce, Poland)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%93%D7%9C%D7%99%D7%A2%D7%9F%20%D7%96%D7%99%D7%9A/"><span class="hw">מאָדליען זיך</span><span class="gl">‘to pray (non-Jewish)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%93%D7%A0%D7%A2/"><span class="hw">מאָדנע</span><span class="gl">‘strange’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%93%D7%A2/"><span class="hw">מאָדע</span><span class="gl">‘fashion’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%93%D7%A2%D7%9C/"><span class="hw">מאָדעל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%93%D7%A2%D7%9C%D7%A7%D7%A2/"><span class="hw">מאָדעלקע</span><span class="gl">‘model (woman)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%93%D7%A2%D7%A8%D7%9F/"><span class="hw">מאָדערן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%94%D7%99%D7%9C%D7%A0%D7%99%D7%A7/"><span class="hw">מאָהילניק</span><span class="gl">‘cemetery (non-Jewish)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%96%D7%9C%D7%A2%D7%9F/"><span class="hw">מאָזלען</span><span class="gl">‘measles’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%98%D7%90%D6%B8%D7%A6%D7%99%D7%A7%D7%9C/"><span class="hw">מאָטאָציקל</span><span class="gl">‘motorcycle’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%98%D7%99%D7%9C/"><span class="hw">מאָטיל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%98%D7%99%D7%A7%D7%A2/"><span class="hw">מאָטיקע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%98%D7%9C%D7%A2%D7%9F/"><span class="hw">מאָטלען</span><span class="gl">‘to gossip’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%9A/"><span class="hw">מאָך</span><span class="gl">‘moss’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%9C%201/"><span class="hw">מאָל 1</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%9C%202/"><span class="hw">מאָל 2</span><span class="gl">‘moth’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%9C%203/"><span class="hw">מאָל 3</span><span class="gl">‘mark’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%9C%D7%99%D7%A2%D7%95%D7%95/"><span class="hw">מאָליעוו</span><span class="gl">‘Mahilyou, Russian Mogilyov (city in eastern Belarus)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%9C%D7%9F%201/"><span class="hw">מאָלן 1</span><span class="gl">‘to paint’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%9C%D7%9F%202/"><span class="hw">מאָלן 2</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%9C%D7%A2%D7%A8/"><span class="hw">מאָלער</span><span class="gl">‘painter’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%9C%D7%A6%D7%B2%D6%B7%D7%98/"><span class="hw">מאָלצײַט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%9C%D7%A7%D7%9F/"><span class="hw">מאָלקן</span><span class="gl">‘whey’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%9E%D7%A2%D7%A0%D7%98/"><span class="hw">מאָמענט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%9F/"><span class="hw">מאָן</span><span class="gl">‘poppy’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%A0%D7%90%D6%B7%D7%98/"><span class="hw">מאָנאַט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%A0%D7%98%D7%99%D7%A7/"><span class="hw">מאָנטיק</span><span class="gl">‘Monday’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%A0%D7%99%D7%A9/"><span class="hw">מאָניש</span><span class="gl">‘Monish (man's name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%A0%D7%A1%D7%98%D7%A2%D7%A8/"><span class="hw">מאָנסטער</span><span class="gl">‘monster’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%A0%D7%A2%D7%9F/"><span class="hw">מאָנען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%A0%D7%A7%D7%99/"><span class="hw">מאָנקי</span><span class="gl">‘monkey’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%A0%D7%A7%D7%99%D6%BE%D7%91%D7%99%D7%96%D7%A0%D7%A2%D7%A1/"><span class="hw">מאָנקי־ביזנעס</span><span class="gl">‘monkey business’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%A1%201/"><span class="hw">מאָס 1</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%A1%202/"><span class="hw">מאָס 2</span><span class="gl">‘moss’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%A1%D7%A7%D7%95%D7%95%D7%A2/"><span class="hw">מאָסקווע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%A6%D7%A2%D7%95%D7%95%D7%A2%D7%9F/"><span class="hw">מאָצעווען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%A7/"><span class="hw">מאָק</span><span class="gl">‘idiot’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%A8%D7%90%D6%B7%D7%A1%D7%98/"><span class="hw">מאָראַסט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%A8%D7%90%D6%B7%D7%A1%D7%98%D7%99%D7%A7/"><span class="hw">מאָראַסטיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%A8%D7%92%D7%9F/"><span class="hw">מאָרגן</span><span class="gl">‘morning, tomorrow’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%A8%D7%92%D7%9F%D6%BE%D7%A9%D7%98%D7%A2%D7%A8%D7%9F/"><span class="hw">מאָרגן־שטערן</span><span class="gl">‘morning star’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%A8%D7%92%D7%A2%D7%93%D7%96%D7%A9/"><span class="hw">מאָרגעדזש</span><span class="gl">‘morgage’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%A8%D7%93/"><span class="hw">מאָרד</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%A8%D7%93%D7%A2/"><span class="hw">מאָרדע</span><span class="gl">‘chin’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%A8%D7%93%D7%A2%D7%95%D7%95%D7%A2%D7%9F/"><span class="hw">מאָרדעווען</span><span class="gl">‘to muder’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%A8%D7%A2%D7%95%D7%95%D7%A7%D7%A2/"><span class="hw">מאָרעווקע</span><span class="gl">‘ant’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%A9%D7%98%D7%A9%D7%99%D7%A1%D7%A7/"><span class="hw">מאָשטשיסק</span><span class="gl">‘Mostyska (city in western Ukraine)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%A9%D7%9C%D7%A2%D7%92/"><span class="hw">מאָשלעג</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D6%B8%D7%A9%D7%A7%D7%A2/"><span class="hw">מאָשקע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D7%93%D7%99%D7%9D/"><span class="hw">מאדים</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D7%94/"><span class="hw">מאה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D7%94%D6%BE%D7%A9%D7%A2%D7%A8%D7%99%D7%9D/"><span class="hw">מאה־שערים</span><span class="gl">‘Meah Shearim (lit. hundred gates), old Haredi neighborhood in Jerusalem’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D7%99%D7%A8/"><span class="hw">מאיר</span><span class="gl">‘Meyer (name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D7%9B%D7%9C/"><span class="hw">מאכל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D7%9E%D7%99%D7%9F/"><span class="hw">מאמין</span><span class="gl">‘believer’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D7%9E%D7%99%D7%9F%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מאמין זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D7%9E%D7%A8/"><span class="hw">מאמר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D7%9E%D7%A8%20%D7%94%D7%97%D7%9B%D7%9D/"><span class="hw">מאמר החכם</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%90%D7%A8%D7%99%D7%9A%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מאריך זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%91%D6%BF%D7%90%D7%A8%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מבֿאר זײַן</span><span class="gl">‘to explain’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%91%D6%BF%D7%94%D7%99%D7%9C%20%D7%A2%D7%9C%20%D7%94%D7%A8%D7%A2%D7%99%D7%95%D7%9F/"><span class="hw">מבֿהיל על הרעיון</span><span class="gl">‘expression of astonishment and exaggeration’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%91%D6%BF%D7%95%D7%9C%D7%91%D7%9C/"><span class="hw">מבֿולבל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%91%D6%BF%D7%98%D7%9C%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מבֿטל זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%91%D6%BF%D7%99%D7%99%D7%A9%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מבֿייש זײַן</span><span class="gl">‘to shame’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%91%D6%BF%D7%99%D7%9F/"><span class="hw">מבֿין</span><span class="gl">‘expert’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%91%D6%BF%D7%A2%D7%A8%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מבֿער זײַן</span><span class="gl">‘to clear away; to burn’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%91%D6%BF%D7%A7%D7%A8%D6%BE%D7%97%D7%95%D7%9C%D7%94%20%D7%96%D7%B2%D6%B7%D7%9F%E2%80%8F/"><span class="hw">מבֿקר־חולה זײַן‏</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%91%D6%BF%D7%A7%D7%A9%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מבֿקש זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%91%D6%BF%D7%A8%D7%A8%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מבֿרר זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%91%D7%95%D7%9C/"><span class="hw">מבול</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%91%D7%95%D7%9C%D7%A2%D7%9F/"><span class="hw">מבולען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%92%D7%93%D7%99%D7%9D%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מגדים זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%92%D7%93%D7%9C%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מגדל זײַן</span><span class="gl">‘to raise, grow’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%92%D7%95%D7%A9%D7%9D/"><span class="hw">מגושם</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%92%D7%95%D7%A9%D7%9E%D7%93%D7%99%D7%A7/"><span class="hw">מגושמדיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%92%D7%96%D7%9D%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מגזם זײַן</span><span class="gl">‘to exaggerate’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%92%D7%99%D7%93/"><span class="hw">מגיד</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%92%D7%99%D7%93%D7%95%D7%AA/"><span class="hw">מגידות</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%92%D7%99%D7%99%D7%A1%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מגייס זײַן</span><span class="gl">‘to draft, induct into the military’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%92%D7%99%D7%99%D7%A8%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מגייר זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%92%D7%99%D7%9C%D7%94/"><span class="hw">מגילה</span><span class="gl">‘the Megillah; scroll’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%92%D7%99%D7%9C%D7%AA%D6%BE%D7%90%D7%A1%D7%AA%D6%BC%D7%A8/"><span class="hw">מגילת־אסתּר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%92%D7%99%D7%9C%D7%AA%D6%BE%D7%AA%D6%BC%D7%A2%D7%A0%D7%99%D7%AA/"><span class="hw">מגילת־תּענית</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%92%D7%99%D7%9F%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מגין זײַן</span><span class="gl">‘to defend, protect’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%92%D7%9C%D7%94%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מגלה זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%92%D7%A4%D6%BF%D7%94/"><span class="hw">מגפֿה</span><span class="gl">‘epidemic, plague’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%93%D7%90%D6%B8%D7%A9%D7%A7%D7%A2%D6%BE%D7%9C%D7%93%D7%90%D6%B8%D7%A9%D7%A7%D7%A2/"><span class="hw">מדאָשקע־לדאָשקע</span><span class="gl">‘from cover to cover’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%93%D7%91%D7%A8/"><span class="hw">מדבר</span><span class="gl">‘desert’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%93%D7%97%D7%94%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מדחה זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%93%D7%99/"><span class="hw">מדי</span><span class="gl">‘Media (area in north-western Iran)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%93%D7%99%D7%99%D7%A7/"><span class="hw">מדייק</span><span class="gl">‘precise’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%93%D7%99%D7%9F/"><span class="hw">מדין</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%93%D7%99%D7%A0%D7%94/"><span class="hw">מדינה</span><span class="gl">‘country’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%93%D7%A8%D7%91%D7%A0%D7%9F/"><span class="hw">מדרבנן</span><span class="gl">‘only from rabbinic authority (not explicitly in the Torah)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%93%D7%A8%D7%92%D7%94/"><span class="hw">מדרגה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%93%D7%A8%D7%A9/"><span class="hw">מדרש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%94%D6%BE%D7%A0%D7%A9%D7%AA%D6%BC%D7%A0%D7%94/"><span class="hw">מה־נשתּנה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%94%D7%90%D6%B7%D7%99%D6%BE%D7%98%D7%A2%D7%9E%D7%90/"><span class="hw">מהאַי־טעמא</span><span class="gl">‘for this reason’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%94%D7%95%D7%9E%D7%94/"><span class="hw">מהומה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%94%D7%9C%D7%9A/"><span class="hw">מהלך</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%94%D7%A0%D7%94%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מהנה זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%94%D7%A4%D6%BC%D7%9A%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מהפּך זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%94%D7%A4%D6%BC%D7%9B%D7%94/"><span class="hw">מהפּכה</span><span class="gl">‘revolution’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%94%D7%A8%D7%A9%22%D7%90%D6%B8/"><span class="hw">מהרש"אָ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%90%D7%91%D6%BF/"><span class="hw">מואבֿ</span><span class="gl">‘Moab’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%93/"><span class="hw">מוד</span><span class="gl">‘mood’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%93%D7%94%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מודה זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%93%D7%99%D7%A2%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מודיע זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%94%D7%9C/"><span class="hw">מוהל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%95%D7%9B%D6%BC%D7%97%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מווכּח זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%95%D7%AA/"><span class="hw">מוות</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%95%D7%AA%D6%BC%D7%A8%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מוותּר זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%96%D7%99%D7%A7/"><span class="hw">מוזיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%96%D7%99%D7%A7%D7%90%D6%B7%D7%A0%D7%98/"><span class="hw">מוזיקאַנט</span><span class="gl">‘musician’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%96%D7%99%D7%A7%D7%A2%D7%A8/"><span class="hw">מוזיקער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%96%D7%9F/"><span class="hw">מוזן</span><span class="gl">‘to have to, must’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%97/"><span class="hw">מוח</span><span class="gl">‘mind’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%97%D6%BE%D7%A4%D6%BF%D7%90%D6%B7%D7%A8%D7%93%D7%A8%D7%99%D7%99%D7%A2%D7%A8/"><span class="hw">מוח־פֿאַרדרייער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%97%D7%94%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מוחה זײַן</span><span class="gl">‘to protest’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%97%D7%9C%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מוחל זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%97%D7%9C%20%D7%98%D7%95%D7%91%D6%BF%D7%95%D7%AA/"><span class="hw">מוחל טובֿות</span><span class="gl">‘don't do me any favors’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%98/"><span class="hw">מוט</span><span class="gl">‘courage’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%98%D7%A0%D7%A2/"><span class="hw">מוטנע</span><span class="gl">‘murky (adjective)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%98%D7%A2%D7%A8/"><span class="hw">מוטער</span><span class="gl">‘mother’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%98%D7%A2%D7%A8%D7%98%D7%A8%D7%90%D6%B7%D7%9B%D7%98/"><span class="hw">מוטערטראַכט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%98%D7%A2%D7%A8%D7%A7%D7%A2/"><span class="hw">מוטערקע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%98%D7%A9%D7%A2%D7%9F/"><span class="hw">מוטשען</span><span class="gl">‘to torment’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%98%D7%A9%D7%A2%D7%A0%D7%99%D7%A0%D7%A2/"><span class="hw">מוטשענינע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%99%D7%92%D7%99%D7%9C/"><span class="hw">מויגיל</span><span class="gl">‘Mogilany (village in southern Poland)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%99%D7%93/"><span class="hw">מויד</span><span class="gl">‘maid’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%99%D7%96/"><span class="hw">מויז</span><span class="gl">‘mouse’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%99%D7%96%D7%A0%D7%9C%D7%90%D6%B8%D7%9A/"><span class="hw">מויזנלאָך</span><span class="gl">‘mouse hole’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%99%D7%9C/"><span class="hw">מויל</span><span class="gl">‘mouth’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%99%D7%9C%D7%91%D7%A2%D7%A8/"><span class="hw">מוילבער</span><span class="gl">‘mulberry’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%99%D7%9C%D7%95%D7%95%D7%90%D6%B8%D7%A8%D7%A3/"><span class="hw">מוילוואָרף</span><span class="gl">‘mole’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%99%D7%9C%D7%9E%D7%90%D6%B7%D7%9B%D7%A2%D7%A8/"><span class="hw">מוילמאַכער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%99%D7%9C%D7%A9%D7%9C%D7%90%D6%B8%D7%A1/"><span class="hw">מוילשלאָס</span><span class="gl">‘mouth lock’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%99%D7%A2%D7%A8/"><span class="hw">מויער</span><span class="gl">‘stone wall/house’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%99%D7%A2%D7%A8%D7%9F/"><span class="hw">מויערן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%99%D7%A2%D7%A8%D7%A2%D7%A8/"><span class="hw">מויערער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%99%D7%A2%D7%A8%D7%A7%D7%90%D6%B8%D7%A4%D6%BC/"><span class="hw">מויערקאָפּ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%99%D7%A6%D7%A7%D7%A2/"><span class="hw">מויצקע</span><span class="gl">‘slice of bread’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%9B%D7%99%D7%97%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מוכיח זײַן</span><span class="gl">‘reprouch’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%9C%D7%98%D7%A2%D7%A8/"><span class="hw">מולטער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%9C%D7%99%D7%A0%D7%A2%D7%A1/"><span class="hw">מולינעס</span><span class="gl">‘foam’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%9D/"><span class="hw">מום</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%9E%D7%97%D7%94/"><span class="hw">מומחה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%9E%D7%A2/"><span class="hw">מומע</span><span class="gl">‘aunt’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%A0%D7%93/"><span class="hw">מונד</span><span class="gl">‘mouth’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%A0%D7%99%D7%A2%D7%9C%D7%A2/"><span class="hw">מוניעלע</span><span class="gl">‘Munyele (name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%A0%D7%A7%D7%90%D6%B7%D7%98%D7%A9/"><span class="hw">מונקאַטש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%A1%D7%93/"><span class="hw">מוסד</span><span class="gl">‘institution’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%A1%D7%95%D7%9C%D7%9E%D7%90%D6%B7%D7%9F/"><span class="hw">מוסולמאַן</span><span class="gl">‘Muslim’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%A1%D7%98%D7%A2%D7%A8%D7%9F/"><span class="hw">מוסטערן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%A1%D7%A8/"><span class="hw">מוסר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%A1%D7%A8%D6%BE%D7%A1%D7%A4%D6%BF%D7%A8/"><span class="hw">מוסר־ספֿר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%A1%D7%A8%D7%9F/"><span class="hw">מוסרן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%A1%D7%A8%D7%A0%D7%99%D7%A7/"><span class="hw">מוסרניק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%A2%D7%93%D6%BE%D7%A7%D7%98%D7%9F/"><span class="hw">מועד־קטן</span><span class="gl">‘tractate of the Talmud’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%A6%D7%90%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מוצא זײַן</span><span class="gl">‘to find’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%A6%D7%90%D7%99%D6%BE%D7%99%D7%95%D7%9D%D6%BE%D7%9B%D6%BC%D7%99%D7%A4%D6%BC%D7%95%D7%A8/"><span class="hw">מוצאי־יום־כּיפּור</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%A6%D7%90%D7%99%D6%BE%D7%A9%D7%91%D7%AA/"><span class="hw">מוצאי־שבת</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%A6%D7%99%D7%90/"><span class="hw">מוציא</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%A6%D7%9C%D7%97%D7%93%D7%99%D7%A7/"><span class="hw">מוצלחדיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%A7/"><span class="hw">מוק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%A7%D7%9C/"><span class="hw">מוקל</span><span class="gl">‘butt of cigarette’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%A7%D7%A6%D7%94/"><span class="hw">מוקצה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%A8%D7%90/"><span class="hw">מורא</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%A8%D7%90%D6%B7%D7%A9%D7%A7%D7%A2/"><span class="hw">מוראַשקע</span><span class="gl">‘ant’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%A8%D7%90%D7%93%D7%99%D7%A7/"><span class="hw">מוראדיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%A8%D7%93%20/"><span class="hw">מורד </span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%A8%D7%94%20%D7%A0%D7%91%D7%95%D7%9B%D7%99%D7%9D/"><span class="hw">מורה נבוכים</span><span class="gl">‘The Guide for the Perplexed (by Maimonides)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%A8%D7%99%D7%A0%D7%95/"><span class="hw">מורינו</span><span class="gl">‘our teacher (title)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%A9%D7%82%D7%92/"><span class="hw">מושׂג</span><span class="gl">‘idea’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%A9%D7%82%D7%9B%D6%BC%D7%9C/"><span class="hw">מושׂכּל</span><span class="gl">‘idea, concept’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%A9%D7%91%D6%BF/"><span class="hw">מושבֿ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%A9%D7%98%D7%90%D6%B7%D7%A8%D7%93%D7%A2/"><span class="hw">מושטאַרדע</span><span class="gl">‘mustard’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%A9%D7%9C%201/"><span class="hw">מושל 1</span><span class="gl">‘seashell, mussel’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%A9%D7%9C%202/"><span class="hw">מושל 2</span><span class="gl">‘ruler’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%95%D7%A9%D7%A7%D7%A2/"><span class="hw">מושקע</span><span class="gl">‘bowtie’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%96%D7%91%D7%97/"><span class="hw">מזבח</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%96%D7%95%D7%96%D7%94/"><span class="hw">מזוזה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%96%D7%95%D7%9E%D7%9F/"><span class="hw">מזומן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%96%D7%95%D7%A0%D7%95%D7%AA/"><span class="hw">מזונות</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%96%D7%99%D7%A7/"><span class="hw">מזיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%96%D7%99%D7%A7%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מזיק זײַן</span><span class="gl">‘to harm’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%96%D7%9B%D6%BC%D7%94%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מזכּה זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%96%D7%9B%D6%BC%D7%99%D7%A8%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מזכּיר זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%96%D7%9B%D6%BC%D7%99%D7%A8%D6%BE%D7%A0%D7%A9%D7%9E%D7%95%D7%AA%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מזכּיר־נשמות זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%96%D7%9C/"><span class="hw">מזל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%96%D7%9C%D6%BE%D7%98%D7%95%D7%91%D6%BF/"><span class="hw">מזל־טובֿ</span><span class="gl">‘congratulations’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%96%D7%9C%D7%93%D7%99%D7%A7/"><span class="hw">מזלדיק</span><span class="gl">‘lucky’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%96%D7%9E%D7%95%D7%A8/"><span class="hw">מזמור</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%96%D7%9E%D7%A8/"><span class="hw">מזמר</span><span class="gl">‘singer’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%96%D7%A0%D7%94%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מזנה זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%96%D7%A8%D7%97/"><span class="hw">מזרח</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%97%D7%93%D7%A9%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מחדש זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%97%D7%94/"><span class="hw">מחה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%97%D7%95%D7%99%D7%91%D6%BF/"><span class="hw">מחויבֿ</span><span class="gl">‘obligated’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%97%D7%95%D7%9C%D7%A7/"><span class="hw">מחולק</span><span class="gl">‘disagreeing, of a different opinion’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%97%D7%95%D7%A5%20%D7%9C%D7%93%D7%A8%D7%9A%20%D7%94%D7%98%D7%91%D6%BF%D7%A2/"><span class="hw">מחוץ לדרך הטבֿע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%97%D7%95%D7%AA%D6%BC%D7%9F/"><span class="hw">מחותּן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%97%D7%95%D7%AA%D6%BC%D7%A0%D7%AA%D7%98%D7%A2/"><span class="hw">מחותּנתטע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%97%D7%96%D7%95%D7%A8/"><span class="hw">מחזור</span><span class="gl">‘holiday prayer book’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%97%D7%96%D7%A7%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מחזק זײַן</span><span class="gl">‘to strengthen’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%97%D7%99%D7%94/"><span class="hw">מחיה</span><span class="gl">‘pleasure’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%97%D7%99%D7%94%D7%93%D7%99%D7%A7/"><span class="hw">מחיהדיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%97%D7%99%D7%99%D7%91%D6%BF%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מחייבֿ זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%97%D7%99%D7%9C%D7%94/"><span class="hw">מחילה</span><span class="gl">‘foregiveness’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%97%D7%99%D7%9C%D7%94%20%D7%A4%D6%BC%D7%A8%D7%B2%D6%B7%D7%A2%D7%9F/"><span class="hw">מחילה פּרײַען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%97%D7%99%D7%A6%D7%94/"><span class="hw">מחיצה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%97%D7%9C%D7%94/"><span class="hw">מחלה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%97%D7%9C%D7%95%D7%A7%D7%AA/"><span class="hw">מחלוקת</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%97%D7%9C%D7%99%D7%98%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מחליט זײַן</span><span class="gl">‘to decide’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%97%D7%9C%D7%9C%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מחלל זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%97%D7%9C%D7%9C%D6%BE%D7%A9%D7%91%D7%AA%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מחלל־שבת זײַן</span><span class="gl">‘violate the Sabbath’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%97%D7%9C%D7%AA%20%D7%A8%D7%90%D6%B8%D7%A9/"><span class="hw">מחלת ראָש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%97%D7%A0%D7%94/"><span class="hw">מחנה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%97%D7%A6%D7%99%D7%AA%D6%BE%D7%94%D7%A9%D7%A7%D7%9C/"><span class="hw">מחצית־השקל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%97%D7%A7/"><span class="hw">מחק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%97%D7%A8/"><span class="hw">מחר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%97%D7%A8%D7%99%D7%91%D6%BF%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מחריבֿ זײַן</span><span class="gl">‘to destroy’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%97%D7%A8%D7%A3%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מחרף זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%97%D7%A9%D7%91%D6%BF%D7%94/"><span class="hw">מחשבֿה</span><span class="gl">‘thought’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%98%D7%91%D7%A2/"><span class="hw">מטבע</span><span class="gl">‘coin’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%98%D7%94%D7%A8%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מטהר זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%98%D7%95%D7%A8%D7%A3/"><span class="hw">מטורף</span><span class="gl">‘crazy’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%98%D7%95%D7%A9%D7%98%D7%A9/"><span class="hw">מטושטש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%98%D7%99%D7%A8/"><span class="hw">מטיר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%98%D7%9C%D7%98%D7%9C%D7%99%D7%9D/"><span class="hw">מטלטלים</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%98%D7%9E%D7%90%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מטמא זײַן</span><span class="gl">‘to defile’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%98%D7%A4%D6%BC%D7%9C%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מטפּל זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%98%D7%A8%D7%94/"><span class="hw">מטרה</span><span class="gl">‘aim, goal’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%98%D7%A8%D7%99%D7%97%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מטריח זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99/"><span class="hw">מי</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D6%B4%D7%A2%D7%9F/"><span class="hw">מיִען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%90%D6%B7%D7%95%E2%80%A8%27cat%20sound%3B%20call%20to%20a%20cat%27/"><span class="hw">מיאַו 'cat sound; call to a cat'</span><span class="gl">‘cat sound; call to a cat’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%90%D7%95%D7%A1/"><span class="hw">מיאוס</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%90%D7%A9%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מיאש זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%92%D7%9C/"><span class="hw">מיגל</span><span class="gl">‘disgust’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%92%D7%A2%D7%9C%D7%A2/"><span class="hw">מיגעלע</span><span class="gl">‘grasshopper’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%92%D7%A2%D7%A0%D7%A2%D7%9F/"><span class="hw">מיגענען</span><span class="gl">‘to sleep, snooze’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%93/"><span class="hw">מיד</span><span class="gl">‘tired’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%93%D7%94/"><span class="hw">מידה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%93%D7%94%20%D7%9B%D6%BC%D7%A0%D7%92%D7%93%20%D7%9E%D7%99%D7%93%D7%94/"><span class="hw">מידה כּנגד מידה</span><span class="gl">‘an eye for an eye, tit for tat, quid pro quo’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%93%D7%A2%D7%A8/"><span class="hw">מידער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%93%D7%AA%20%D7%94%D7%A8%D7%97%D7%9E%D7%99%D7%9D/"><span class="hw">מידת הרחמים</span><span class="gl">‘lenience’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%95%D7%97%D7%A1/"><span class="hw">מיוחס</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%96%D7%91%D7%97/"><span class="hw">מיזבח</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%96%D7%99%D7%A0%D7%99%D7%A7/"><span class="hw">מיזיניק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%98/"><span class="hw">מיט</span><span class="gl">‘with (preposition)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%98%D7%90%D6%B8%D7%92/"><span class="hw">מיטאָג</span><span class="gl">‘lunch; noon’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%98%D7%90%D6%B8%D7%92%D7%9E%D7%90%D6%B8%D7%9C/"><span class="hw">מיטאָגמאָל</span><span class="gl">‘lunch’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%98%D7%90%D6%B8%D7%92%D7%A2%D7%A1%D7%9F/"><span class="hw">מיטאָגעסן</span><span class="gl">‘lunch’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%98%D7%92%D7%9C%D7%99%D7%93/"><span class="hw">מיטגליד</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%98%D7%92%D7%A2%D7%91%D7%9F/"><span class="hw">מיטגעבן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%98%D7%92%D7%A2%D7%91%D7%A8%D7%90%D6%B7%D7%9B%D7%98%D7%A1/"><span class="hw">מיטגעבראַכטס</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%98%D7%94/"><span class="hw">מיטה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%98%D7%94%D7%99%D7%99%D7%9C%D7%99%D7%A7%D7%99%D7%99%D7%98/"><span class="hw">מיטהייליקייט</span><span class="gl">‘co-sanctity’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%98%D7%95%D7%95%D7%90%D6%B8%D7%9A/"><span class="hw">מיטוואָך</span><span class="gl">‘Wednesday’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%98%D7%96%D7%90%D6%B7%D7%9E%D7%98/"><span class="hw">מיטזאַמט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%98%D7%9C%D6%BE%D7%90%D6%B7%D7%9C%D7%98%D7%A2%D7%A8/"><span class="hw">מיטל־אַלטער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%98%D7%9C%D6%BE%D7%A4%D6%BF%D7%99%D7%A0%D7%92%D7%A2%D7%A8/"><span class="hw">מיטל־פֿינגער</span><span class="gl">‘middle finger’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%98%D7%9C%D7%99%D7%99%D7%93/"><span class="hw">מיטלייד</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%98%D7%9C%D7%A4%D6%BC%D7%95%D7%A0%D7%A7%D7%98/"><span class="hw">מיטלפּונקט</span><span class="gl">‘mid-point’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%98%D7%9E%D7%90%D6%B7%D7%9B%D7%9F/"><span class="hw">מיטמאַכן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%98%D7%9F/"><span class="hw">מיטן</span><span class="gl">‘in the middle’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%98%D7%A2/"><span class="hw">מיטע</span><span class="gl">‘customs, tolls; rent’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%98%D7%A2%D7%A0%D7%90%D6%B7%D7%A0%D7%93/"><span class="hw">מיטענאַנד</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%98%D7%A4%D6%BF%D7%A8%D7%99%D7%99%D7%A2%D7%9F/"><span class="hw">מיטפֿרייען</span><span class="gl">‘to rejoice together with others’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%99%D7%93%D7%9C/"><span class="hw">מיידל</span><span class="gl">‘girl’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%99%D7%93%D7%9C%D7%95%D7%95%D7%B2%D6%B7%D7%96/"><span class="hw">מיידלווײַז</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%99%D7%96%D7%A2%D7%A8/"><span class="hw">מייזער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%99%D7%98%D7%A2/"><span class="hw">מייטע</span><span class="gl">‘ (name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%99%D7%9D/"><span class="hw">מיים</span><span class="gl">‘water’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%99%D7%9F/"><span class="hw">מיין</span><span class="gl">‘more’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%99%D7%A0%D7%95%D7%A0%D7%92/"><span class="hw">מיינונג</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%99%D7%A0%D7%A2%D7%9F/"><span class="hw">מיינען</span><span class="gl">‘to mean’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%99%D7%A1%D7%98%D7%9F%20%D7%98%D7%99%D7%99%D7%9C/"><span class="hw">מייסטן טייל</span><span class="gl">‘for the most part’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%99%D7%A7%D7%A2%D7%A0%D7%A2%D7%9F/"><span class="hw">מייקענען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%99%D7%A8%D7%A2/"><span class="hw">מיירע</span><span class="gl">‘dough for baking matzos’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%9A/"><span class="hw">מיך</span><span class="gl">‘me (accusative)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%9B%D7%9C/"><span class="hw">מיכל</span><span class="gl">‘(man's name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%9B%D7%9C%D7%99%D7%A2/"><span class="hw">מיכליע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%9C/"><span class="hw">מיל</span><span class="gl">‘mill’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%9C%D7%90/"><span class="hw">מילא</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%9C%D7%91/"><span class="hw">מילב</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%9C%D7%92%D7%A8%D7%95%D7%99%D7%9D/"><span class="hw">מילגרוים</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%9C%D7%94/"><span class="hw">מילה</span><span class="gl">‘circumcision’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%9C%D7%94%D7%95%D7%99%D7%96%D7%9F/"><span class="hw">מילהויזן</span><span class="gl">‘Mulhouse (German Mühlhausen), a city in Alsace, France’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%9C%D7%99%D7%90%D6%B7%D7%A8%D7%93/"><span class="hw">מיליאַרד</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%9C%D7%99%D7%90%D6%B8%D7%9F/"><span class="hw">מיליאָן</span><span class="gl">‘million’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%9C%D7%99%D7%90%D6%B8%D7%A0%D7%A2%D7%A8/"><span class="hw">מיליאָנער</span><span class="gl">‘millionaire’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%9C%D7%99%D7%98%D7%A2%D7%A8/"><span class="hw">מיליטער</span><span class="gl">‘military’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%9C%D7%99%D7%A2%D6%BE%D7%9E%D7%99%D7%9C%D7%99%D7%90%D6%B8%D7%A0%D7%A2%D7%9F/"><span class="hw">מיליע־מיליאָנען</span><span class="gl">‘many millions’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%9C%D7%99%D7%A5/"><span class="hw">מיליץ</span><span class="gl">‘militia’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%9C%D7%99%D7%A6%D7%99%D7%90%D6%B7%D7%A0%D7%98/"><span class="hw">מיליציאַנט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%9C%D7%99%D7%A6%D7%99%D7%A2/"><span class="hw">מיליציע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%9C%D7%9A/"><span class="hw">מילך</span><span class="gl">‘milk’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%9C%D7%9B%D7%94%D7%A2%D7%A0%D7%93%D7%9C%D7%A2%D7%A8/"><span class="hw">מילכהענדלער</span><span class="gl">‘dairyman’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%9C%D7%9B%D7%99%D7%A7/"><span class="hw">מילכיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%9C%D7%9B%D7%99%D7%A7%D7%A1/"><span class="hw">מילכיקס</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%9C%D7%9B%D7%99%D7%A7%D7%A2%D7%A8/"><span class="hw">מילכיקער</span><span class="gl">‘dairyman’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%9C%D7%9B%D7%9C/"><span class="hw">מילכל</span><span class="gl">‘grinder (for coffee or pepper; diminutive of מיל)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%9C%D7%A0%D7%A2%D7%A8/"><span class="hw">מילנער</span><span class="gl">‘miller’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%9C%D7%A9%D7%98%D7%99%D7%99%D7%9F/"><span class="hw">מילשטיין</span><span class="gl">‘millstone’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%9E%D7%A8%D7%90/"><span class="hw">מימרא</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%9F/"><span class="hw">מין</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%A0%D7%90%D6%B7%D7%A9%D7%98%D7%95%D7%A8/"><span class="hw">מינאַשטור</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%A0%D7%92%D7%9C%D7%A2%D7%9F/"><span class="hw">מינגלען</span><span class="gl">‘to mingle’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%A0%D7%94%D7%92/"><span class="hw">מינהג</span><span class="gl">‘custom’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%A0%D7%95%D7%98/"><span class="hw">מינוט</span><span class="gl">‘minute’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%A0%D7%98%D7%A2%D7%A8%D7%9F/"><span class="hw">מינטערן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%A0%D7%99%D7%9A/"><span class="hw">מיניך</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%A0%D7%99%D7%A1%D7%98%D7%A2%D7%A8/"><span class="hw">מיניסטער</span><span class="gl">‘minister’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%A0%D7%A1%D7%A7%D7%A2%D7%A8/"><span class="hw">מינסקער</span><span class="gl">‘Minsk (adjective)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%A0%D7%A2%D7%A8/"><span class="hw">מינער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%A0%D7%A2%D7%A8%D7%9F/"><span class="hw">מינערן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%A1%D7%98/"><span class="hw">מיסט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%A1%D7%98%D7%A4%D6%BF%D7%99%D7%99%D7%92%D7%A2%D7%9C%D7%A2/"><span class="hw">מיסטפֿייגעלע</span><span class="gl">‘sparrow’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%A1%D7%98%D7%A9%D7%95%D7%99%D7%A4%D6%BF%D7%9C/"><span class="hw">מיסטשויפֿל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%A1%D7%A4%D6%BF%D7%90%D6%B7%D7%A8%D7%A9%D7%98%D7%A2%D7%A0%D7%93%D7%A2%D7%A0%D7%99%D7%A9/"><span class="hw">מיספֿאַרשטענדעניש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%A2%D7%95%D7%98/"><span class="hw">מיעוט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%A6%D7%95%D7%95%D7%94/"><span class="hw">מיצווה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%A6%D7%95%D7%95%D7%94%D6%BE%D7%98%D7%90%D6%B7%D7%A0%D7%A5/"><span class="hw">מיצווה־טאַנץ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%A6%D7%95%D7%95%D7%94%D6%BE%D7%98%D7%90%D6%B7%D7%A0%D7%A7/"><span class="hw">מיצווה־טאַנק</span><span class="gl">‘mitzvah-tank, mitvah-mobile (loud Chabad truck meant to encourage Jews to do mitzvahs)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%A6%D7%95%D7%95%D7%AA%D6%BE%D7%91%D7%A0%D7%99%D6%BE%D7%A0%D7%97/"><span class="hw">מיצוות־בני־נח</span><span class="gl">‘the commandments of the sons of Noah: the seven commandments that apply to non-Jews’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%A6%D7%9C/"><span class="hw">מיצל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%A6%D7%A8%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מיצר זײַן</span><span class="gl">‘to distress’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%A7%D7%95%D7%95%D7%94/"><span class="hw">מיקווה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%A7%D7%95%D7%95%D7%94%D6%BE%D7%99%D7%99%D6%B4%D7%93%D7%A2%D7%A0%D7%A2/"><span class="hw">מיקווה־ייִדענע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%A7%D7%95%D7%9C%D7%99%D7%A0%D7%A6%D7%A2/"><span class="hw">מיקולינצע</span><span class="gl">‘the town of Mikulińce / Микулинці, Galicia, today in Ukraine’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%A7%D7%9C%D7%90%D6%B8%D7%9E%D7%A4%D6%BC%D7%A2%D7%A8%D7%A9%D7%98/"><span class="hw">מיקלאָמפּערשט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%A7%D7%A8%D7%94/"><span class="hw">מיקרה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%A8%201/"><span class="hw">מיר 1</span><span class="gl">‘we’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%A8%202/"><span class="hw">מיר 2</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%A8%D7%95%D7%9F/"><span class="hw">מירון</span><span class="gl">‘Meron (town in northern Israel)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%A8%D7%A2/"><span class="hw">מירע</span><span class="gl">‘Mira (women's name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%A8%D7%A6%D7%A2%D7%A9%D7%A2%D7%9D/"><span class="hw">מירצעשעם</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%A9%D7%98%D7%99%D7%99%D7%A0%D7%A1%20%D7%92%D7%A2%D7%96%D7%90%D6%B8%D7%92%D7%98/"><span class="hw">מישטיינס געזאָגט</span><span class="gl">‘(expressing regret or disdain)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%A9%D7%9E%D7%90%D6%B7%D7%A9/"><span class="hw">מישמאַש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%A9%D7%9F/"><span class="hw">מישן</span><span class="gl">‘to mix’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%A9%D7%A0%D7%94/"><span class="hw">מישנה</span><span class="gl">‘Mishnah (first part of the Talmud)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%A9%D7%A7%D7%90%D6%B8%D7%9C%D7%A5/"><span class="hw">מישקאָלץ</span><span class="gl">‘Miskolc (city in eastern Hungary)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%A9%D7%A7%D7%9C/"><span class="hw">מישקל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%A9%D7%A7%D7%A2%D7%95%D7%95%D7%A2%D7%9F/"><span class="hw">מישקעווען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%AA%D7%94/"><span class="hw">מיתה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%99%D7%AA%D7%94%D6%BE%D7%9E%D7%A9%D7%95%D7%A0%D7%94/"><span class="hw">מיתה־משונה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9B%D6%BC%D7%94/"><span class="hw">מכּה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9B%D6%BC%D7%95%D7%97/"><span class="hw">מכּוח</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9B%D6%BC%D7%99%D7%A8%20/"><span class="hw">מכּיר </span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9B%D6%BC%D7%99%D7%A8%D6%BE%D7%98%D7%95%D7%91%D6%BF%D7%94/"><span class="hw">מכּיר־טובֿה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9B%D6%BC%D7%99%D7%A8%D6%BE%D7%98%D7%95%D7%91%D6%BF%D7%94%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מכּיר־טובֿה זײַן</span><span class="gl">‘to be thankful’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9B%D6%BC%D7%9C%D6%BE%D7%A9%D7%9B%D6%BC%D7%9F/"><span class="hw">מכּל־שכּן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9B%D7%90%D7%9C/"><span class="hw">מכאל</span><span class="gl">‘Michael (man's name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9B%D7%91%D7%93%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מכבד זײַן</span><span class="gl">‘to honor’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9B%D7%95%D7%95%D7%9F/"><span class="hw">מכוון</span><span class="gl">‘intention’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9B%D7%95%D7%95%D7%9F%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מכוון זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9B%D7%95%D7%9C%D7%94/"><span class="hw">מכולה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9B%D7%99%D7%A8%D7%AA%D6%BE%D7%99%D7%95%D7%A1%D7%A3/"><span class="hw">מכירת־יוסף</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9B%D7%A0%D7%99%D7%A2%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מכניע זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9B%D7%A0%D7%A1%D7%99%D7%99%D7%9D/"><span class="hw">מכנסיים</span><span class="gl">‘pants (for burial)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9B%D7%A4%D6%BC%D7%A8%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מכפּר זײַן</span><span class="gl">‘to grant atonement’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9B%D7%A8%D7%99%D7%A2%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מכריע זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9B%D7%A9%D7%99%D7%9C%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מכשיל זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9B%D7%A9%D7%A3/"><span class="hw">מכשף</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9B%D7%A9%D7%A4%D6%BF%D7%94/"><span class="hw">מכשפֿה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9C%20%D7%96%D7%B2%D6%B7%D7%9F%20%3E%20%D7%9E%D7%9C%D7%A2%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מל זײַן > מלע זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9C%D7%90/"><span class="hw">מלא</span><span class="gl">‘full (of)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9C%D7%90%D6%B8%D7%98%D7%A9%D7%A2%D7%9F/"><span class="hw">מלאָטשען</span><span class="gl">‘to thresh’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9C%D7%90%D6%B8%D7%9B%D7%94/"><span class="hw">מלאָכה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9C%D7%90%D7%9A/"><span class="hw">מלאך</span><span class="gl">‘angel’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9C%D7%90%D7%9A%D6%BE%D7%94%D7%9E%D7%95%D7%95%D7%AA/"><span class="hw">מלאך־המוות</span><span class="gl">‘Angel of Death’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9C%D7%90%D7%9A%D6%BE%D7%97%D7%91%D7%9C%D7%94/"><span class="hw">מלאך־חבלה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9C%D7%91%D7%95%D7%A9/"><span class="hw">מלבוש</span><span class="gl">‘garment’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9C%D7%91%D7%95%D7%A9%D7%9F/"><span class="hw">מלבושן</span><span class="gl">‘to clothe’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9C%D7%91%D7%A9%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מלבש זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9C%D7%95%D7%95%D7%94%D6%BE%D7%9E%D7%9C%D7%9B%D6%BC%D7%94/"><span class="hw">מלווה־מלכּה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9C%D7%95%D7%99%D7%A6%D7%A2%D7%9F/"><span class="hw">מלויצען</span><span class="gl">‘to thresh (grain)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9C%D7%95%D7%9B%D7%94/"><span class="hw">מלוכה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9C%D7%95%D7%9E%D7%93/"><span class="hw">מלומד</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9C%D7%95%D7%A4%D6%BC%D7%9F/"><span class="hw">מלופּן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9C%D7%97%D7%9E%D7%94/"><span class="hw">מלחמה</span><span class="gl">‘war’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9C%D7%99%D7%A0%D7%A6%D7%A2/"><span class="hw">מלינצע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9C%D7%99%D7%A5/"><span class="hw">מליץ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9C%D7%99%D7%A5%D6%BE%D7%99%D7%95%D7%A9%D7%A8/"><span class="hw">מליץ־יושר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9C%D7%99%D7%A6%D7%94/"><span class="hw">מליצה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9C%D7%9A/"><span class="hw">מלך</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9C%D7%9B%D6%BC%D7%94%201/"><span class="hw">מלכּה 1</span><span class="gl">‘queen’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9C%D7%9B%D6%BC%D7%94%202/"><span class="hw">מלכּה 2</span><span class="gl">‘Milcah (Biblical character)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9C%D7%9B%D6%BC%D7%94%20%D7%A4%D6%BC%D7%99%D7%A7/"><span class="hw">מלכּה פּיק</span><span class="gl">‘Queen of Spades (cards)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9C%D7%9B%D6%BC%D7%94%20%D7%A9%D7%91%D6%BF%D7%90%0A%D7%9E%D7%9C%D7%9B%D6%BC%D7%94%20%D7%A9%D7%91%D6%BF%D7%90%0A/"><span class="hw">מלכּה שבֿא
+מלכּה שבֿא
+</span><span class="gl">‘The Queen of Sheba’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9C%D7%9B%D7%95%D7%AA%D7%90%20%D7%93%D7%A8%D7%A7%D7%99%D7%A2%D7%90/"><span class="hw">מלכותא דרקיעא</span><span class="gl">‘the kingdom of heaven’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9C%D7%9E%D7%93/"><span class="hw">מלמד</span><span class="gl">‘teacher (in heder)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9C%D7%9E%D7%93%20%D7%AA%D6%BC%D7%99%D7%A0%D7%95%D7%A7%D7%95%D7%AA/"><span class="hw">מלמד תּינוקות</span><span class="gl">‘teacher of children’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9C%D7%A2%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מלע זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9C%D7%A2%D7%99%D7%9C/"><span class="hw">מלעיל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9C%D7%A7%D7%95%D7%AA/"><span class="hw">מלקות</span><span class="gl">‘lashes, whipping’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9E%D7%95%D7%9F/"><span class="hw">ממון</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9E%D7%95%D7%A0%D7%94/"><span class="hw">ממונה</span><span class="gl">‘supervisor, person in charge’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9E%D7%96%D7%A8/"><span class="hw">ממזר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9E%D7%99%D7%9C%D7%90%20/"><span class="hw">ממילא </span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9E%D7%A6%D7%99%D7%90%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">ממציא זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9E%D7%A9/"><span class="hw">ממש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9E%D7%A9%D7%95%D7%AA/"><span class="hw">ממשות</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9E%D7%A9%D7%99%D7%9A%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">ממשיך זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9F/"><span class="hw">מן</span><span class="gl">‘manna (from Heaven)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9F%20%D7%94%D7%A9%D7%9E%D7%99%D7%9D/"><span class="hw">מן השמים</span><span class="gl">‘from Heaven’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%9F%D6%BE%D7%94%D7%A1%D7%AA%D6%BC%D7%9D/"><span class="hw">מן־הסתּם</span><span class="gl">‘probably’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A0%D7%93%D7%91%D6%BF%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מנדבֿ זײַן</span><span class="gl">‘to donate’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A0%D7%93%D7%A8%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מנדר זײַן</span><span class="gl">‘to pledge’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A0%D7%94%D7%99%D7%92/"><span class="hw">מנהיג</span><span class="gl">‘leader’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A0%D7%94%D7%99%D7%92%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מנהיג זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A0%D7%94%D7%9C/"><span class="hw">מנהל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A0%D7%95%D6%BC%D7%95%D7%95%D7%9C/"><span class="hw">מנוּוול</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A0%D7%95%D7%91%D6%BF%D7%9C%D7%98%D7%A2/"><span class="hw">מנובֿלטע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A0%D7%95%D7%97%D7%94/"><span class="hw">מנוחה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A0%D7%95%D7%A8%D7%94/"><span class="hw">מנורה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A0%D7%97%D7%94/"><span class="hw">מנחה</span><span class="gl">‘afternoon prayers’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A0%D7%97%D7%9D/"><span class="hw">מנחם</span><span class="gl">‘Menachem’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A0%D7%97%D7%9D%D6%BE%D7%9E%D7%A2%D7%A0%D7%93%D7%9C%D7%A2%D7%95%D7%95%D7%A2%D7%9F/"><span class="hw">מנחם־מענדלעווען</span><span class="gl">‘to be occupied with unrealistic plans, build castles in the sky’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A0%D7%99%D7%9F/"><span class="hw">מנין</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A0%D7%A9%D7%94/"><span class="hw">מנשה</span><span class="gl">‘Menasseh (name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A1%D7%91%D7%99%D7%A8%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מסביר זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A1%D7%92%D7%A8%D7%AA/"><span class="hw">מסגרת</span><span class="gl">‘framework’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A1%D7%93%D7%A8%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מסדר זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A1%D7%95%D7%92%D7%9C/"><span class="hw">מסוגל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A1%D7%95%D7%93%D7%A8/"><span class="hw">מסודר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A1%D7%95%D7%93%D7%A8%D7%93%D7%99%D7%A7/"><span class="hw">מסודרדיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A1%D7%95%D7%9B%D6%BC%D7%9F/"><span class="hw">מסוכּן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A1%D7%95%D7%A4%D6%BC%D7%A7/"><span class="hw">מסופּק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A1%D7%95%D7%A8/"><span class="hw">מסור</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A1%D7%99%D7%91%D7%94/"><span class="hw">מסיבה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A1%D7%99%D7%99%D7%9D%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מסיים זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A1%D7%99%D7%A8%D7%94/"><span class="hw">מסירה</span><span class="gl">‘denunciation’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A1%D7%99%D7%A8%D7%AA%D6%BE%D7%A0%D7%A4%D6%BF%D7%A9/"><span class="hw">מסירת־נפֿש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A1%D7%9B%D6%BC%D7%99%D7%9D%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מסכּים זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A1%D7%9B%D7%AA%D6%BC%D7%90/"><span class="hw">מסכתּא</span><span class="gl">‘Talmudic tractate’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A1%D7%A7%D7%A0%D7%94/"><span class="hw">מסקנה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A1%D7%A8%D7%91%D6%BF%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מסרבֿ זײַן</span><span class="gl">‘to refuse’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A1%D7%A8%D7%9F/"><span class="hw">מסרן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A1%D7%AA%D6%BC%D7%9E%D7%90/"><span class="hw">מסתּמא</span><span class="gl">‘probably’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%92%D7%9C%D7%A2%D7%9A/"><span class="hw">מעגלעך</span><span class="gl">‘possible’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%92%D7%9C%D7%A2%D7%9B%D7%A7%D7%99%D7%99%D7%98/"><span class="hw">מעגלעכקייט</span><span class="gl">‘possibility’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%92%D7%9F/"><span class="hw">מעגן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%93/"><span class="hw">מעד</span><span class="gl">‘mead’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%93%D7%90%D6%B7%D7%9C/"><span class="hw">מעדאַל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%93%D7%99%D7%A6%D7%99%D7%9F/"><span class="hw">מעדיצין</span><span class="gl">‘medicine’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%95%D7%91%D7%A8%D7%AA/"><span class="hw">מעוברת</span><span class="gl">‘pregnant’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%95%D7%A8%D7%A8%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מעורר זײַן</span><span class="gl">‘to rouse, incite (ᴠᴇʀʙ)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%95%D7%AA/"><span class="hw">מעות</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%96%D7%A8%D7%99%D7%98%D7%A9/"><span class="hw">מעזריטש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%96%D7%A9%D7%A2/"><span class="hw">מעזשע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%99%D7%93%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מעיד זײַן</span><span class="gl">‘to bear witness’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%99%D7%9F%20%D7%A2%D7%95%D7%9C%D7%9D%20%D7%94%D7%91%D7%90/"><span class="hw">מעין עולם הבא</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%9B%D7%98/"><span class="hw">מעכט</span><span class="gl">‘would (like)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%9B%D7%98%D7%99%D7%A7/"><span class="hw">מעכטיק</span><span class="gl">‘powerful, mighty’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%9B%D7%99%D7%A2/"><span class="hw">מעכיע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%9C/"><span class="hw">מעל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%9C%D7%90%D6%B7%D7%A0%D7%9B%D7%90%D6%B8%D7%9C%D7%99%D7%A2/"><span class="hw">מעלאַנכאָליע</span><span class="gl">‘melancholy’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%9C%D7%90%D6%B8%D7%A0%D7%A2/"><span class="hw">מעלאָנע</span><span class="gl">‘watermelon’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%9C%D7%93%D7%9F/"><span class="hw">מעלדן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%9C%D7%94/"><span class="hw">מעלה</span><span class="gl">‘advantage’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%9C%D7%94%D6%BE%D7%92%D7%99%D7%A8%D7%94%D7%9F/"><span class="hw">מעלה־גירהן</span><span class="gl">‘to ruminate, chew the cud’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%9C%D7%99%D7%A7/"><span class="hw">מעליק</span><span class="gl">‘mealy’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%9C%D7%A6%D7%95%D7%A7%D7%A2%D7%A8/"><span class="hw">מעלצוקער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%9C%D7%A7%D7%9F/"><span class="hw">מעלקן</span><span class="gl">‘to milk’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%9C%D7%A7%D7%A9%D7%A2%D7%A4%D6%BF%D7%9C/"><span class="hw">מעלקשעפֿל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%9C%D7%A9%D7%A4%D6%BC%D7%B2%D6%B7%D7%96/"><span class="hw">מעלשפּײַז</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%9E%D7%93/"><span class="hw">מעמד</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%9E%D7%93%D7%95%D7%AA/"><span class="hw">מעמדות</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%9E%D7%A2/"><span class="hw">מעמע</span><span class="gl">‘mother’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%9E%D7%A2%D7%A8%D7%9F/"><span class="hw">מעמערן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%9F/"><span class="hw">מען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%A0%D7%93%D7%9C/"><span class="hw">מענדל</span><span class="gl">‘Mendel (man's name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%A0%D7%98%D7%A9/"><span class="hw">מענטש</span><span class="gl">‘person’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%A0%D7%98%D7%A9%D7%94%D7%99%D7%99%D7%98/"><span class="hw">מענטשהייט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%A0%D7%99%D6%B4%D7%A2/"><span class="hw">מעניִע</span><span class="gl">‘bracelet’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%A1%D7%98/"><span class="hw">מעסט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%A1%D7%98%D7%95%D7%95%D7%90%D6%B8%D7%9A/"><span class="hw">מעסטוואָך</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%A1%D7%98%D7%9F/"><span class="hw">מעסטן</span><span class="gl">‘to measure’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%A1%D7%A2%D7%A8/"><span class="hw">מעסער</span><span class="gl">‘knife’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%A7%D7%9C%D7%A2%D7%A8/"><span class="hw">מעקלער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%A7%D7%9F/"><span class="hw">מעקן</span><span class="gl">‘to erase’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%A7%D7%A2%D7%9C%D7%A2%D7%9A/"><span class="hw">מעקעלעך</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%A8%201/"><span class="hw">מער 1</span><span class="gl">‘more’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%A8%202/"><span class="hw">מער 2</span><span class="gl">‘What is the matter?’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%A8%203/"><span class="hw">מער 3</span><span class="gl">‘carrot’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%A8%D7%91%D6%BF/"><span class="hw">מערבֿ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%A8%D7%91%D7%99%D7%A7/"><span class="hw">מערביק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%A8%D7%92%D7%A2%D7%A0%D7%99%D7%A7/"><span class="hw">מערגעניק</span><span class="gl">‘a skirt-chacing young man’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%A8%D7%93%D7%A2%D7%A8%D7%B2%D6%B7/"><span class="hw">מערדערײַ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%A8%D7%94%D7%99%D7%99%D7%98/"><span class="hw">מערהייט</span><span class="gl">‘majority’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%A8%D7%96%D7%A9%D7%A2%D7%A8/"><span class="hw">מערזשער</span><span class="gl">‘morter (for grinding)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%A8%D7%98%D7%A8%D7%B2%D6%B7%D7%95%D7%95%D7%9C%D7%A2%D7%9A/"><span class="hw">מערטרײַוולעך</span><span class="gl">‘raisins’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%A8%D7%99%D7%91%D6%BF/"><span class="hw">מעריבֿ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%A8%D7%9F%201/"><span class="hw">מערן 1</span><span class="gl">‘to increase’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%A8%D7%9F%202/"><span class="hw">מערן 2</span><span class="gl">‘Moravia (in eastern Czechia)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%A8%D7%9F%D6%BE%D7%A6%D7%99%D7%9E%D7%A2%D7%A1/"><span class="hw">מערן־צימעס</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%A8%D7%A2%D7%A8/"><span class="hw">מערער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%A8%D7%A2%D7%A8%D7%A2/"><span class="hw">מערערע</span><span class="gl">‘several’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%A8%D7%AA%D6%BE%D7%94%D7%9E%D7%9B%D7%A4%D6%BC%D7%9C%D7%94/"><span class="hw">מערת־המכפּלה</span><span class="gl">‘cave of the Patriarchs (in Hebron)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%A9/"><span class="hw">מעש</span><span class="gl">‘brass’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%A9%D7%82%D7%94%201/"><span class="hw">מעשׂה 1</span><span class="gl">‘story’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%A9%D7%82%D7%94%202/"><span class="hw">מעשׂה 2</span><span class="gl">‘deed’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%A9%D7%82%D7%94%D6%BE%D7%A9%D7%82%D7%98%D7%9F/"><span class="hw">מעשׂה־שׂטן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%A9%D7%82%D7%A8/"><span class="hw">מעשׂר</span><span class="gl">‘tithe’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%A9%D7%82%D7%A8%20%D7%A2%D7%A0%D7%99/"><span class="hw">מעשׂר עני</span><span class="gl">‘poor tithe’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%A9%D7%82%D7%A8%20%D7%A9%D7%A0%D7%99/"><span class="hw">מעשׂר שני</span><span class="gl">‘second tithe (Jewish law)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%A9%D7%98%D7%A2%D7%A1/"><span class="hw">מעשטעס</span><span class="gl">‘slippers’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%A9%D7%9F/"><span class="hw">מעשן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A2%D7%AA%D6%BE%D7%9C%D7%A2%D7%AA/"><span class="hw">מעת־לעת</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A4%D6%BC%D7%95%D7%9C%D7%AA/"><span class="hw">מפּולת</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A4%D6%BC%D7%99%D7%9C%D6%BE%D7%A7%D7%99%D7%A0%D7%93/"><span class="hw">מפּיל־קינד</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A4%D6%BC%D7%99%D7%9C%D7%A2/"><span class="hw">מפּילע</span><span class="gl">‘aborted fetus’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A4%D6%BC%D7%9C%D7%94/"><span class="hw">מפּלה</span><span class="gl">‘failure’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A4%D6%BF%D7%95%D7%A8%D7%A1%D7%9D/"><span class="hw">מפֿורסם</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A4%D6%BF%D7%95%D7%A8%D7%A9/"><span class="hw">מפֿורש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A4%D6%BF%D7%9C%D7%A4%D6%BC%D7%9C%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מפֿלפּל זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A4%D6%BF%D7%A1%D7%99%D7%A7%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מפֿסיק זײַן</span><span class="gl">‘to stop, pause’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A4%D6%BF%D7%A7%D7%99%D7%A8%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מפֿקיר זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A4%D6%BF%D7%A8%D7%A1%D7%9D%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מפֿרסם זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A4%D6%BF%D7%A8%D7%A9/"><span class="hw">מפֿרש</span><span class="gl">‘commentator’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A4%D6%BF%D7%A8%D7%A9%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מפֿרש זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A6%D7%91%D6%BF/"><span class="hw">מצבֿ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A6%D7%91%D6%BF%D7%94/"><span class="hw">מצבֿה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A6%D7%94/"><span class="hw">מצה</span><span class="gl">‘matzo’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A6%D7%94%D6%BE%D7%95%D7%95%D7%90%D6%B7%D7%A1%D7%A2%D7%A8/"><span class="hw">מצה־וואַסער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A6%D7%94%D6%BE%D7%9E%D7%A2%D7%9C/"><span class="hw">מצה־מעל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A6%D7%94%D6%BE%D7%A9%D7%9E%D7%95%D7%A8%D7%94/"><span class="hw">מצה־שמורה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A6%D7%95%D7%95%D7%94%20%D7%94%D7%91%D7%90%D7%94%20%D7%91%D7%A2%D7%91%D7%99%D7%A8%D7%94/"><span class="hw">מצווה הבאה בעבירה</span><span class="gl">‘a commandment fulfilled by means of a sin (not permitted)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A6%D7%95%D7%A8%D7%A2/"><span class="hw">מצורע</span><span class="gl">‘leper’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A6%D7%99%D7%90%D7%94/"><span class="hw">מציאה</span><span class="gl">‘bargain’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A6%D7%99%D7%90%D7%95%D7%AA/"><span class="hw">מציאות</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A6%D7%99%D7%9C%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מציל זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A6%D7%9C%D7%99%D7%97%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מצליח זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A6%D7%A2%D7%A8%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מצער זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A6%D7%A8%D7%99/"><span class="hw">מצרי</span><span class="gl">‘(ancient) Egyptian’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A6%D7%A8%D7%99%D7%9D/"><span class="hw">מצרים</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A7%D7%91%D7%9C%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מקבל זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A7%D7%91%D7%A8%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מקבר זײַן</span><span class="gl">‘to bury’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A7%D7%93%D7%99%D7%9D%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מקדים זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A7%D7%93%D7%A9%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מקדש זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A7%D7%95%D7%91%D7%9C/"><span class="hw">מקובל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A7%D7%95%D7%9D/"><span class="hw">מקום</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A7%D7%95%D7%A8/"><span class="hw">מקור</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A7%D7%97/"><span class="hw">מקח</span><span class="gl">‘price’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A7%D7%99%D7%99%D7%9D%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מקיים זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A7%D7%99%D7%9C%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מקיל זײַן</span><span class="gl">‘to be lenient’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A7%D7%9C/"><span class="hw">מקל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A7%D7%A0%D7%94%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מקנה זײַן</span><span class="gl">‘to envy’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A7%D7%A8%D7%91%D6%BF%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מקרבֿ זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A7%D7%A8%D7%99%D7%91%D6%BF%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מקריבֿ זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A7%D7%A9%D7%9F/"><span class="hw">מקשן</span><span class="gl">‘questionner’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A8%20%D7%91%D7%A8%20%D7%A8%D7%91%D6%BF%20%D7%90%D6%B7%D7%A9%D7%99/"><span class="hw">מר בר רבֿ אַשי</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A8%D7%90%D6%BE%D7%93%D7%90%D6%B7%D7%AA%D7%A8%D7%90/"><span class="hw">מרא־דאַתרא</span><span class="gl">‘rabbi’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A8%D7%92%D7%96%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מרגז זײַן</span><span class="gl">‘annoy, anger, be angry’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A8%D7%92%D7%99%D7%A9%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מרגיש זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A8%D7%92%D7%9C/"><span class="hw">מרגל</span><span class="gl">‘spy’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A8%D7%93%D7%9B%D7%99/"><span class="hw">מרדכי</span><span class="gl">‘Mordechai (name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A8%D7%93%D7%9B%D7%99%20%D7%94%D7%A6%D7%93%D7%99%D7%A7/"><span class="hw">מרדכי הצדיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A8%D7%95%D7%95%D7%99%D7%97%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מרוויח זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A8%D7%95%D7%96%D7%A9%D7%A2%D7%9F/"><span class="hw">מרוזשען</span><span class="gl">‘to squint’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A8%D7%95%D7%9E%D7%96/"><span class="hw">מרומז</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A8%D7%95%D7%A6%D7%94%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מרוצה זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A8%D7%95%D7%A8/"><span class="hw">מרור</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A8%D7%97%D7%9D%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מרחם זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A8%D7%97%D7%A9%D7%95%D7%95%D7%9F/"><span class="hw">מרחשוון</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A8%D7%99%D7%91%D6%BF/"><span class="hw">מריבֿ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A8%D7%99%D7%93%D7%94/"><span class="hw">מרידה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A8%D7%99%D7%9D/"><span class="hw">מרים</span><span class="gl">‘Miriam (woman's name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A8%D7%9E%D7%90%20%5B%3F%5D%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מרמא [?] זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A8%D7%9E%D7%96%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מרמז זײַן</span><span class="gl">‘to hint at’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A8%D7%A9%D7%A2%D7%AA/"><span class="hw">מרשעת</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%82%D7%90/"><span class="hw">משׂא</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%82%D7%90%D6%BE%D7%95%D7%9E%D7%AA%D6%BC%D7%9F/"><span class="hw">משׂא־ומתּן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%82%D7%90%D6%BE%D7%A9%D7%99%D7%A3/"><span class="hw">משׂא־שיף</span><span class="gl">‘cargo ship, freighter’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%82%D7%9E%D7%97%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">משׂמח זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%91%D7%99%D7%97%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">משביח זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%91%D7%99%D7%A2%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">משביע זײַן</span><span class="gl">‘to swear in’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%92%D7%99%D7%97%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">משגיח זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%93%D7%9A%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">משדך זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%94/"><span class="hw">משה</span><span class="gl">‘Moses (name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%94%20%D7%A8%D7%91%D7%99%D7%A0%D7%95/"><span class="hw">משה רבינו</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%94-%D7%A8%D7%91%D7%A0%D7%95%D7%A1%20%D7%A7%D7%99%D6%B4%D7%A2%D7%9C%D7%A2/"><span class="hw">משה-רבנוס קיִעלע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%95%D7%92%D7%A2/"><span class="hw">משוגע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%95%D7%92%D7%A2%D7%99%D7%9D%D6%BE%D7%94%D7%95%D7%99%D7%96/"><span class="hw">משוגעים־הויז</span><span class="gl">‘insane asylum’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%95%D7%92%D7%A2%D7%A0%D7%A2%D7%A8/"><span class="hw">משוגענער</span><span class="gl">‘lunatic’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%95%D7%92%D7%A2%D7%AA%D7%98%D7%A2/"><span class="hw">משוגעתטע</span><span class="gl">‘crazy woman’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%95%D7%9C%D7%97/"><span class="hw">משולח</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%95%D7%9C%D7%9E%D7%A2%D7%9F/"><span class="hw">משולמען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%95%D7%9E%D7%93/"><span class="hw">משומד</span><span class="gl">‘apostate, convert’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%95%D7%A0%D7%94/"><span class="hw">משונה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%95%D7%A0%D7%94%D7%93%D7%99%D7%A7/"><span class="hw">משונהדיק</span><span class="gl">‘strange’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%95%D7%A4%D6%BC%D7%A2/"><span class="hw">משופּע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%95%D7%A4%D6%BC%D7%A2%D7%93%D7%99%D7%A7/"><span class="hw">משופּעדיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%95%D7%A8%D7%A8/"><span class="hw">משורר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%99%D7%97/"><span class="hw">משיח</span><span class="gl">‘messiah’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%9B%D6%BC%D7%95%D7%9F/"><span class="hw">משכּון</span><span class="gl">‘pledge, collateral’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%9B%D6%BC%D7%9F/"><span class="hw">משכּן</span><span class="gl">‘the Tabernacle’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%9C/"><span class="hw">משל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%9C%D7%97%D7%AA/"><span class="hw">משלחת</span><span class="gl">‘delegation’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%9C%D7%99/"><span class="hw">משלי</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%9E%D7%A2%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">משמע זײַן</span><span class="gl">‘to mean’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%9E%D7%A2%D7%95%D7%AA/"><span class="hw">משמעות</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%9E%D7%A8%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">משמר זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%A0%D7%94/"><span class="hw">משנה</span><span class="gl">‘the Mishnah, earliest book of the Talmud’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%A0%D7%94%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">משנה זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%A0%D7%94%D6%BE%D7%9C%D7%9E%D7%9C%D7%9A/"><span class="hw">משנה־למלך</span><span class="gl">‘viceroy’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%A2%D7%A8%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">משער זײַן</span><span class="gl">‘to suppose’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%A4%D6%BC%D7%97%D7%94/"><span class="hw">משפּחה</span><span class="gl">‘family’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%A4%D6%BC%D7%97%D7%98%D7%A2/"><span class="hw">משפּחטע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%A4%D6%BC%D7%98/"><span class="hw">משפּט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%A4%D6%BC%D7%99%D7%A2/"><span class="hw">משפּיע</span><span class="gl">‘influencer (in ultra-Orthodox world)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%A7%D7%94/"><span class="hw">משקה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%A7%D7%A8%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">משקר זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%A8%D7%AA/"><span class="hw">משרת</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%AA%D6%BC%D7%93%D7%9C%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">משתּדל זײַן</span><span class="gl">‘to make an effort; to lobby’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%AA%D6%BC%D7%94/"><span class="hw">משתּה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%A9%D7%AA%D6%BC%D7%99%D7%9F%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">משתּין זײַן</span><span class="gl">‘to urinate’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%AA/"><span class="hw">מת</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%AA%D6%BC%D7%95%D7%9A/"><span class="hw">מתּוך</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%AA%D6%BC%D7%97%D7%99%D7%9C%D7%94/"><span class="hw">מתּחילה</span><span class="gl">‘from the beginning’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%AA%D6%BC%D7%99%D7%A8%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מתּיר זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%AA%D6%BC%D7%9F%D6%BE%D7%91%D7%A1%D7%AA%D7%A8/"><span class="hw">מתּן־בסתר</span><span class="gl">‘giving charity in secret’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%AA%D6%BC%D7%A0%D7%94/"><span class="hw">מתּנה</span><span class="gl">‘gift’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%AA%D6%BC%D7%A8%D7%92%D7%9E%D7%9F/"><span class="hw">מתּרגמן</span><span class="gl">‘translator’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%AA%D7%91%D7%95%D7%A0%D7%9F%20%D7%96%D7%B2%D6%B7%D7%9F%20%D7%96%D7%99%D7%9A/"><span class="hw">מתבונן זײַן זיך</span><span class="gl">‘to contemplate’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%AA%D7%95%D7%95%D7%93%D7%94%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מתוודה זײַן</span><span class="gl">‘to confess’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%AA%D7%95%D7%A9%D7%9C%D7%97/"><span class="hw">מתושלח</span><span class="gl">‘Methuselah’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%AA%D7%97%D7%AA%D6%BC%D7%9F%20%D7%96%D7%B2%D6%B7%D7%9F%20%D7%96%D7%99%D7%9A/"><span class="hw">מתחתּן זײַן זיך</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%AA%D7%99%D7%97%D7%A1%20%D7%96%D7%B2%D6%B7%D7%9F%20%D7%96%D7%99%D7%9A/"><span class="hw">מתיחס זײַן זיך</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%AA%D7%A2%D7%A1%D7%A7%20%D7%96%D7%B2%D6%B7%D7%9F%20%D7%96%D7%99%D7%9A/"><span class="hw">מתעסק זײַן זיך</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%AA%D7%A4%D6%BC%D7%9C%D7%9C%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מתפּלל זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%AA%D7%A7%D7%9F%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">מתקן זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%B2%D6%B7%D7%96%D7%9F%D6%BE%D7%9B%D7%90%D6%B7%D7%A4%D6%BC%D7%A2%D7%A8/"><span class="hw">מײַזן־כאַפּער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%B2%D6%B7%D7%98%D7%A7%D7%A2%D7%A1/"><span class="hw">מײַטקעס</span><span class="gl">‘panties’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%B2%D6%B7%D7%9B%D7%9C/"><span class="hw">מײַכל</span><span class="gl">‘small mouth (diminutive)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%B2%D6%B7%D7%9C/"><span class="hw">מײַל</span><span class="gl">‘mile’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%B2%D6%B7%D7%9F/"><span class="hw">מײַן</span><span class="gl">‘my (possessive adjective)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%B2%D6%B7%D7%A0%D7%98/"><span class="hw">מײַנט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%B2%D6%B7%D7%A0%D7%99%D7%A7/"><span class="hw">מײַניק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%B2%D6%B7%D7%A0%D7%A1%D7%98%20%D7%94%D7%90%D6%B7%D7%9C%D7%91%D7%9F/"><span class="hw">מײַנסט האַלבן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%B2%D6%B7%D7%A0%D7%A2%D7%A0%D7%A2%D7%9F/"><span class="hw">מײַנענען</span><span class="gl">‘to change, exhange’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%B2%D6%B7%D7%A0%D7%A2%D7%A8/"><span class="hw">מײַנער</span><span class="gl">‘me (old genitive form of איך)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%B2%D6%B7%D7%A1%D7%98/"><span class="hw">מײַסט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%B2%D6%B7%D7%A1%D7%98%D7%A0%D7%A1/"><span class="hw">מײַסטנס</span><span class="gl">‘mostly’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%B2%D6%B7%D7%A1%D7%98%D7%A2%D7%A8/"><span class="hw">מײַסטער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9E%D7%B2%D6%B7%D7%A1%D7%98%D7%A2%D7%A8%D7%A9%D7%90%D6%B7%D7%A4%D6%BF%D7%98/"><span class="hw">מײַסטערשאַפֿט</span><span class="gl">‘mastery’</span></a></li>
+
+</ul>
+
+</main>
+<footer>
+  Yiddish Dialect Dictionary &nbsp;·&nbsp; 10,034 entries
+</footer>
+<script>const BASE_URL = '/Yiddish-Dialect-Dictionary';</script>
+<script>
+(function() {
+  let index = null;
+  const input = document.getElementById('search-input');
+  const results = document.getElementById('search-results');
+  if (!input) return;
+
+  async function loadIndex() {
+    if (index) return;
+    try {
+      const r = await fetch(BASE_URL + '/search-index.json');
+      index = await r.json();
+    } catch(e) { console.error('Could not load search index', e); }
+  }
+
+  function search(q) {
+    q = q.trim().toLowerCase();
+    if (!q || !index) return [];
+    return index
+      .filter(e =>
+        e.hw.toLowerCase().includes(q) ||
+        (e.gl && e.gl.toLowerCase().includes(q))
+      )
+      .slice(0, 20);
+  }
+
+  function renderResults(items, q) {
+    if (!items.length) {
+      results.innerHTML = '<div class="search-no-results">No results found.</div>';
+      results.classList.add('show');
+      return;
+    }
+    results.innerHTML = items.map(e => `
+      <a class="search-result-item" href="${e.url}">
+        <span class="search-result-hw">${e.hw}</span>
+        ${e.gl ? `<span class="search-result-gloss">'${e.gl}'</span>` : ''}
+      </a>`).join('');
+    results.classList.add('show');
+  }
+
+  let timer;
+  input.addEventListener('input', async () => {
+    clearTimeout(timer);
+    const q = input.value;
+    if (!q.trim()) { results.classList.remove('show'); return; }
+    await loadIndex();
+    timer = setTimeout(() => renderResults(search(q), q), 120);
+  });
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.header-search')) results.classList.remove('show');
+  });
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { results.classList.remove('show'); input.blur(); }
+  });
+})();
+</script>
+</body>
+</html>

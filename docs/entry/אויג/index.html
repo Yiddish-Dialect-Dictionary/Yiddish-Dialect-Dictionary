@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="yi" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>אויג – Yiddish Dialect Dictionary</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #faf9f6;
+  --surface: #ffffff;
+  --border: #e0ddd5;
+  --text: #1c1b18;
+  --muted: #6b6860;
+  --accent: #1a4480;
+  --accent-light: #e8eef7;
+  --link: #1a4480;
+  --link-hover: #0d2a52;
+  --hebrew-font: 'Ezra SIL', 'SBL Hebrew', 'David', 'Frank Ruehl CLM', serif;
+  --body-font: Georgia, 'Times New Roman', serif;
+  --ui-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+body {
+  font-family: var(--body-font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  font-size: 16px;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--link-hover); text-decoration: underline; }
+
+/* ── Header ── */
+.site-header {
+  background: var(--accent);
+  color: white;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0,0,0,.25);
+}
+.site-header a { color: white; font-family: var(--ui-font); font-size: .9rem; }
+.site-header a.home { font-weight: 700; font-size: 1rem; white-space: nowrap; }
+.site-header a:hover { text-decoration: underline; }
+
+/* search in header */
+.header-search {
+  flex: 1;
+  max-width: 480px;
+  position: relative;
+}
+.header-search input {
+  width: 100%;
+  padding: .45rem .9rem .45rem 2.2rem;
+  border: none;
+  border-radius: 4px;
+  font-family: var(--ui-font);
+  font-size: .95rem;
+  background: rgba(255,255,255,.15);
+  color: white;
+  outline: none;
+}
+.header-search input::placeholder { color: rgba(255,255,255,.65); }
+.header-search input:focus { background: rgba(255,255,255,.25); }
+.header-search .icon {
+  position: absolute;
+  left: .6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: .7;
+  pointer-events: none;
+}
+.search-results {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.15);
+  max-height: 360px;
+  overflow-y: auto;
+  z-index: 200;
+}
+.search-results.show { display: block; }
+.search-result-item {
+  display: block;
+  padding: .6rem 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.search-result-item:last-child { border-bottom: none; }
+.search-result-item:hover { background: var(--accent-light); }
+.search-result-hw {
+  font-size: 1.1rem;
+  font-family: var(--hebrew-font);
+  direction: rtl;
+  display: inline-block;
+  margin-right: .5rem;
+}
+.search-result-gloss { color: var(--muted); font-style: italic; }
+.search-no-results { padding: .8rem 1rem; color: var(--muted); font-family: var(--ui-font); }
+
+/* ── Layout ── */
+.page-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+/* ── Alphabet nav (homepage + letter pages) ── */
+.alphabet-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin: 1.5rem 0;
+}
+.alphabet-nav a {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: .5rem .75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  text-decoration: none;
+  min-width: 52px;
+  transition: background .15s, border-color .15s;
+}
+.alphabet-nav a:hover, .alphabet-nav a.active {
+  background: var(--accent-light);
+  border-color: var(--accent);
+}
+.alphabet-nav a .heb {
+  font-family: var(--hebrew-font);
+  font-size: 1.4rem;
+  line-height: 1;
+  direction: rtl;
+}
+.alphabet-nav a .translit {
+  font-family: var(--ui-font);
+  font-size: .65rem;
+  color: var(--muted);
+  margin-top: .2rem;
+}
+
+/* ── Homepage ── */
+.hero {
+  text-align: center;
+  padding: 2.5rem 0 1.5rem;
+}
+.hero h1 {
+  font-size: 2.2rem;
+  color: var(--accent);
+  margin-bottom: .5rem;
+}
+.hero p {
+  color: var(--muted);
+  font-family: var(--ui-font);
+  font-size: 1rem;
+}
+.section-label {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 2rem 0 .75rem;
+}
+
+/* ── Letter page ── */
+.letter-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: .75rem;
+}
+.letter-header .heb-big {
+  font-family: var(--hebrew-font);
+  font-size: 3rem;
+  direction: rtl;
+  line-height: 1;
+  color: var(--accent);
+}
+.letter-header .info {
+  font-family: var(--ui-font);
+}
+.letter-header .translit-big { font-size: 1.4rem; font-weight: 600; }
+.letter-header .count { color: var(--muted); font-size: .9rem; }
+
+.entry-list {
+  list-style: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface);
+}
+.entry-list li {
+  border-bottom: 1px solid var(--border);
+}
+.entry-list li:last-child { border-bottom: none; }
+.entry-list a {
+  display: flex;
+  align-items: baseline;
+  gap: .75rem;
+  padding: .65rem 1rem;
+  color: var(--text);
+  text-decoration: none;
+}
+.entry-list a:hover { background: var(--accent-light); }
+.entry-list .hw {
+  font-family: var(--hebrew-font);
+  font-size: 1.15rem;
+  direction: rtl;
+  flex-shrink: 0;
+}
+.entry-list .gl {
+  font-style: italic;
+  color: var(--muted);
+  font-size: .9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Entry page ── */
+.entry-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--accent);
+}
+.entry-headword {
+  font-family: var(--hebrew-font);
+  font-size: 2.6rem;
+  direction: rtl;
+  line-height: 1.2;
+  color: var(--text);
+}
+.entry-gloss {
+  font-style: italic;
+  color: var(--muted);
+  font-size: 1.05rem;
+  margin-top: .3rem;
+}
+
+.entry-body h2 {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 1.8rem 0 .6rem;
+  padding-bottom: .3rem;
+  border-bottom: 1px solid var(--border);
+}
+.entry-body h3 {
+  font-family: var(--ui-font);
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin: 1rem 0 .4rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.entry-body p {
+  margin-bottom: .8rem;
+  line-height: 1.7;
+}
+.entry-body ul, .entry-body ol {
+  margin: .5rem 0 .8rem 1.5rem;
+}
+.entry-body li { margin-bottom: .3rem; }
+.entry-body audio {
+  display: block;
+  margin: .75rem 0;
+  max-width: 100%;
+}
+.entry-body img {
+  max-width: 100%;
+  height: auto;
+  margin: .75rem 0;
+  border-radius: 4px;
+}
+.entry-body blockquote {
+  border-left: 3px solid var(--border);
+  padding-left: 1rem;
+  color: var(--muted);
+  margin: .5rem 0;
+}
+
+/* back/nav bar above entry */
+.entry-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.entry-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .3rem .7rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--text);
+}
+.entry-nav a:hover {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  text-decoration: none;
+}
+
+/* ── Footer ── */
+footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  margin-top: 3rem;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .hero h1 { font-size: 1.6rem; }
+  .alphabet-nav a { min-width: 44px; padding: .4rem .55rem; }
+  .alphabet-nav a .heb { font-size: 1.2rem; }
+  .entry-headword { font-size: 2rem; }
+  .header-search { max-width: none; }
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <a href="/Yiddish-Dialect-Dictionary/" class="home">Yiddish Dialect Dictionary</a>
+  <div class="header-search">
+    <svg class="icon" width="16" height="16" fill="white" viewBox="0 0 16 16">
+      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.868-3.834zm-5.242 1.406a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+    </svg>
+    <input type="search" id="search-input" placeholder="Search entries…" autocomplete="off">
+    <div id="search-results" class="search-results"></div>
+  </div>
+</header>
+<main class="page-wrap">
+
+<div class="entry-nav">
+  <a href="/Yiddish-Dialect-Dictionary/letter/aleph/">← Aleph</a>
+  <a href="/Yiddish-Dialect-Dictionary/">Home</a>
+</div>
+<div class="entry-header">
+  <div class="entry-headword" dir="rtl">אויג</div>
+  
+</div>
+<div class="entry-body" dir="auto">
+<p>אויג<br />
+־ן<br />
+דאָס/די/דער<br />
+(NORTHEASTERN and SOUTHEASTERN mainly די, SOUTHEASTERN partly דאָס, NORTHEASTERN partly דער)</p>
+<h2>ETYMOLOGY</h2>
+<p 283_="283," 382_="382," 505_="505," 507="507" Fliciński="Fliciński">The phrase וואַרפֿן זיך אין די אויגן 'to be conspicuous (lit. to through oneself into the eyes)' is a calque of Polish rzucać się w oczy 'idem.'<br />
+The DSA map of <Augen> shows that the East Central German form is mainly <og> (with a long /oː/), while the main form in East Franconian and Rhine Franconian (including Frankfurt/Main) is <ag> (with a long /aː/). These dialects appear to have had an important role in the development of Eastern and Western Yiddish, respectively, with mainly /aː/ in the West and mainly /oj/ in the East.<br />
+<img alt="" src="https://archive.org/download/Yiddish-Dialect-Maps/DSA%20Augen%20-%20oygn.jpg" /><br />
+Got. augo, Crimean Got. (pl.) oeghene, ON auga, OE ēage, English eye, OS ōga, OHG ouga, MHG ouge, oug, NHG Auge; from PGmc ✱augōn-; from PIE ✱h₃okʷ-n- &lt; ✱h₃okʷ-s, gen. ✱h₃(o)kʷ-és, cf. Sanskrit ákṣi-, Greek ὄσσε, Latin oculus, Lithuanian akìs<br />
+The Germanic diphthong ✱au perhaps arose by analogy with ✱auzōn- 'ear' (see אויער).<br />
+{DW² 3: 870; EWA 6: 1252; Feist 64; Kroonen 2013: 41; Mayrhofer 1: 42}<br />
+Vowel 44, Proto-Yiddish ✱ɔu<br />
+{Katz 1982: 61}<br />
+The comparison היטן / פּילנעווען ווי דאָס אויג אין קאָפּ 'guard like the eye in one's head' appears to be a calque of Polish pilnować kogoś/czegoś jak oka w głowie.<br />
+{Fliciński 289}<br />
+The idiom גיין וווּהין די אויגן טראָגן 'to go where the eyes carry (i.e., wherever)' appears to be a calque of Polish pójść / iść , gdzie oczy poniosą.<br />
+{Fliciński 126, 318}<br />
+The idiom שיטן זאַמד אין די אויגן 'to pour sand in someone's eyes (i.e., to deceive, pull the wool over someone's eyes)' appears to be a calque of Polish sypać piaskiem w oczy.<br />
+{Fliciński 402}<br />
+The idiom וואַרפֿן זיך אין די אויגן 'to throw itself into the eyes (i.e., to be noticeable, stand out)' appears to be a calque of Polish rzucać się w oczy.<br />
+{Fliciński 361}<br />
+The idiom וואַרפֿן אַן אויג אויף 'to throw an eye on (i.e., to take a look at, keep an eye on)' appears to be a calque of Polish rzucić / rzucać okiem (na coś/na kogoś).<br />
+{Fliciński 361-2}<br />
+The comparison ליב/האָלט/טײַער ווי דאָס אויג אין קאָפּ 'dear as the eye in one's head (i.e., very dear)' appears to be, in part, a calque of Polish oczko w głowie 'eye in head (i.e., apple of one's eye)'.<br />
+{Fliciński 40, 387, 392}<br />
+The comparison היטן ווי אַן אויג אין קאָפּ 'to guard like an eye in one's head (i.e., closely)' appears to be a calque of Polish pilnować / strzec kogoś/czegoś jak oka w głowie.<br />
+{Fliciński 289, 398}<br />
+The idiom פֿאַרלירן פֿון די אויגן 'to lose sight of' appears to be a calque of Polish stracić / tracić kogoś z oczu.<br />
+{Fliciński 396, 420}<br />
+The idiom דאָס שוואַרצאַפּל פֿון אויג 'the pupil of the eye (i.e. apple of one's eye, something very dear)' appears to be based on Polish pilnować / strzec kogoś/czegoś jak źrenicy oka 'to watch someone/something like the pupil of one's eye (i.e., something very valuable)'.<br />
+{Fliciński 289, 398}<br />
+The idiom אונטער פֿיר אויגן 'under four eyes (i.e., in private, one on one)' appears to be a calque of Polish w cztery oczy.<br />
+{Fliciński 449}<br />
+The idiom קוקן דעם טויט אין די אויגן 'to look death in the eyes (i.e., to be near death)' appears to be a calque of Polish zaglądać / zajrzeć / patrzeć / spojrzeć śmierci w oczy.<br /></p>
+<p><img alt="" src="https://archive.org/download/Yiddish-Dialect-Maps/Guggenheim-Gruenberg_karte_5.jpg" /></p>
+<p><img alt="" src="https://archive.org/download/shprakhatlas/ShprakhatlasKarte44-Optimized.jpg" /><br />
+{Yiddish Language Atlas of the Soviet Union 1931, map 44} <br />
+<img alt="" src="https://archive.org/download/shprakhatlas/ShprakhatlasKarte73-Optimized.jpg" /><br />
+{Yiddish Language Atlas of the Soviet Union 1931, map 73}<br />
+<img alt="" src="https://archive.org/download/Yiddish-Dialect-Maps/map%20-%20FoY3-176%20-%20oyg.jpg" /><br />
+<img alt="" src="https://archive.org/download/Yiddish-Dialect-Maps/Herzog4-14Neuter-Masculine-111.jpg" /><br />
+<img alt="" src="https://archive.org/download/Yiddish-Dialect-Maps/Herzog4-37-ChangesCounterToSlavicModel-126.jpg" /><br />
+<img alt="" src="https://archive.org/download/Yiddish-Dialect-Maps/Herzog4-9-FencterOygKind-108.jpg" /><br />
+<img alt="" src="https://archive.org/download/Yiddish-Dialect-Maps/Herzog5-71-73-OjerOjgOjxFarfrojrn-202.jpg" /></p>
+<p>Pronunciation:<br />
+Western: /a:g/<br />
+Lithuanian: /ejg/<br />
+Courland: /øyg/<br />
+Polish and Ukrainian: /ojg/ </p>
+<h2>WESTERN</h2>
+<p>o͡əg {Schnitzler, Prager Judendeutsch, 21, 23}<br />
+-   o͡əgn אויגן</p>
+<p>4 Agen sen mehr als 2.<br />
+{Maißim un Schnokes vun e Handelewos, LEIPZIG 1845: 39}<br />
+-   Mit an Ag is de Kuh blind. {43}<br />
+-   Fall af'n Rucke un schlog der en Ag eraus. {44}<br />
+-   S schloft nit Alles wos die Agen zu hot. {46}<br />
+-   De כלה hot e חסרון se hot schwarze Agen. {49}</p>
+<h3>Holland (Netherlands)</h3>
+<p>aag {HOLLAND, Beem, Jerosche}<br />
+-   E grousses aag uf eppes hobben. {Jerosche №1}<br />
+-   Die aagen sennen grousser wie der magen (as der …) (gresser …). {Jerosche №2}<br />
+(Tendlau 527)<br />
+-   Bernst. 6 - Di ojgen zenen gresser wi dus maul (vi der mugen).<br />
+(Weill pag. 67)<br />
+-   Niks is gut fier die aagen. {Jerosche №3}<br />
+Tendlau 787: Nix is gut für die Aage', Aber nit für den Mage'.<br />
+Bernst. 180 - Niks is güt zü di ojgen.</p>
+<h3>Alsace (France)</h3>
+<p>aːk {ALSACE, Zuckerman 1969, 41}</p>
+<p>s kʰɩnd rajbd sɩç srɛçdə aːg דאָס קינד רײַבט זיך דאָס רעכטע אויג {ALSACE, 47075 Mulhouse, 015-090}</p>
+<h3>Switzerland</h3>
+<p>aːgə  {SWITZERLAND, Fleischer 2005}</p>
+<p>āk {CZECHIA and western SLOVAKIA, Beranek 1936: 72}</p>
+<h3>Oyberland (West Transcarpathian)</h3>
+<p>āg (no word-final devoicing) {WTCP, U. Weinreich 1964: 253}</p>
+<p>āg {WTCP, Budapest, Hutterer 1965: 125, 129, 139, 141}<br />
+-   äugŋ̥ ~ āgŋ̥ אויגן (plural)</p>
+<p>āg {WTCP, SOUTH-CENTRAL HUNGARY, Garvin 1965: 101}<br />
+-   āgn̥ (pl.)</p>
+<p>ə áːg אַ אויג {ɴᴏᴛᴇ: הקשר בין הווײַסל און געלבל} {WTCP, Dunajská Streda, 47179}<br />
+-   ə klaː aːrəle אַ קליין אייגעלע {?}<br />
+-   dəz jɩŋəl rajpt zɔx den rɛxtə aːg דאָס ייִנגל רײַבט זיך דעם רעכטע אויג<br />
+-   dəs kʲɩnd rajpcəx dz raxtə aːg דאָס קינד רײַבט זיך דאָס רעכטע אויג<br />
+-   aːg͡ŋ אויגן<br />
+-   fyn deˑn gój zɔlstə dɔx zeː obaxt gebm, der nɛmdɔ də vajslʲ fyn də aːg͡ŋ əraus פֿון דעם גוי זאָלסטו דאָך זייער אָבאַכט געבן, דער נעמט דיר די ווײַסל פֿון די אויגן אַרויס<br />
+-   dəs švarcə ɩn aug דאָס שוואַרצע אין אויג<br />
+-   šarb͡m̩ ɔf də aːg͡ŋ שאַרבן אויף די אויגן (at burial)<br />
+-   dəz aˑglʲ דאָס אייגל<br />
+-   blinclən mɩdə aːgŋ בלינצלען מיט די אויגן</p>
+<p>dos kɩnd tycax rajbm dus rɛxtə ojgʲ דאָס קינד טוט זיך רײַבן דאָס רעכטע אויג {WTCP, Vác, 47197}<br />
+-   aːg {מאַנכע אַזוי}<br />
+-   ɔugŋ... אויגן<br />
+-   ójgmʲitlʲ אויגמיטל {ɴᴏᴛᴇ: 'אימפּראָוו}<br />
+-   dəs švarclʲ in ojg דאָס שוואַרצל אין אויג<br />
+-   doˑs harc gəlyst ɩn dos ojgʲ zeˑt דאָס האַרץ געלוסט און דאָס אויג זעט {ɴᴏᴛᴇ: הלב חובב והעין רואה}</p>
+<p>dəs rajpcəx dus rɛxte ojgʲ ~ aːg דאָס רײַבט זיך דאָס רעכטע אויג {WTCP, Berettyó-Újfalu, 47212}<br />
+-   ɔjg͡ŋ אויגן</p>
+<h2>CENTRAL</h2>
+<p>ojk (word-final devoicing) {U. Weinreich 1964: 253}</p>
+<p>ǫi̯k {Hutterer 1965: 141}</p>
+<p>oik {eastern SLOVAKIA and CARPATHO-RUTHENIA, Beranek 1936: 72}</p>
+<h3>Unterland (East Transcarpathian)</h3>
+<p>dəs rextə āg דאָס רעכטע אויג {ETCP, Hajduhadház, U. Weinreich 1964: 258}</p>
+<p>dus raxtə āg דאָס רעכטע אויג {ETCP, Bucium / Vármézö, U. Weinreich 1964: 259}</p>
+<p>ojk {ETCP, Bistrița, U. Weinreich 1964: 259}</p>
+<p>dəs kʲɩnt rajpcαx &gt; ráˑpcəx dus rɛxtɛ ojk דאָס קינד רײַבט זיך דאָס רעכטע אויג {ETCP, Teiuș, 46233}</p>
+<p>dɩ agŋ zejən niš די אויגן זעען נישט {ETCP, Sîg Felső Szek, 47223}<br />
+-   dəs kʲɩnd rajbcəx dus raxtə aːg דאָס קינד רײַבט זיך דאָס רעכטע אויג</p>
+<p>dəs raːpcax dus rɛxtə ɔjk דאָס רײַבט זיך דאָס רעכטע אויג {ETCP, Bistriţa, 47241}</p>
+<p>dus rextə ojg̥ʲ דאָס רעכטע אויג {ETCP, Mukachevo, 48226}<br />
+-   dus rextə ojk דאָס רעכטע אויג {U. Weinreich 1964: 259}</p>
+<p>əs raˑpt əs rɛxtə ojkʲ עס רײַבט דאָס רעכטע אויג {ETCP, Nyzhnya Apsha, 48233}</p>
+<p>ojg; ojgŋ {POLAND, Wolbrom, 50196}<br />
+-   zej noʀ daːgŋ vus ʀot זע נאָר די אויגן וואָס ער האָט {ɴᴏᴛᴇ: געסל}<br />
+-   vus raːpstə dɛ ᴿazoj s raxtə ojg̥ʲ וואָס רײַבסטו דיר אַזוי דאָס רעכטע אויג</p>
+<p>ds jɩngl raˑpt əs raxtə ojk דאָס ייִנגל רײַבט דאָס רעכטע אויג {POLAND, Warsaw, 52211}</p>
+<h2>HASIDIC</h2>
+<h3>AMERICA</h3>
+<p>ˈojgŋ̩<br />
+cvɩšn̩ fiːr ˈɔjgŋ̩ צווישן פֿיר אויגן<br />
+krɩcn̩ ɩn dɩ ɔjgŋ̩ קריצן אין די אויגן</p>
+<h3>EUROPE</h3>
+<p>zalc faʀ də ɔjgŋ̩ ɩn fɛfəʀ faʀ də mɔwl זאַלץ פֿאַר די אויגן און פֿעפֿער פֿאַר די מויל 'a horrible experience' {Vienna, Eidel Malowicki}</p>
+<h2>NORTHEASTERN</h2>
+<p>די אויג<br />
+{מאַרק, "אונדזער ליטווישער ייִדיש" (1951): 451}<br />
+קיין בייז אויג זאָל ניט שאַטן (רעשטל פֿון נייטראַלן מין) {ז' 451}</p>
+<p>êjgen {Grajewo, Olsvanger 1931}</p>
+<p>žmurẽn di ejgn זשמורען די אויגן {BELARUS, Gomel, 52314}<br />
+-   er rajp̥di rexte ejgʲ ער רײַבט די רעכטע אויג</p>
+<h3>Lithuania</h3>
+<p>di rexte ejg די רעכטע אויג {LITHUANIA, Kaunas, 54239}</p>
+<p>erájbiréxte ejg ער רײַבט די רעכטע אויג {LITHUANIA, Vilnius, 54257}</p>
+<h2>SOUTHEASTERN</h2>
+<p>der lopm fɩnəm ojkʲ דער לאָפּן פֿונעם אויג {ROMANIA, Brăila, 45273}<br />
+-   des kɩnt raˑpcəx dəm ræxtn ojkʲ דאָס קינד רײַבט זיך דעם רעכטן אויג</p>
+<p><audio controls src="https://archive.org/download/MangerLexicon/Manger%20-%20Avrom%20Shikt%20Eliezern%20Zukhn%20Far%20Yitskhok%20a%20Vayb%20-%20di%20oygn%20gevendt%20tsum%20shlyakh.mp3"></audio><br />
+AUDIO Itzik Manger {Czernowitz / Chernivtsi, BUKOVINA}<br />
+ojgŋ̩<br />
+די אויגן געווענדט צום שליאַך<br />
+<audio controls src="https://archive.org/download/MangerLexicon/Manger%20-%20Avrom%20Shikt%20Eliezern%20Zukhn%20Far%20Yitskhok%20a%20Vayb%20-%20vayl%20Yitskhokl%20iz%20mayn%20oyg%20in%20kop.mp3"></audio><br />
+ווײַל יצחקל איז מײַן אויג אין קאָפּ 'because little Isaac is the dearest thing to me'<br />
+<audio controls src="https://archive.org/download/MangerLexicon/Manger%20-%20Der%20Shnayder-gezeln%20Note%20Manger%20-%20der%20kayzer%20raybt%20zikh%20di%20oygn.mp3"></audio><br />
+דער קייזער רײַבט זיך די אויגן</p>
+<p>Data and statistics from the LCAAJ could be given in a footnote for those interested in more detail. For example, among the 168 locations I analyzed (out of 603), the gender of the word is neuter in 50%, masculine in 18%, and feminine in 32%. The more detailed phonetic transcriptions and the names of the locations could also be added for scholars, as could the proto-vowel reconstructed by Yiddish linguists (in this case: ou44).<br />
+aːg     48172 {Transcarpathia: Zlaté Klasy; Vel'ký Mager}, 47175 Tet {Transcarpathia: Tét}<br />
+ejg     49298 {Northern Ukraine: Pavoloch}, 49338 {Northern Ukraine: Myrhorod}, 50304 {Northern Ukraine: Hostomel'}, 52307 {Northern Poland: Streshyn}, 52327 {Northern Poland: Klintsy}, 53231 {Lithuania: Białystok}, 53261 {Northern Belarus: Lyakhavichy}, 53274 {Northern Belarus: Uzda}, 53279 {Northern Belarus: Minsk}, 53282 {Northern Belarus: Novye Dorogi}, 53289 {Northern Belarus: Berazino}, 53291 {Northern Belarus: Babruysk}, 53309 {Northern Belarus: Chavusy}, 54236 {Lithuania: Prienai}, 54257 {Lithuania: Vilnius}, 54279 {Northern Belarus: Dokshytsy}, 55244 {Lithuania: Ramygala}, 55248 {Lithuania: Panėveņys}, 55303 {Northern Belarus: Kolyshki}, 56254 {Northern Belarus: Jaunjelgava}, 56276 {Northern Belarus: Ludza}, 56281 {Northern Belarus: Osveya}, 53228 {Northern Belarus: Grajewo}<br />
+ejg̥    50281 {Northern Ukraine: Chudniv}, 51258 {Northern Ukraine: Lyubeshiv}, 52235 {Northern Poland: Kleszczele}, 52249 {Northern Poland: Ruzhany}, 52251 {Northern Poland: Drahichyn}, 52258 {Northern Poland: Bycień (Byteń)}, 52263 {Northern Poland: Dubaj}, 52268 {Northern Poland: Hantsavichy}, 52314 {Northern Poland: Homyel'}, 53239 {Lithuania: Hródna}, 55236 {Lithuania: Krakės}, 55268 {Lithuania: Daugavpils}, 55273 {Northern Belarus: Hlybokaye}, 56256 {Northern Belarus: Krustpils}, 56293 {Courland: Nevel}, 53236 {Lithuania: Indura}, 53251 {Northern Belarus: Kazloúńčyna}<br />
+hejg̥   53225 {Northern Poland: Trzcianne}<br />
+ejgʲ    56225 {Lithuania: Saldus (Frauenburg)}<br />
+ejk 50329 {Northern Ukraine: Dmytrivka}, 50334 {Northern Ukraine: Lokhvytsya}, 52219 {Northern Poland: Brok}, 52228 {Northern Poland: Jabłonka Kościelna}, 52229 {Northern Poland: Brańsk}, 52236 {Northern Poland: Kamyanyets}, 52237 {Northern Poland: Bielsk Podlaski}, 52294 {Northern Poland: Azarychy}, 53216 {Northern Poland: Kolno}, 53224 {Northern Belarus: Szczuczyn}, 50283 {Northern Ukraine: Pryazhiv}, 52245 {Northern Poland: Malech}, 52292 {Northern Poland: Kalinkavichy}<br />
+(h)ejk  53215 {Northern Poland: Myszyniec}<br />
+ejkʲ    55223 {Lithuania: Jurbarkas}, 56253 {Northern Belarus: Subate}<br />
+ejk̥    51314 {Northern Ukraine: Chernihiv (Chernigov)}, 55233 {Lithuania: Kėdainiai}<br />
+e5jg (5 = raising) 53286 {Northern Belarus: Svislach}<br />
+ej$     53252 {Northern Belarus: Moŭčadź}<br />
+ojg     46338 {Southern Ukraine and Romania: Kakhovka}, 47287 {Southern Ukraine and Romania: Mărculești}, 47301 {Southern Ukraine and Romania: {unidentified}}, 48223 {Transcarpathia: Borzhava}, 48284 {Southern Ukraine and Romania: Dzyhivka}, 48288 {Southern Ukraine and Romania: Krasne}, 48309 {Southern Ukraine and Romania: Tal'ne}, 48324 {Southern Ukraine and Romania: Kirovohrad}, 49262 {Northern Ukraine: Horodok}, 49278 {Northern Ukraine: Ladyhy}, 49278 {Northern Ukraine: Ladyhy}, 49317 {Northern Ukraine: Rzhyshchiv}, 50197 {Northern Poland: Częstochowa}, 51199 {Northern Poland: Brzeziny}, 51199 {Northern Poland: Brzeziny}, 51229 {Northern Poland: Międzyrzec Podlaski}, 52196 {Northern Poland: Płock}, 52231 {Northern Poland: Biała Podlaska}, 56244 {Courland: (near) Ņeimelis} (also ejg), 48281 {Southern Ukraine and Romania: Soroca}(also ojkʲ), 49247 {Eastern Galicia: L'viv } (also ojkʲ), 50221 {Western Galicia: Rzeszów}, 50236 {Northern Poland: Uhniv}, 49296 {Northern Ukraine: Volodarka}<br />
+ojgʲ    48251 {Transcarpathia: Roztoky}<br />
+ojg̥    48263 {Northern Ukraine: Lipcani}, 48296 {Southern Ukraine and Romania: Teplyk}, 49271 {Northern Ukraine: Zin'kiv}, 49307 {Northern Ukraine: Bila Tserkva}, 51181 {Northern Poland: {unidentified}, 51187 {Northern Poland: Kalisz}, 51198 {Northern Poland: Łódź}, 51228 {Northern Poland: Luków}, 51243 {Northern Poland: Kovel'}, 52184 {Northern Poland: Kleczew}, 52184 {Northern Poland: Kleczew}, 52213 {Northern Poland: Kałuszyn}, 52233 {Northern Poland: Brest}, 48311 {Southern Ukraine and Romania: Lyubomyrka}, 42972 {?}, 49279 {Northern Ukraine: Lyubar}<br />
+h2ojg̥ (2 = voicing but fortis) 47268 {Transcarpathia: Botoşani}<br />
+ojg̥ʲ   48274 {Southern Ukraine and Romania: Briceni}, 48276 {Southern Ukraine and Romania: Ozaryntsi}, 50196 {Northern Poland: Wolbrom}<br />
+ojg7 (7 = velarization, retraction) 47197 {Transcarpathia: Vác}<br />
+ojk     48216 {Transcarpathia: (section of Michalovce)}, 48277 {Southern Ukraine and Romania: Stara Ushytsya}, 49229 {Eastern Galicia: Przemyśl}, 49242 {Eastern Galicia: Kalush}, 49254 {Eastern Galicia: Vybudiv}, 49261 {Northern Ukraine: Sataniv}, 49304 {Northern Ukraine: Stavyshche}, 50206 {Northern Poland: Chmielnik}, 50216 {Northern Poland: Gorzyce}, 50237 {Northern Poland: Zamość}, 50239 {Northern Poland: Hrubieszów}, 51185 {Northern Poland: Złoczew}, 51189 {Northern Poland: Poddębice}, 51237 {Northern Poland: Łomazy}, 51238 {Northern Poland: Sławatycze}, 52181 {Northern Poland: Konin}, 52195 {Northern Poland: Gostynin}, 52195 {Northern Poland: Gostynin}, 52202 {Northern Poland: Błonie}, 52208 {Northern Poland: Ciechanów}, 52211 {Northern Poland: Warszawa}, 52212 {Northern Poland: Kolbiel}, 52213 {Northern Poland: Kałuszyn}, 52214 {Northern Poland: Radzymin}, 52215 {Northern Poland: Jadów}, 52217 {Northern Poland: Maków}, 52221 {Northern Poland: Siedlce}, 52223 {Northern Poland: Łosice}, 52224 {Northern Poland: Węgrów}, 52225 {Northern Poland: Drohiczyn}, 53202 {Northern Poland: Mława}, 53203 {Auoslltarinad, Czechoslovakia, Germany,: Chorzele}, 53211 {Northern Poland: Krasnosielc}, 58216 {?}, 49312 {Northern Ukraine: Shpola}, 53221 {Northern Belarus: Łomża} (also ejk)<br />
+ojk̥    50248 {Eastern Galicia: Volodymyr-Volynskyi}, 55286 {Northern Belarus: Polatsk}, 51246 {Northern Poland: Nuino} (also ejgʲ) <br />
+ojkʲ    47266 {Transcarpathia: Hârlău}, 48248 {Eastern Galicia: Ivano-Frankivsk}, 48256 {Eastern Galicia: Zvenyachyn}, 48286 {Southern Ukraine and Romania: Tul'chyn}, 48286 {Southern Ukraine and Romania: Tul'chyn} (also ojg̥ʲ), 49245 {Eastern Galicia: Nowi Strilyschtscha}, 50212 {Poland: Dębica}, 51215 {Northern Poland: Kozienice}, 51241 {Northern Poland: Mykytychi (uncertain)}, 48272 {Southern Ukraine and Romania: Briceva}<br />
+oyg     51233 {Northern Poland: Świerże}<br />
+øjg     56266 {Northern Belarus: Viļāni}<br />
+øug     55224 {Lithuania: Kvėdarna} (also ejg)<br />
+øyg     57212 {Courland: Piltene}, 57222 {Northern Belarus: Talsi (Talsen)}, 58265 {Estonia: Tartu (Dorpat)}, 56214 {Lithuania: Liepāja}<br />
+eøwg    54229 {Lithuania: Kudirkos Naumiestis}</p>
+<p>aːg     48172 Mógendorf, 47197 Vác {?}, 47175 Tet </p>
+<p>ejg     49298, 49338, 50304, 52307, 52327, 53231, 53261, 53274, 53279, 53282, 53289, 53291, 53309, 54236, 54257, 54279, 55244, 55244, 55248, 55303, 56254, 56276, 56281, 53228<br />
+ejg̥    50281, 51258, 52235, 52249, 52251, 52258, 52263, 52268, 52314, 53239, 55236, 55268, 55273, 56256, 56293, 53236, 53251<br />
+hejg̥   53225<br />
+ejgʲ    56225<br />
+ejk 50329, 50334, 52219, 52228, 52229, 52236, 52237, 52294, 53216, 53224, 53224, 50283, 52245, 52292<br />
+(h)ejk  53215<br />
+ejkʲ    55223, 56253<br />
+ejk̥    51314, 55233<br />
+e5jg    (raising) 53286<br />
+ej$     53252<br />
+ojg     46338, 47287, 47301, 48223, 48284, 48288, 48309, 48324, 49262, 49278, 49278, 49317, 50197, 51199, 51199, 51229, 52196, 52231, 56244 (also ejg), 48281(also ojkʲ), 49247 (also ojkʲ), 50221, 50236, 49296<br />
+ojgʲ     48251<br />
+ojg̥    48263, 48296, 49271, 49307, 51181, 51187, 51198, 51228, 51243, 52184, 52184, 52213, 52233, 48311, 42972, 49279<br />
+h2ojg̥   (voicing but fortis) 47268<br />
+ojg̥ʲ   48274, 48276, 50196<br />
+ojg7    (velarization, retraction) 47197<br />
+ojk     48216, 48277, 49229, 49242, 49254, 49261, 49304, 50206, 50216, 50237, 50239, 51185, 51189, 51237, 51238, 52181, 52195, 52195, 52202, 52208, 52211, 52212, 52213, 52214, 52215, 52217, 52221, 52223, 52224, 52225, 53202, 53203, 53211, 58216, 49312, 53221 (also ejk)<br />
+ojk̥    50248, 55286, 51246 (also ejgʲ) <br />
+ojkʲ    47266, 48248, 48256, 48286,  48286 (also ojg̥ʲ), 49245, 50212, 51215, 51241, 48272<br />
+oyg     51233<br />
+øjg     56266<br />
+øug     55224 (also ejg)<br />
+øyg     57212, 57222, 58265, 56214<br />
+eøwg    54229</p>
+<p>GENDER<br />
+Neuter 50%<br />
+    47197,  47266,  47268,  47287,  47301,  48251,  48256,  48263,  48272,  48274,  48276,  48277,  48281,  48284,  48288,  48309,  48311,  48324,  49229,  49242,  49245,  49247,  49254,  49262,  49278,  49278,  49279,  49304,  49307,  49312,  50196,  50197,  50212,  50239,  50248,  50281,  50283,  51181,  51185,  51187,  51189,  51198,  51199,  51228,  51229,  51233,  51237,  51238,  51241,  51243,  52181,  52184,  52184,  52195,  52195,  52196,  52202,  52208,  52211,  52212,  52213,  52213,  52214,  52215,  52217,  52221,  52223,  52224,  53202,  53203,  53211,  58216<br />
+Masculine 18%<br />
+    48223, 49296, 51258, 51283, 52219, 52225, 52228, 52229, 52231, 52233, 52235, 52236, 52237, 52251, 52263, 52292, 52294, 53215, 53216, 53221, 53224, 53224, 53282, 55273, 56256, 56276, 56293<br />
+Feminine 32%<br />
+    46338,  48248,  48286,  49338,  50221,  50304,  50329,  50334,  51246,  51314,  52245,  52258,  52268,  52307,  52314,  52327,  53231,  53236,  53239,  53251,  53252,  53261,  53274,  53279,  53289,  53291,  53309,  54229,  54236,  54257,  54279,  55223,  55224,  55236,  55244,  55248,  55268,  55286,  55303,  56225,  56253,  56254,  56266,  56281,  57222,  58265<br />
+{Indeterminate<br />
+    42972,  48216,  48296,  49261,  49271,  49298,  49317,  50206,  50216,  50236,  50237,  51199,  51215,  52249,  53225,  53228,  53286,  54266,  55233,  55244,  56214,  56244,  57212,  57222}</p>
+</div>
+
+</main>
+<footer>
+  Yiddish Dialect Dictionary &nbsp;·&nbsp; 10,034 entries
+</footer>
+<script>const BASE_URL = '/Yiddish-Dialect-Dictionary';</script>
+<script>
+(function() {
+  let index = null;
+  const input = document.getElementById('search-input');
+  const results = document.getElementById('search-results');
+  if (!input) return;
+
+  async function loadIndex() {
+    if (index) return;
+    try {
+      const r = await fetch(BASE_URL + '/search-index.json');
+      index = await r.json();
+    } catch(e) { console.error('Could not load search index', e); }
+  }
+
+  function search(q) {
+    q = q.trim().toLowerCase();
+    if (!q || !index) return [];
+    return index
+      .filter(e =>
+        e.hw.toLowerCase().includes(q) ||
+        (e.gl && e.gl.toLowerCase().includes(q))
+      )
+      .slice(0, 20);
+  }
+
+  function renderResults(items, q) {
+    if (!items.length) {
+      results.innerHTML = '<div class="search-no-results">No results found.</div>';
+      results.classList.add('show');
+      return;
+    }
+    results.innerHTML = items.map(e => `
+      <a class="search-result-item" href="${e.url}">
+        <span class="search-result-hw">${e.hw}</span>
+        ${e.gl ? `<span class="search-result-gloss">'${e.gl}'</span>` : ''}
+      </a>`).join('');
+    results.classList.add('show');
+  }
+
+  let timer;
+  input.addEventListener('input', async () => {
+    clearTimeout(timer);
+    const q = input.value;
+    if (!q.trim()) { results.classList.remove('show'); return; }
+    await loadIndex();
+    timer = setTimeout(() => renderResults(search(q), q), 120);
+  });
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.header-search')) results.classList.remove('show');
+  });
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { results.classList.remove('show'); input.blur(); }
+  });
+})();
+</script>
+</body>
+</html>

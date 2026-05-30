@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="yi" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>אַזוי – Yiddish Dialect Dictionary</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #faf9f6;
+  --surface: #ffffff;
+  --border: #e0ddd5;
+  --text: #1c1b18;
+  --muted: #6b6860;
+  --accent: #1a4480;
+  --accent-light: #e8eef7;
+  --link: #1a4480;
+  --link-hover: #0d2a52;
+  --hebrew-font: 'Ezra SIL', 'SBL Hebrew', 'David', 'Frank Ruehl CLM', serif;
+  --body-font: Georgia, 'Times New Roman', serif;
+  --ui-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+body {
+  font-family: var(--body-font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  font-size: 16px;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--link-hover); text-decoration: underline; }
+
+/* ── Header ── */
+.site-header {
+  background: var(--accent);
+  color: white;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0,0,0,.25);
+}
+.site-header a { color: white; font-family: var(--ui-font); font-size: .9rem; }
+.site-header a.home { font-weight: 700; font-size: 1rem; white-space: nowrap; }
+.site-header a:hover { text-decoration: underline; }
+
+/* search in header */
+.header-search {
+  flex: 1;
+  max-width: 480px;
+  position: relative;
+}
+.header-search input {
+  width: 100%;
+  padding: .45rem .9rem .45rem 2.2rem;
+  border: none;
+  border-radius: 4px;
+  font-family: var(--ui-font);
+  font-size: .95rem;
+  background: rgba(255,255,255,.15);
+  color: white;
+  outline: none;
+}
+.header-search input::placeholder { color: rgba(255,255,255,.65); }
+.header-search input:focus { background: rgba(255,255,255,.25); }
+.header-search .icon {
+  position: absolute;
+  left: .6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: .7;
+  pointer-events: none;
+}
+.search-results {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.15);
+  max-height: 360px;
+  overflow-y: auto;
+  z-index: 200;
+}
+.search-results.show { display: block; }
+.search-result-item {
+  display: block;
+  padding: .6rem 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.search-result-item:last-child { border-bottom: none; }
+.search-result-item:hover { background: var(--accent-light); }
+.search-result-hw {
+  font-size: 1.1rem;
+  font-family: var(--hebrew-font);
+  direction: rtl;
+  display: inline-block;
+  margin-right: .5rem;
+}
+.search-result-gloss { color: var(--muted); font-style: italic; }
+.search-no-results { padding: .8rem 1rem; color: var(--muted); font-family: var(--ui-font); }
+
+/* ── Layout ── */
+.page-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+/* ── Alphabet nav (homepage + letter pages) ── */
+.alphabet-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin: 1.5rem 0;
+}
+.alphabet-nav a {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: .5rem .75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  text-decoration: none;
+  min-width: 52px;
+  transition: background .15s, border-color .15s;
+}
+.alphabet-nav a:hover, .alphabet-nav a.active {
+  background: var(--accent-light);
+  border-color: var(--accent);
+}
+.alphabet-nav a .heb {
+  font-family: var(--hebrew-font);
+  font-size: 1.4rem;
+  line-height: 1;
+  direction: rtl;
+}
+.alphabet-nav a .translit {
+  font-family: var(--ui-font);
+  font-size: .65rem;
+  color: var(--muted);
+  margin-top: .2rem;
+}
+
+/* ── Homepage ── */
+.hero {
+  text-align: center;
+  padding: 2.5rem 0 1.5rem;
+}
+.hero h1 {
+  font-size: 2.2rem;
+  color: var(--accent);
+  margin-bottom: .5rem;
+}
+.hero p {
+  color: var(--muted);
+  font-family: var(--ui-font);
+  font-size: 1rem;
+}
+.section-label {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 2rem 0 .75rem;
+}
+
+/* ── Letter page ── */
+.letter-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: .75rem;
+}
+.letter-header .heb-big {
+  font-family: var(--hebrew-font);
+  font-size: 3rem;
+  direction: rtl;
+  line-height: 1;
+  color: var(--accent);
+}
+.letter-header .info {
+  font-family: var(--ui-font);
+}
+.letter-header .translit-big { font-size: 1.4rem; font-weight: 600; }
+.letter-header .count { color: var(--muted); font-size: .9rem; }
+
+.entry-list {
+  list-style: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface);
+}
+.entry-list li {
+  border-bottom: 1px solid var(--border);
+}
+.entry-list li:last-child { border-bottom: none; }
+.entry-list a {
+  display: flex;
+  align-items: baseline;
+  gap: .75rem;
+  padding: .65rem 1rem;
+  color: var(--text);
+  text-decoration: none;
+}
+.entry-list a:hover { background: var(--accent-light); }
+.entry-list .hw {
+  font-family: var(--hebrew-font);
+  font-size: 1.15rem;
+  direction: rtl;
+  flex-shrink: 0;
+}
+.entry-list .gl {
+  font-style: italic;
+  color: var(--muted);
+  font-size: .9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Entry page ── */
+.entry-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--accent);
+}
+.entry-headword {
+  font-family: var(--hebrew-font);
+  font-size: 2.6rem;
+  direction: rtl;
+  line-height: 1.2;
+  color: var(--text);
+}
+.entry-gloss {
+  font-style: italic;
+  color: var(--muted);
+  font-size: 1.05rem;
+  margin-top: .3rem;
+}
+
+.entry-body h2 {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 1.8rem 0 .6rem;
+  padding-bottom: .3rem;
+  border-bottom: 1px solid var(--border);
+}
+.entry-body h3 {
+  font-family: var(--ui-font);
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin: 1rem 0 .4rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.entry-body p {
+  margin-bottom: .8rem;
+  line-height: 1.7;
+}
+.entry-body ul, .entry-body ol {
+  margin: .5rem 0 .8rem 1.5rem;
+}
+.entry-body li { margin-bottom: .3rem; }
+.entry-body audio {
+  display: block;
+  margin: .75rem 0;
+  max-width: 100%;
+}
+.entry-body img {
+  max-width: 100%;
+  height: auto;
+  margin: .75rem 0;
+  border-radius: 4px;
+}
+.entry-body blockquote {
+  border-left: 3px solid var(--border);
+  padding-left: 1rem;
+  color: var(--muted);
+  margin: .5rem 0;
+}
+
+/* back/nav bar above entry */
+.entry-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.entry-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .3rem .7rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--text);
+}
+.entry-nav a:hover {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  text-decoration: none;
+}
+
+/* ── Footer ── */
+footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  margin-top: 3rem;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .hero h1 { font-size: 1.6rem; }
+  .alphabet-nav a { min-width: 44px; padding: .4rem .55rem; }
+  .alphabet-nav a .heb { font-size: 1.2rem; }
+  .entry-headword { font-size: 2rem; }
+  .header-search { max-width: none; }
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <a href="/Yiddish-Dialect-Dictionary/" class="home">Yiddish Dialect Dictionary</a>
+  <div class="header-search">
+    <svg class="icon" width="16" height="16" fill="white" viewBox="0 0 16 16">
+      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.868-3.834zm-5.242 1.406a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+    </svg>
+    <input type="search" id="search-input" placeholder="Search entries…" autocomplete="off">
+    <div id="search-results" class="search-results"></div>
+  </div>
+</header>
+<main class="page-wrap">
+
+<div class="entry-nav">
+  <a href="/Yiddish-Dialect-Dictionary/letter/aleph/">← Aleph</a>
+  <a href="/Yiddish-Dialect-Dictionary/">Home</a>
+</div>
+<div class="entry-header">
+  <div class="entry-headword" dir="rtl">אַזוי</div>
+  
+</div>
+<div class="entry-body" dir="auto">
+<p>אַזוי</p>
+<h2>ETYMOLOGY</h2>
+<p>The phrase אַזוי צי אַזוי 'either way; in any event' might be a calque of Polish tak czy siak; tak czy owak. <br />
+MHG alsô</p>
+<p><img alt="" src="https://archive.org/download/Yiddish-Dialect-Maps/Guggenheim-Gruenberg_karte_16.jpg" /></p>
+<h2>WESTERN</h2>
+<p>In Old Yiddish generally:<br />
+אזו<br />
+Approximate pronunciation: /aˈzoː/</p>
+<p>אלזא<br />
+{Cambridge Codex, ca. 1382; Eli Katz (1963) 80ff.}<br />
+Approximate pronunciation: /alzoː/</p>
+<p 1588_:="1588&quot;:" 51...="51..." Weinryb_="Weinryb," _A="&quot;A" briv="briv" fun="fun" in="in" pekl="pekl" yidish="yidish" yor="yor">זויא<br />
+ זויא בלייבט עז וואיל איין זויא [...]<br /></p>
+<p>sô, aso͡ə {Schnitzler, Prager Judendeutsch, 21, 24}</p>
+<p>sou, so {Sprach-Meister 1742}</p>
+<p>Sau lang geht der Krug zum Brunn bis er zubracht. <br />
+{Maißim un Schnokes vun e Handelewos, LEIPZIG 1845: 41}<br />
+-   Wenn me ward sau alt wie e Kuh, lernt me alle Weil epes zu. {46}</p>
+<p>sau {EAST FRIESLAND, Aurich, Schulenrufen 1902}</p>
+<h3>Holland (Netherlands)</h3>
+<p>sou [ɔu] [HOLLAND, Beem, Jerosche]<br />
+-   Die zwaate helft is aach sou. 'Do not talk any further: I understand the rest.' {Jerosche №331}<br />
+-   Sou der her, sou 's ge'scher. 'As the lord, so the tools.' {Jerosche №336}</p>
+<h3>Alsace (France)</h3>
+<p>sɔ̞u vajsi ce̝ːn זוי ווײַסע ציין  {ALSACE, 47075 Mulhouse, 021-020}<br />
+- sɔu ɩš moˑdə gəˈves זוי איז מאָדע געוועזן {p046-020}<br />
+- iˑr miˑn ajç nɩd əsɔu aːdɔ̞u איר מוזן אײַך ניט אַזוי אָנטאָן {q046-100}</p>
+<h3>Switzerland</h3>
+<p>(ə)zou, (ə)zoː, soː, sau {SWITZERLAND, Fleischer 2005}</p>
+<p>əzou {westernmost CZECHIA, Beranek 1936: 69}</p>
+<p>əzoü {CZECHIA and WEST SLOVAKIA, Beranek 1936: 69}</p>
+<h3>Czechia</h3>
+<p>əzau {CZECHIA, Šafov, Beranek 1936: 69}</p>
+<p>ezôi {BURGENLAND, Stalek 1926: 270}</p>
+<h3>Oyberland (West Transcarpathian)</h3>
+<p>əzåi̯ ~ əzǫi̯ {WTCP, Budapest, Hutterer 1965: 129}</p>
+<p>zō {probably loan from or coexisting German} {WTCP, SOUTHWESTERN HUNGARY, Garvin 1965: 97}</p>
+<p>əzoy {WTCP, SOUTH-CENTRAL HUNGARY, Garvin 1965: 101}</p>
+<p>əzåj, zåj {WTCP, NORTHWESTERN HUNGARIAN, Garvin 1965: 104}<br />
+-   zō {probably from German}</p>
+<p>əzɔ́ˑj, əzɔ́j {WTCP, Dunajská Streda, 47179}<br />
+-   iˑəx bʲin zɔj gəlɔfɱ daz ɔx kʲɛn kaʊm óˑtəm šɛp͡m̩ איך בין אַזוי געלאָפֿן דאָס איך קען קוים אָטעם שעפּן<br />
+-   ix hɛt kaː mɔ́jrə gəhat fyn əzɔ́j ɛpəs איך העט קיין מורא געהאַט פֿון אַזוי עפּעס<br />
+-   əzɔ́ˑj aɫtα tɔp אַזוי אַלטער טאָפּ 'such an old pot'<br />
+-   doˑz iz dɔx gʲyˑt əzɔ́j דאָס איז דאָך גוט אַזוי<br />
+-   ɛː maxc əzoːj yn miα maxŋ̩s əzɔj ער מאַכט עס אַזוי און מיר מאַכן עס אַזוי</p>
+<p>rəšxojdəš ajŋgebm klaˑnə cykərləx zɔj vi mɔjn ראָש־חודש אײַנגעבן קליינע צוקערלעך אַזוי ווי מאָן {WTCP, Vác, 47197}<br />
+-   (ə) zɔj ə moːdə voˑr אַזוי אַ מאָדע וואָר<br />
+-   zɔj vɩ deˑs dɔj אַזוי ווי דאָס דאָ<br />
+-   zɔj ə laŋk štɩklʲ ajzn̩ אַזוי אַ לאַנג שטיקל אײַזן <br />
+-   ɛˑ maxc əzɔj ɩn miˑr maxŋs əzɔ́j ער מאַכט עס אַזוי און מיר מאַכן עס אַזוי<br />
+-   fyn əzɔj ə bɔum פֿון אַזוי אַ בוים<br />
+-   ɩm álgəmájnən is dɔx zɔj gəveˑzn אים אַלגעמיינען איז דאָך אַזוי געוועזן  (cf. NHG im Allgemeinen)<br />
+-   zɔj ə brɔjt šmɛkt mᵊr gyːt אַזוי אַ ברויט שמעקט מיר גוט<br />
+-   də šlʲaŋ ɩz əzɔj ə xaˑjə vos əs bajst די שלאַנג איז אַזוי אַ חיה וואָס עס בײַסט<br />
+-   zɔj ə laŋə riːmən אַזוי אַ לאַנגע רימען<br />
+-   vi zoj ryft mən dajn tatn ווי אַזוי רופֿט מען דײַן טאַטן<br />
+-   ɛc zɔlc əzoj maxŋ עץ זאָלטס אַזוי מאַכן<br />
+-   ɛc maxc doˑs əzɔ́j? עטס מאַכטס דאָס אַזוי</p>
+<p>sɪz əzɔ́j ə mʊədə gəvᴇˑzn ס'איז אַזוי אַ מאָדע געוועזן {WTCP, Berettyó-Újfalu, 47212}<br />
+-   əzɔ́j ə brɔjt hot ə gʲy̆t͡n̩ gəšmák אַזוי אַ ברויט האָט אַ גוטן געשמאַק<br />
+-   ɛr tyt əzɔj ער טוט אַזוי<br />
+-   in ync tymərəs əzɔ́ˑj און אונדז טוען מיר עס אַזוי<br />
+-   ɛc zɔlc əzɔ́j toːn עס זאָלט עס אַזוי טאָן<br />
+-   tyc əzɔj טוטס אַזוי<br />
+-   viˑ kʲɛmən doˑs əzɔj toːn? ווי קען מען דאָס אַזוי טאָן</p>
+<p>er maxt əs əzój ער מאַכט עס אַזוי {WTCP, Hajdúhadház, 47219}<br />
+-   viˑr maxən dəs nišʲ əzɔ́j מיר מאַכן דאָס נישט אַזוי</p>
+<p>əzɔj maxt ɛc əs אַזוי מאַכט עץ עס {WTCP, Bratislava, 48171A} </p>
+<h2>CENTRAL</h2>
+<h3>Unterland (East Transcarpathian)</h3>
+<p>əzoi {ETCP, Beranek 1936: 69}</p>
+<p>azoj titér אַזוי טוט ער {ETCP, Teiuș, 46233}</p>
+<p>azój ə múədə ɩz gɩvèjn אַזוי אַ מאָדע איז געווען {ETCP, Sîg Felső Szek, 47223}<br />
+-   azoj maxt eːr ɩn azɔj maxmər iˑndz אַזוי מאַכט ער און אַזוי מאַכמיר אונדז<br />
+-   əzój brɔjt šmɛkt mir gʲɩt אַזוי ברויט שמעקט מיר גוט<br />
+-   a šlaŋg iz azo/ɔj ə xaˑjə vus bajst אַ שלאַנג איז אַזוי אַ חיה וואָס בײַסט</p>
+<p>nijavádə sɩz azóu נו אַוודאי עס איז אַזוי {ETCP, near Sighet, 47228}</p>
+<p>sɩz miːs az di tɩst azɔj עס איז מיאוס אַז דו טוסט אַזוי {ETCP, Nyzhnya Apsha, 48233}</p>
+<p>azój {POLAND, Wolbrom, 50196}</p>
+<p>azɔj mɛ zug azɔj אַזוי מע זאָגט אַזוי {Warsaw, Geller 2001: 189}<br />
+-   a-zuu̯ nᵻʃ't-ajsn, az-ᵻnts nɛmɛn אַז עס זאָל נישט הייסן, אַז אונדז נעמען {p. 191}<br />
+-   azɔ vᵻ-n-ᵻm xuːlɛm אַזוי ווי אין חלום {p. 199}<br />
+-   azɔj az mᵻ zɛn gɛblᵻbm ᵻn dɛraːjɛn אַזוי אַז מיר זענען געבליבן אין דרײַען {p. 201}<br />
+-   azɔj-zᵻ-s lɛjbm fᵻn dᵻ puu̯ jidn אַזוי איז דאָס לעבן פֿון די פּאָר ייִדן {p. 201}<br />
+-   azɔj-i giɛvɛjn s-lɛjbm אַזוי איז געווען דאָס לעבן {p. 205}<br />
+-   azɔj is-ᵻz lɛjbm fᵻn mɛɲtʃ' אַזוי איז דאָס לעבן פֿון מענטש {p. 207}<br />
+-   dᵻs vaːp ɔːx azɔj דאָס ווײַב אויך אַזוי {p. 283}<br />
+-   tsᵻ mij azɔ צו מיר אַזוי {p. 329}<br />
+azoj tɩ,cəzəx uˑə אַזוי טוט זי זיך אָן {POLAND, Warsaw, 52211}</p>
+<h2>HASIDIC</h2>
+<h3>AMERICA</h3>
+<p>aˈzoj<br />
+ajnər zukt aˈzoj, ajnər zukt aziː איינער זאָגט אַזוי, איינער זאָגט אַזי 'you say tomato, I say tomahto'<br />
+aˈzɔj fiːl אַזוי פֿיל<br />
+ɛfšər gajt ɛs azɔj, ɛfšər gajt ɛs aziˑ אפֿשר גייט עס אַזוי, אפֿשר גייט עס אַזי</p>
+<h3>EUROPE</h3>
+<p>azɔj [Vienna, Eidel Malowicki]<br />
+azɔj zugsti ?אַזוי זאָגטסו</p>
+<h3>ISRAEL</h3>
+<p>me šemt zax epes azey eyner farn andern מע שעפּט זיך עפּעס אַזוי איינער פֿאַרן אַנדערן {JERUSALEMITE, Assouline 2017: 71}</p>
+<p>un azey vayter און אַזוי ווײַטער {JERUSALEMITE, Assouline 2017: 109}</p>
+<h2>NORTHEASTERN</h2>
+<p>asêj {Grajewo, Olsvanger 1931}</p>
+<h3>Lithuania</h3>
+<p>azéj tut ɛ́ʀ, azéj tuɛn míʀ אַזוי טוט ער, אַזוי טוען מיר {LITHUANIA, Vilnius, 54257}</p>
+</div>
+
+</main>
+<footer>
+  Yiddish Dialect Dictionary &nbsp;·&nbsp; 10,034 entries
+</footer>
+<script>const BASE_URL = '/Yiddish-Dialect-Dictionary';</script>
+<script>
+(function() {
+  let index = null;
+  const input = document.getElementById('search-input');
+  const results = document.getElementById('search-results');
+  if (!input) return;
+
+  async function loadIndex() {
+    if (index) return;
+    try {
+      const r = await fetch(BASE_URL + '/search-index.json');
+      index = await r.json();
+    } catch(e) { console.error('Could not load search index', e); }
+  }
+
+  function search(q) {
+    q = q.trim().toLowerCase();
+    if (!q || !index) return [];
+    return index
+      .filter(e =>
+        e.hw.toLowerCase().includes(q) ||
+        (e.gl && e.gl.toLowerCase().includes(q))
+      )
+      .slice(0, 20);
+  }
+
+  function renderResults(items, q) {
+    if (!items.length) {
+      results.innerHTML = '<div class="search-no-results">No results found.</div>';
+      results.classList.add('show');
+      return;
+    }
+    results.innerHTML = items.map(e => `
+      <a class="search-result-item" href="${e.url}">
+        <span class="search-result-hw">${e.hw}</span>
+        ${e.gl ? `<span class="search-result-gloss">'${e.gl}'</span>` : ''}
+      </a>`).join('');
+    results.classList.add('show');
+  }
+
+  let timer;
+  input.addEventListener('input', async () => {
+    clearTimeout(timer);
+    const q = input.value;
+    if (!q.trim()) { results.classList.remove('show'); return; }
+    await loadIndex();
+    timer = setTimeout(() => renderResults(search(q), q), 120);
+  });
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.header-search')) results.classList.remove('show');
+  });
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { results.classList.remove('show'); input.blur(); }
+  });
+})();
+</script>
+</body>
+</html>

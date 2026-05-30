@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="yi" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>געבן – Yiddish Dialect Dictionary</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #faf9f6;
+  --surface: #ffffff;
+  --border: #e0ddd5;
+  --text: #1c1b18;
+  --muted: #6b6860;
+  --accent: #1a4480;
+  --accent-light: #e8eef7;
+  --link: #1a4480;
+  --link-hover: #0d2a52;
+  --hebrew-font: 'Ezra SIL', 'SBL Hebrew', 'David', 'Frank Ruehl CLM', serif;
+  --body-font: Georgia, 'Times New Roman', serif;
+  --ui-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+body {
+  font-family: var(--body-font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  font-size: 16px;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--link-hover); text-decoration: underline; }
+
+/* ── Header ── */
+.site-header {
+  background: var(--accent);
+  color: white;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0,0,0,.25);
+}
+.site-header a { color: white; font-family: var(--ui-font); font-size: .9rem; }
+.site-header a.home { font-weight: 700; font-size: 1rem; white-space: nowrap; }
+.site-header a:hover { text-decoration: underline; }
+
+/* search in header */
+.header-search {
+  flex: 1;
+  max-width: 480px;
+  position: relative;
+}
+.header-search input {
+  width: 100%;
+  padding: .45rem .9rem .45rem 2.2rem;
+  border: none;
+  border-radius: 4px;
+  font-family: var(--ui-font);
+  font-size: .95rem;
+  background: rgba(255,255,255,.15);
+  color: white;
+  outline: none;
+}
+.header-search input::placeholder { color: rgba(255,255,255,.65); }
+.header-search input:focus { background: rgba(255,255,255,.25); }
+.header-search .icon {
+  position: absolute;
+  left: .6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: .7;
+  pointer-events: none;
+}
+.search-results {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.15);
+  max-height: 360px;
+  overflow-y: auto;
+  z-index: 200;
+}
+.search-results.show { display: block; }
+.search-result-item {
+  display: block;
+  padding: .6rem 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.search-result-item:last-child { border-bottom: none; }
+.search-result-item:hover { background: var(--accent-light); }
+.search-result-hw {
+  font-size: 1.1rem;
+  font-family: var(--hebrew-font);
+  direction: rtl;
+  display: inline-block;
+  margin-right: .5rem;
+}
+.search-result-gloss { color: var(--muted); font-style: italic; }
+.search-no-results { padding: .8rem 1rem; color: var(--muted); font-family: var(--ui-font); }
+
+/* ── Layout ── */
+.page-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+/* ── Alphabet nav (homepage + letter pages) ── */
+.alphabet-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin: 1.5rem 0;
+}
+.alphabet-nav a {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: .5rem .75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  text-decoration: none;
+  min-width: 52px;
+  transition: background .15s, border-color .15s;
+}
+.alphabet-nav a:hover, .alphabet-nav a.active {
+  background: var(--accent-light);
+  border-color: var(--accent);
+}
+.alphabet-nav a .heb {
+  font-family: var(--hebrew-font);
+  font-size: 1.4rem;
+  line-height: 1;
+  direction: rtl;
+}
+.alphabet-nav a .translit {
+  font-family: var(--ui-font);
+  font-size: .65rem;
+  color: var(--muted);
+  margin-top: .2rem;
+}
+
+/* ── Homepage ── */
+.hero {
+  text-align: center;
+  padding: 2.5rem 0 1.5rem;
+}
+.hero h1 {
+  font-size: 2.2rem;
+  color: var(--accent);
+  margin-bottom: .5rem;
+}
+.hero p {
+  color: var(--muted);
+  font-family: var(--ui-font);
+  font-size: 1rem;
+}
+.section-label {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 2rem 0 .75rem;
+}
+
+/* ── Letter page ── */
+.letter-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: .75rem;
+}
+.letter-header .heb-big {
+  font-family: var(--hebrew-font);
+  font-size: 3rem;
+  direction: rtl;
+  line-height: 1;
+  color: var(--accent);
+}
+.letter-header .info {
+  font-family: var(--ui-font);
+}
+.letter-header .translit-big { font-size: 1.4rem; font-weight: 600; }
+.letter-header .count { color: var(--muted); font-size: .9rem; }
+
+.entry-list {
+  list-style: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface);
+}
+.entry-list li {
+  border-bottom: 1px solid var(--border);
+}
+.entry-list li:last-child { border-bottom: none; }
+.entry-list a {
+  display: flex;
+  align-items: baseline;
+  gap: .75rem;
+  padding: .65rem 1rem;
+  color: var(--text);
+  text-decoration: none;
+}
+.entry-list a:hover { background: var(--accent-light); }
+.entry-list .hw {
+  font-family: var(--hebrew-font);
+  font-size: 1.15rem;
+  direction: rtl;
+  flex-shrink: 0;
+}
+.entry-list .gl {
+  font-style: italic;
+  color: var(--muted);
+  font-size: .9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Entry page ── */
+.entry-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--accent);
+}
+.entry-headword {
+  font-family: var(--hebrew-font);
+  font-size: 2.6rem;
+  direction: rtl;
+  line-height: 1.2;
+  color: var(--text);
+}
+.entry-gloss {
+  font-style: italic;
+  color: var(--muted);
+  font-size: 1.05rem;
+  margin-top: .3rem;
+}
+
+.entry-body h2 {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 1.8rem 0 .6rem;
+  padding-bottom: .3rem;
+  border-bottom: 1px solid var(--border);
+}
+.entry-body h3 {
+  font-family: var(--ui-font);
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin: 1rem 0 .4rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.entry-body p {
+  margin-bottom: .8rem;
+  line-height: 1.7;
+}
+.entry-body ul, .entry-body ol {
+  margin: .5rem 0 .8rem 1.5rem;
+}
+.entry-body li { margin-bottom: .3rem; }
+.entry-body audio {
+  display: block;
+  margin: .75rem 0;
+  max-width: 100%;
+}
+.entry-body img {
+  max-width: 100%;
+  height: auto;
+  margin: .75rem 0;
+  border-radius: 4px;
+}
+.entry-body blockquote {
+  border-left: 3px solid var(--border);
+  padding-left: 1rem;
+  color: var(--muted);
+  margin: .5rem 0;
+}
+
+/* back/nav bar above entry */
+.entry-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.entry-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .3rem .7rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--text);
+}
+.entry-nav a:hover {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  text-decoration: none;
+}
+
+/* ── Footer ── */
+footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  margin-top: 3rem;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .hero h1 { font-size: 1.6rem; }
+  .alphabet-nav a { min-width: 44px; padding: .4rem .55rem; }
+  .alphabet-nav a .heb { font-size: 1.2rem; }
+  .entry-headword { font-size: 2rem; }
+  .header-search { max-width: none; }
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <a href="/Yiddish-Dialect-Dictionary/" class="home">Yiddish Dialect Dictionary</a>
+  <div class="header-search">
+    <svg class="icon" width="16" height="16" fill="white" viewBox="0 0 16 16">
+      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.868-3.834zm-5.242 1.406a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+    </svg>
+    <input type="search" id="search-input" placeholder="Search entries…" autocomplete="off">
+    <div id="search-results" class="search-results"></div>
+  </div>
+</header>
+<main class="page-wrap">
+
+<div class="entry-nav">
+  <a href="/Yiddish-Dialect-Dictionary/letter/giml/">← Giml</a>
+  <a href="/Yiddish-Dialect-Dictionary/">Home</a>
+</div>
+<div class="entry-header">
+  <div class="entry-headword" dir="rtl">געבן</div>
+  <div class="entry-gloss">‘to give’</div>
+</div>
+<div class="entry-body" dir="auto">
+<p>געבן<br />
+געגעבן<br />
+'to give'</p>
+<h2>ETYMOLOGY</h2>
+<p>{Why was the protovowel E5 rather than E3 (like הייבן etc.)? But short in Dutch WY.}<br />
+I. Proto-Yiddish ✱gɛːbən; Proto-EY ✱gɛːbn; from MHG geben. <br />
+Protovowel E5.<br />
+II. MHG geben; from OHG gëban; cf. NHG geben.</p>
+<blockquote>
+<p 130.="130." 172_="172;" 2013:="2013:" Kroonen="Kroonen" Orel="Orel">{DW¹ 4: 1665.}<br />
+III. Gothic giban; ON gefa; OS geban; OE ġiefan; (English give from ON gefa); OHG gëban; from PGmc ✱gebaną; from PIE ✱gʰabʰ- 'to give, move' (according to Orel); or ✱ḱo(m)-h₁ep- 'to seize' (according to Kroonen); cf. Latin coēpi 'seized'.<br /></p>
+</blockquote>
+<p><img alt="" src="https://archive.org/download/Yiddish-Dialect-Maps/Herzog3-1-4-GiveTashlexLojvichHung-52.jpg" /></p>
+<h2>WESTERN</h2>
+<p>gebən {Schnitzler, Prager Judendeutsch, 19, 23}<br />
+-   ich geb איך געב</p>
+<p 1696_="1696," 307="307" מעשׂה="מעשׂה" ניקלסבורג="ניקלסבורג">הקב"ה גיבט כח<br />
+'God gives power'<br /></p>
+<p 1845:="1845:" 40="40" Handelewos_="Handelewos," LEIPZIG="LEIPZIG" Maißim="Maißim" Schnokes="Schnokes" e="e" un="un" vun="vun">Unter'n Aufen get's ach Leut.<br /></p>
+<p>Eesev get Máaser von Stroh!<br />
+{FRANKFURT, Tendlau №8}<br />
+-   Ich red' vun Grün, gebstu Tschuwe: blau! {№97}</p>
+<h3>Holland (Netherlands)</h3>
+<p>gebben, gibben; geb; gebt, gibt, giːt; gegebben {HOLLAND, Beem, Jerosche}<br />
+-   er giːt ער גיט<br />
+-   isch hob gegebben איך האָב געגעבן<br />
+-   Wen man dir gibt, nem! Wen man dir nemt, kreisch! {Jerosche №232}<br />
+-   Bernst. 57 - As man git, nem; As man nemt, schrei gewalt.<br />
+-   Wer es nit an Jankew gebt, moss es an Eissew gebben. 'He who does not spend his money on good causes will probably lose it in a less pleasant way.' {Jerosche №374}<br />
+-   Wer nit gebben wil an e Jid, moss gebben an e goj. 'Whoever does not want to give to a Jew will give his money on a non-Jew. Recalls the time when the Jews had to make excessive financial contributions to the Christian authorities of the city and country and sometimes sought a pretext to evade their obligations towards the Jewish community.' {Jerosche №396}<br />
+-   Gebt Kaal kaan biks, geb isch kaan deit. 'If the community doesn't give a rifle, I won't give a penny. If the competent authorities do not want to carry out their responsibilities, I will not do mine. Love cannot come from only one side.' {Jerosche №413}</p>
+<h3>Alsace (France)</h3>
+<p>mr̩ mys drʊf axd geˑ as əs kʰɩnd sɩç di naˑs bʊcd מע מוז דערויף אַכט געבן, אַז דאָס קינד זיך די נאָז פּוצט {ALSACE, 47075 Mulhouse, 016-060}<br />
+- ˈfysdrɩd geˑ פֿוסטריט געבן 'to kick' {032-010}<br />
+- hɛˑrənʊ̞f fɔr fysdrɩd cə geˑ הער אויף פֿאָר פֿוסטריט צו געבן {q032-020}<br />
+- vɛn dy mər  dəʁ- kɩdl̩ deč geː ded ɩç nə ˈaːdɔ̞u ווען דו מיר דער קיטל טעטסט געבן, טעט איך אין אָנטאָן {q040-080, 040-090}<br />
+- gɛn məʁ- di laːdʁ̩- גיב מיר די לייטער {q059-070}</p>
+<h3>Switzerland</h3>
+<p>geː געגעבן {Endingen, Isaak Guggenheim-Bloch, Fleischer 2005:73.}<br />
+geː, keː געגעבן {SWITZERLAND, Fleischer 2005}<br />
+-   si gen זיי גיבן</p>
+<p>gejbm {BURGENLAND, Stalek 1926: 270}<br />
+-   di müter get mo doch די מוטער גיט מיר דאָך<br />
+-   doᵘ gebt eir ei-er דאָ גיט ער איר </p>
+<h3>Oyberland (West Transcarpathian)</h3>
+<p>gęB 'I give' {WTCP, Budapest, Hutterer 1965: 135}</p>
+<p>cy ɛsn gʲeb͡m̩ צו עסן געבן {WTCP, Dunajská Streda, 47179}<br />
+-   gɛmɔ kaː knɔblzyp meˑr געב מיר קיין קנאָבלזופּ מער<br />
+-   gʲɛmr deːn apl געב מיר דעם אַפּל<br />
+-   iˑαx gʲɛb͡m̩ deˑn ɛplʲ איך געב אים דעם עפּל<br />
+-   ɛˑ gʲɛt diˑα ער געט דיר<br />
+-   dyˑ gʲɛst ynz ə ɛpl דו געסט אונדז אַ עפּל<br />
+-   miˑᵃ gʲɛb͡m̩ fa zeˑ ø apl̩ʲ מיר געבן פֿאַר  זיי אַ אַפּל<br />
+-   zeː gʲɛb͡m doˑz fa eŋk זיי געבן דאָס פֿאַר ענק<br />
+-   gʲɛ́c fa ynz̥ də ɛpl! געטס פֿאַר אונדז די עפּל<br />
+-   gʲɛmɔ də lɛfl štoˑc də goˑpl געב מיר די לעפֿל שטאָטס די גאָפּל <br />
+-   gʲɛb oˑbaxt, dy zɔlst kaˑ greˑt šlɩŋə געב אָבאַכט דו זאָלסט קיין גרעט שלינגען<br />
+-   hɔt mɔ cyˑ ə grɔjsə pɔrcjoˑ gəgʲéb͡m̩ האָט מיר צו אַ גרויסע פּאָרציאָן געגעבן<br />
+-   cyn joα hɔtə álʲəvæjlʲ ɛpəz ə matóːnə gʲəgʲeˑb͡m̩ צום יאָר האָט ער אַלעווײַל עפּעס אַ מתּנה געגעבן</p>
+<p>vɛn dy hɛst mɩr gəgejbm dajn rekʎ hɛt əx məs õŋgətoˑn ווען דו העסט מיר געגעבן דײַן רעקל, העט איך מיר עס אָנגעטאָן {WTCP, Vác, 47197}<br />
+-   manxəs moˑl geˑbm zə ə mətoːnə fr jɛnə מאַנכעס מאָל געבן זיי אַ מתּנה פֿאַר יענע<br />
+-   gʲɛb mʲiˑr den ɛpl געב מיר דעם עפּל<br />
+-   iˑəx gʲɛb iˑm den ɛpl איך געב אים דעם עפּל<br />
+-   eˑr gʲɛt diˑr ער געט דיר<br />
+-   dy gʲɛst əs fər ynᵈz̥ דו געסט עס פֿאַר אונדז<br />
+-   mir gʲɛb͡m̩s diˑr מיר געבן עס דיר<br />
+-   zej gʲɛb͡m̩s fər eŋk זיי געבן עס פֿאַר ענק<br />
+-   kindɛr gʲɛpc / gʲɛc yndz dɛ/ə ɛpl̩ʲ קינדער, געטס אונדז דע עפּל<br />
+-   miˑr hɔstə cy ə grɔjsə pɔrcjə / pɔrcijon gəgéb͡m מיר האָסטו צו אַ גרויסע פּאָרציע / פּאָרציאָן געגעבן<br />
+-   fərn kind cy ɛsn geˑb͡m̩ פֿאַרן קינד צו עסן געבן<br />
+-   gʲɛt ka čyːvə געט קיין תּשובֿה<br />
+-   gəgʲeb͡m̩ far dɩ feˑgʲəlʲ cy ɛsn געגעבן פֿאַר די פֿייגל צו עסן</p>
+<p>gɛb͡m zɛ fər ájnəm ə mətʊ́ˑnə געבן זיי פֿאַר איינעם אַ מתּנה {WTCP, Berettyó-Újfalu, 47212}<br />
+-   (dɩ) hɛst mr gəgeˑb͡m dəs rɛkʎ̩ hɛt əx mərs óŋgətoˑn דו העסט מיר געגעבן דאָס רעקל, העך איך מיר עס אָנגעטאָן <br />
+-   gɛmir əhɛˑr dəs ɛplʲ געב מיר אַהער דאָס עפּל<br />
+-   ejm gʲɛbəx dus ɛpl אים געב איך דאָס עפּל<br />
+-   eˑr gɛts fər diˑr ער געט עס פֿאַר דיר<br />
+-   dyˑ gɛsts fαr yndz̥ דו געסט עס פֿאַר אונדז<br />
+-   miˑr gʲɛb͡ms far zeˑ מיר געבן עס פֿאַר זיי<br />
+-   yndz gʲɛbmr̩s far zej אונדז געבן מיר עס פֿאַר זיי<br />
+-   zej gʲɛb͡m̩s far eŋk זיי געבן עס פֿאַר ענק <br />
+-   kindər, gʲɛc far ynd̥z dʊs ɛpl קינדער, געטס פֿאַר אונדז דאָס עפּל<br />
+-   ɛˑr hɔt eˑm ə kʲyš gʲəgʲeˑb͡m ער האָט אים אַ קוש געגעבן <br />
+-   ɛr gʲɛt kajn čyˑvə ער געט קיין תּשובֿה<br />
+-   געץ מיר ע קרײַצער</p>
+<h2>CENTRAL</h2>
+<p>geibm {eastern SLOVAKIA and CARPATHO-RUTHENIA, Beranek 1936: 72}</p>
+<h3>Unterland (East Transcarpathian)</h3>
+<p>vɛn dɩ hɛst mr ven gəgeˑbm dem rɔk hɛt əx əm vɛn úŋgαtin ווען דו העסט מיר ווען געגעבן דעם ראָק, העט איך אים ווען אָנגעטון {ETCP, Teiuș, 46233}<br />
+-   gʲimər dəm guplʲ štucəm lɛ́fl גיב מיר דעם גאָפּל שטאָץ דעם לעפֿל</p>
+<p>a muˑl gʲɛt mən ə mətuə˯nə˯ אַ מאָל געט מען אַ מתּנה {ETCP, Sîg Felső Szek, 47223}<br />
+-   az dɩ hɛst mir gʲɩgejbm dəm rɔk hɛt əx əs úŋgɩtuən אַז דו העסט מיר געגעבן דעם ראָק, העט איך עס אָנגעטון<br />
+-   gʲɛb míˑr dəm ɛpl געב מיר דעם עפּל<br />
+-   ejm / iər gʲɛb əx dəm ɛpl אים / איר געב איך דעם עפּל<br />
+-   ejr gʲɛt diər ער געט דיר<br />
+-   di gʲɛst ɩndz də ɛplʲ דו געסט אונדז די עפּל {note: !מערערע}<br />
+-   inc gʲɛmər fr̩ zaj də ɛpl אונדז געבן מיר פֿאַר זיי די עפּל<br />
+-   zaj gʲɛbm̩ fᵊr eŋk זיי געבן פֿאַר ענק<br />
+-   kʲindər gʲɛc inc / fr inc də ɛpl קינדער, געטס אונדז / פֿאַר אונדז די עפּל<br />
+-   mə gʲɛt ništ óbaxtiŋg מע געט נישט אָבאַכטונג<br />
+-   xəl dəx gʲɩbm fər ə cɩgajnər איך וועל דיך גיבן פֿאַר אַ ציגײַנער 'I will give you to a Gypsy' (threat said to children)<br />
+-   gəgeˑbm mašk͡ŋ געגעבן משכּון</p>
+<p>az diˑ hɛst mər gəvejn gəgejbm̩ dəm mantl hɛt əx ejm gəvejn úŋgʲətiˑən אַז דו העסט מיר געווען געגעבן דעם מאַנטל, העט איך אים געווען אָנגעטון {ETCP, Bistriţa, 47241}</p>
+<p>gɩb mir גיב מיר {ETCP, Nyzhnya Apsha, 48233}<br />
+-   gimər an ɛplʲ גיב מיר אַן עפּל<br />
+-   iˑx gɩb ejm əm ɛ́plʲ איך גיב אים אַן עפּל<br />
+-   ejr gidʲiˑr ער גיט דיר<br />
+-   dᵻ gistəs ɩnc דו גיסט עס אונדז<br />
+-   ɩnc gɩmər əs far zaj אונדז גיבן מיר עס פֿאַר זיי<br />
+-   zaj gibm̩ ə/ᵻs aˑx זיי גיבן עס אײַך<br />
+-   gic ɩnc də͜͡ ɛpl גיטס אונדז די עפּל<br />
+-   a nɛm gʲejbm אַ נעם געבן<br />
+-   gimr̩ m̩tɛlʲər גיב מיר דעם טעלער<br />
+-   gɩbmr̩ mgʊplʲ štucn̩ lɛfl̩ גיב מיר דעם גאָפּל שטאָצן לעפֿל</p>
+<p>gɩmə dɩ laːtɛ גיב מיר די לייטער {POLAND, Wolbrom, 50196}<br />
+-   gɩmə dəm tɛʎɛ גיב מיר דעם טעלער<br />
+-   maŋxəs muˑl gɛt ɛ ojx a mətuːnə ejməcn מאַנכעס מאָל גיט ער אויך אַ מתּנה עמעצן<br />
+-   gɩməʀ an ɛpɫ גיב מיר אַן עפּל<br />
+-   ix giˑbm̩ n̩ɛ́pɫ איך גיב אים אַן עפּל<br />
+-   ɛ(ʀ) git ə(ʀ) n̩ɛ́pɫ̩ ער גיט איר אַן עפּל<br />
+-   diˑ gɛst ɩnc n̩ɛpɫ̩ דו גיסט אונדז אַן עפּל<br />
+-   miə gɩbm̩ iˑm zaj מיר גיבן אים זיי<br />
+-   zaj gɩbm iˑm ajx זיי גיבן אים אײַך<br />
+-   gec ɩnc də epɫ געטס אונדז  דעם עפּל<br />
+-   xɔ gɩgejn a mətuˑnə dɩ šʲajnə kaɫə כ'האָב געגעבן אַ מתּנה די שיינע כּלה</p>
+<p>dus ɔt-ma a sax giɛgiɛjbm דאָס האָט מיר אַ סך געגעבן {Warsaw, Geller 2001: 177}<br />
+-   ᵻn dɔrtn ɔt-ᵻs mɛ ɔːxᵻt zɛjɛ a sax giɛgiɛjbm און דאָרטן האָט עס מיר אויכעט זייער אַ סך געגעבן {p. 179}<br />
+-   nɔx git, vus xɔb ᵻr nᵻʃ' giɛgiɛbm נאָך גוט, וואָס איך האָב איר נישט געגעבן {p. 187}<br />
+-   kajnmuu̯ ɔmᵻ-zᵻ nᵻʃ't gᵻxat tsᵻ giɛjbm af atsuu̯ɛs קיין מאָל האָבן זיי נישט געהאַט צו געבן אויף הוצאָות {p. 191}<br />
+-   ɔt mi-jɛː tsvaj pɛtʃ' האָט ער מיר געגעבן צוויי פּעטש {p. 237}<br />
+-   git-a-mɛ vaːtɛ גיט ער מיר ווײַטער {p. 293}<br />
+-   xɔb-ᵻm gim tsvaj draː ɬajɛs איך האָב אים געגעבן צוויי־דרײַ לייעס {!} ('punches'?) {p. 293}<br />
+-   z-ɔbm giɛːjm a tɛrmin זיי האָבן געגעבן אַ טערמין {p. 299}<br />
+-   m-ɔt giɛgiɛj brɔjt, m-ɔt giɛgiɛjbm kavɛ מע האָט געגעבן ברויט, מע האָט געגעבן קאַווע {p. 299}<br />
+-   zɔu̯st ɛsn, vus mɛ-t-ɛ giɛjbm זאָלסט עסן, וואָס מע וועט דיר געבן {p. 309}<br />
+-   mi-jɛbm a manarkiɛ מיר געגעבן אַ מאַרינאַרקע {p. 315}<br />
+-   ɔt mɛ-jɛjɛm a hᵻtu̯ האָט מען געגעבן אַ היטל {p. 315}<br />
+-   ɔt-ɛ mijɛ, ɔt-ɛ mijr arɔːsgiɛbɛt a pᵻnk ʃtrɔj ᵻn giɛm a kɔzux האָט ער מיר, האָט ער מיר אַרויסגעבעט אַ פּענק שטרוי און געגעבן אַ קאָזשוך (Polish pęk 'bundle', kożuch 'sheepskin coat') {p. 315}<br />
+-   mᵻ-jɛjɛ ʃᵻn-a grɔbɛ manarkiɛ מיר געגעבן שוין אַ גראָבע מאַרינאַרקע {p. 317}<br />
+-   ɛ-r-ɔt mi giɛgiɛjm kɔlatsjɛ ער האָט מיר געגעבן קאָלאַציע {p. 321}<br />
+ven də vost mo gəgejb͡m̩ dm,paʎtn ווען דו וואָלטסט מיר געגעבן דעם פּאַלטן {POLAND, Warsaw, 52211}<br />
+-   gɩ,bmər an epl גיב מיר אַן עפּל<br />
+-   jax ge5bem a/n/ epl איך געב אים אַן עפּל<br />
+-   eje get dəm epl diˑ,ə ער געט דעם עפּל דיר<br />
+-   diˑ gest dəm epl ɩnc דו געסט דעם עפּל אונדז<br />
+-   miˑə geb͡m̩ zaj / ɩndz geb͡m̩ əm zaj מיר געבן זיי / אונדז געבן אים זיי<br />
+-   zaj geb͡m̩ es aˑx זיי געבן עס אײַך<br />
+-   gɩc ɩnc / gɩt ɩnc dɩ epalax גיטס אונדז / גיט אונדז די עפּעלעך<br />
+-   gemərdəm telər געב מיר דעם טעלער<br />
+-   gemər dəm gupl štutəm lefl געב מיר דעם גאָפּל שטאָט דעם לעפֿל<br />
+-   zot mə gəgejb͡m̩ a ci grojsn xajlək זי האָט מיר געגעבן אַ צו גרויסן חלק<br />
+-   gejb͡m̩ az a jɩngl vert gəbojrn געבן אַז אַ ייִנגל ווערט געבוירן <br />
+-   geb a kop dɩ pʲɩlkɩ a zol zəx drajən ) koʎərn געב אַ קאָפּ די פּילקע ער זאָל זיך דרייען ( קאָלערן<br />
+-   oj vaj gɩmo taj taj ɩz bitə gɩme cɩkə cɩkər ɩziˑs gɩmo fiˑs fiˑs ɩz kalt krixɩn valt valt ɩz mojrə kojf zɩx sxojrə sxojrɩz taje gaj ɩn faje אוי וויי, גיב מיר טיי. טיי איז ביטער, גיב מיר צוקער. צוקער איז זיס, גיב מיר פֿוס. פֿוס איז קאַלט, קריך אין וואַלד. וואַלד איז מורא, קויף זיך סחורה. סחורה איז טײַער, גיי אין פֿײַער<br />
+-   xo gəgejb͡m̩ a matuˑnə də šajnə kalə איך האָב געגעבן אַ מתּנה די שיינע כּלה</p>
+<video controls src="https://archive.org/download/FilmLexicon/Dzigan-NorAPorFund-NuGitMer.mp4"></video>
+<p>VIDEO Shimon Dzigan {Łódź, Poland}<br />
+ni gɛt meˑəʳ<br />
+נו, גיט מער!</p>
+<h2>HASIDIC</h2>
+<h3>AMERICA</h3>
+<p>gɛvɱ (?) (influenced by English give?)<br />
+gejb͡m̥ (infinitive)<br />
+gebən im klajduŋg̥ געבן אים קליידונג (influenced by the following vowel?)<br />
+zaj gɛb͡m̥ זיי גיבן<br />
+ɩx gɛb far aːx איך געב פֿאַר אײַך<br />
+gəˈgejb͡m̩ ˈfarn̩ ˈfajər געגעבן פֿאַרן פֿײַער<br />
+er gɛt a bluːz̥ ער גיט אַ בלאָז<br />
+gɛc mir ˈbɩtə a ˈrejgə געטס מיר ביטע אַ רגע<br />
+gɩc mir ˈbɪtə ajn ˈrejgə גיטס מיר ביטע איין רגע<br />
+gɩc mir ˈbɪtə aj mɪˈnɪt גיטס מיר ביטע איין מינוט<br />
+gɛc mɩr bɩtə ajn mɩnɩt !געטס מיר ביטע איין מינוט<br />
+azɛxə gɩte esn̩ gɛt mən du? ?אַזעלכע גוטע עסן געט מען דאָ<br />
+gɛc a čæns! !געטס אַ טשענס 'give a chance!'<br />
+mə tur nɩš gejbən cɩ ɛsn̩ far a mɛnčn̩ מע טאָר נישט געבן צו עסן פֿאַר אַ מענטשן<br />
+a šɩdəx gɛt gɔt אַ שידוך געט גאָט<br />
+mir gɛbm̩ ɩmzɩst מיר געבן אומזיסט<br />
+ɩx gɛb dir vasər איך געב דיר וואַסער</p>
+<h3>EUROPE</h3>
+<p>gɔt hɔt gəgejbm̩ dɩ tɔjʀə faʀ dɩ jidn̩ גאָט האָט געגעבן די תּורה פֿאַר די ייִדן {Antwerp, Mendy Cahan}<br />
+zɔl gɔt gejbm̩ az kɩmədɩgə vɔx זאָל גאָט געבן, אַז קומעדיקע וואָך</p>
+<h3>ISRAEL</h3>
+<p>vɔs gɛpt diʀ tʀaxtn̩ וואָס געבט דיר טראַכטן {Bnei Brak, Eli Benedict (Karlin)}<br />
+gɔt gɛpt axtuŋg גאָט געבט אַכטונג<br />
+gɛpt mɛn mɛʀ cdukɛ געבט מען מער צדקה</p>
+<p>zi get nisht ka pratím זי גיט נישט קיין פּרטים {HASIDIC, Assouline 2017: 80}</p>
+<p>zi get mir ir plats זי גיט מיר איר פּלאַץ  {HASIDIC, Assouline 2018a: 54}</p>
+<p>mir gibn מיר גיבן {JERUSALEMITE} {Assouline 2010: 10}</p>
+<h2>NORTHEASTERN</h2>
+<p>erət gʲɩgʲeb͡m̩ imᵉcn a maˈtonᵉ ער האָט געגעבן אימעצן אַ מתּנה {BELARUS, Gomel, 52314}</p>
+<h3>Lithuania</h3>
+<p>gʲɩgʲeb͡m̩ געגעבן {LITHUANIA, Kaunas, 54239}</p>
+<p>gebm, gɩgɛ́bm {LITHUANIA, Vilnius, 54257}<br />
+-   gib mir an epl גיב מיר אַן עפּל<br />
+-   iɣ giˑb iˑm dem epl איך גיב אים דעם עפּל<br />
+-   er gidiˑr ער גיט דיר<br />
+-   du gizdem epl undz דו גיסט דעם עפּל אונדז<br />
+-   mir gibm dem epl zej מיר גיבן דעם עפּל זיי<br />
+-   zej gibm ajɣ dem epl זיי גיבן אײַך דעם עפּל<br />
+-   git undz di epl גיט אונדז די עפּל<br />
+-   ɛʀtiʀ gɩgɛ́bm a kus̀ ער האָט איר געגעבן אַ קוש</p>
+<h2>SOUTHEASTERN</h2>
+<p>vestə mir gʲəveːn gʲigʲeːbm dejm paltón vet ex iːm gʲəveːn uˑŋgʲitiːn וואָלטסטו מיר געווען געגעבן דעם פּאַלטאָ, וואָלט איך אים געווען אָנגעטאָן  {ROMANIA, Brăila, 45273}</p>
+<p><audio controls src="https://archive.org/download/SholemAleichemLexicon/Sholem-Aleichem%20-%20ven%20ikh%20bin%20rotshild%201915%20-%20vol%20ikh%20gegebn%20%28gegibn%29%20mayn%20yidene%20a%20drayerl.mp3"></audio><br />
+AUDIO Sholem Aleichem {Pereyaslav, Voronko, UKRAINE} 1915<br />
+gəˈgibm<br />
+וואָלט איך געגעבן מײַן ייִדענע אַ דרײַערל</p>
+</div>
+
+</main>
+<footer>
+  Yiddish Dialect Dictionary &nbsp;·&nbsp; 10,034 entries
+</footer>
+<script>const BASE_URL = '/Yiddish-Dialect-Dictionary';</script>
+<script>
+(function() {
+  let index = null;
+  const input = document.getElementById('search-input');
+  const results = document.getElementById('search-results');
+  if (!input) return;
+
+  async function loadIndex() {
+    if (index) return;
+    try {
+      const r = await fetch(BASE_URL + '/search-index.json');
+      index = await r.json();
+    } catch(e) { console.error('Could not load search index', e); }
+  }
+
+  function search(q) {
+    q = q.trim().toLowerCase();
+    if (!q || !index) return [];
+    return index
+      .filter(e =>
+        e.hw.toLowerCase().includes(q) ||
+        (e.gl && e.gl.toLowerCase().includes(q))
+      )
+      .slice(0, 20);
+  }
+
+  function renderResults(items, q) {
+    if (!items.length) {
+      results.innerHTML = '<div class="search-no-results">No results found.</div>';
+      results.classList.add('show');
+      return;
+    }
+    results.innerHTML = items.map(e => `
+      <a class="search-result-item" href="${e.url}">
+        <span class="search-result-hw">${e.hw}</span>
+        ${e.gl ? `<span class="search-result-gloss">'${e.gl}'</span>` : ''}
+      </a>`).join('');
+    results.classList.add('show');
+  }
+
+  let timer;
+  input.addEventListener('input', async () => {
+    clearTimeout(timer);
+    const q = input.value;
+    if (!q.trim()) { results.classList.remove('show'); return; }
+    await loadIndex();
+    timer = setTimeout(() => renderResults(search(q), q), 120);
+  });
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.header-search')) results.classList.remove('show');
+  });
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { results.classList.remove('show'); input.blur(); }
+  });
+})();
+</script>
+</body>
+</html>

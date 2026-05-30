@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="yi" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>שטאָט – Yiddish Dialect Dictionary</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #faf9f6;
+  --surface: #ffffff;
+  --border: #e0ddd5;
+  --text: #1c1b18;
+  --muted: #6b6860;
+  --accent: #1a4480;
+  --accent-light: #e8eef7;
+  --link: #1a4480;
+  --link-hover: #0d2a52;
+  --hebrew-font: 'Ezra SIL', 'SBL Hebrew', 'David', 'Frank Ruehl CLM', serif;
+  --body-font: Georgia, 'Times New Roman', serif;
+  --ui-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+body {
+  font-family: var(--body-font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  font-size: 16px;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--link-hover); text-decoration: underline; }
+
+/* ── Header ── */
+.site-header {
+  background: var(--accent);
+  color: white;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0,0,0,.25);
+}
+.site-header a { color: white; font-family: var(--ui-font); font-size: .9rem; }
+.site-header a.home { font-weight: 700; font-size: 1rem; white-space: nowrap; }
+.site-header a:hover { text-decoration: underline; }
+
+/* search in header */
+.header-search {
+  flex: 1;
+  max-width: 480px;
+  position: relative;
+}
+.header-search input {
+  width: 100%;
+  padding: .45rem .9rem .45rem 2.2rem;
+  border: none;
+  border-radius: 4px;
+  font-family: var(--ui-font);
+  font-size: .95rem;
+  background: rgba(255,255,255,.15);
+  color: white;
+  outline: none;
+}
+.header-search input::placeholder { color: rgba(255,255,255,.65); }
+.header-search input:focus { background: rgba(255,255,255,.25); }
+.header-search .icon {
+  position: absolute;
+  left: .6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: .7;
+  pointer-events: none;
+}
+.search-results {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.15);
+  max-height: 360px;
+  overflow-y: auto;
+  z-index: 200;
+}
+.search-results.show { display: block; }
+.search-result-item {
+  display: block;
+  padding: .6rem 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.search-result-item:last-child { border-bottom: none; }
+.search-result-item:hover { background: var(--accent-light); }
+.search-result-hw {
+  font-size: 1.1rem;
+  font-family: var(--hebrew-font);
+  direction: rtl;
+  display: inline-block;
+  margin-right: .5rem;
+}
+.search-result-gloss { color: var(--muted); font-style: italic; }
+.search-no-results { padding: .8rem 1rem; color: var(--muted); font-family: var(--ui-font); }
+
+/* ── Layout ── */
+.page-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+/* ── Alphabet nav (homepage + letter pages) ── */
+.alphabet-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin: 1.5rem 0;
+}
+.alphabet-nav a {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: .5rem .75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  text-decoration: none;
+  min-width: 52px;
+  transition: background .15s, border-color .15s;
+}
+.alphabet-nav a:hover, .alphabet-nav a.active {
+  background: var(--accent-light);
+  border-color: var(--accent);
+}
+.alphabet-nav a .heb {
+  font-family: var(--hebrew-font);
+  font-size: 1.4rem;
+  line-height: 1;
+  direction: rtl;
+}
+.alphabet-nav a .translit {
+  font-family: var(--ui-font);
+  font-size: .65rem;
+  color: var(--muted);
+  margin-top: .2rem;
+}
+
+/* ── Homepage ── */
+.hero {
+  text-align: center;
+  padding: 2.5rem 0 1.5rem;
+}
+.hero h1 {
+  font-size: 2.2rem;
+  color: var(--accent);
+  margin-bottom: .5rem;
+}
+.hero p {
+  color: var(--muted);
+  font-family: var(--ui-font);
+  font-size: 1rem;
+}
+.section-label {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 2rem 0 .75rem;
+}
+
+/* ── Letter page ── */
+.letter-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: .75rem;
+}
+.letter-header .heb-big {
+  font-family: var(--hebrew-font);
+  font-size: 3rem;
+  direction: rtl;
+  line-height: 1;
+  color: var(--accent);
+}
+.letter-header .info {
+  font-family: var(--ui-font);
+}
+.letter-header .translit-big { font-size: 1.4rem; font-weight: 600; }
+.letter-header .count { color: var(--muted); font-size: .9rem; }
+
+.entry-list {
+  list-style: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface);
+}
+.entry-list li {
+  border-bottom: 1px solid var(--border);
+}
+.entry-list li:last-child { border-bottom: none; }
+.entry-list a {
+  display: flex;
+  align-items: baseline;
+  gap: .75rem;
+  padding: .65rem 1rem;
+  color: var(--text);
+  text-decoration: none;
+}
+.entry-list a:hover { background: var(--accent-light); }
+.entry-list .hw {
+  font-family: var(--hebrew-font);
+  font-size: 1.15rem;
+  direction: rtl;
+  flex-shrink: 0;
+}
+.entry-list .gl {
+  font-style: italic;
+  color: var(--muted);
+  font-size: .9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Entry page ── */
+.entry-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--accent);
+}
+.entry-headword {
+  font-family: var(--hebrew-font);
+  font-size: 2.6rem;
+  direction: rtl;
+  line-height: 1.2;
+  color: var(--text);
+}
+.entry-gloss {
+  font-style: italic;
+  color: var(--muted);
+  font-size: 1.05rem;
+  margin-top: .3rem;
+}
+
+.entry-body h2 {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 1.8rem 0 .6rem;
+  padding-bottom: .3rem;
+  border-bottom: 1px solid var(--border);
+}
+.entry-body h3 {
+  font-family: var(--ui-font);
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin: 1rem 0 .4rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.entry-body p {
+  margin-bottom: .8rem;
+  line-height: 1.7;
+}
+.entry-body ul, .entry-body ol {
+  margin: .5rem 0 .8rem 1.5rem;
+}
+.entry-body li { margin-bottom: .3rem; }
+.entry-body audio {
+  display: block;
+  margin: .75rem 0;
+  max-width: 100%;
+}
+.entry-body img {
+  max-width: 100%;
+  height: auto;
+  margin: .75rem 0;
+  border-radius: 4px;
+}
+.entry-body blockquote {
+  border-left: 3px solid var(--border);
+  padding-left: 1rem;
+  color: var(--muted);
+  margin: .5rem 0;
+}
+
+/* back/nav bar above entry */
+.entry-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.entry-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .3rem .7rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--text);
+}
+.entry-nav a:hover {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  text-decoration: none;
+}
+
+/* ── Footer ── */
+footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  margin-top: 3rem;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .hero h1 { font-size: 1.6rem; }
+  .alphabet-nav a { min-width: 44px; padding: .4rem .55rem; }
+  .alphabet-nav a .heb { font-size: 1.2rem; }
+  .entry-headword { font-size: 2rem; }
+  .header-search { max-width: none; }
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <a href="/Yiddish-Dialect-Dictionary/" class="home">Yiddish Dialect Dictionary</a>
+  <div class="header-search">
+    <svg class="icon" width="16" height="16" fill="white" viewBox="0 0 16 16">
+      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.868-3.834zm-5.242 1.406a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+    </svg>
+    <input type="search" id="search-input" placeholder="Search entries…" autocomplete="off">
+    <div id="search-results" class="search-results"></div>
+  </div>
+</header>
+<main class="page-wrap">
+
+<div class="entry-nav">
+  <a href="/Yiddish-Dialect-Dictionary/letter/shin/">← Shin</a>
+  <a href="/Yiddish-Dialect-Dictionary/">Home</a>
+</div>
+<div class="entry-header">
+  <div class="entry-headword" dir="rtl">שטאָט</div>
+  <div class="entry-gloss">‘city, town’</div>
+</div>
+<div class="entry-body" dir="auto">
+<p>שטאָט<br />
+שטעט<br />
+די<br />
+'city, town'</p>
+<h2>ETYMOLOGY</h2>
+<p 1982:="1982:" 60="60" Katz="Katz">Vowel 13, Proto-Yiddish ✱a<br /></p>
+<p><img alt="" src="https://archive.org/download/Yiddish-Dialect-Maps/map%20-%20FoY3-122%20-%20oyfn%20vant.jpg" /><br />
+<img alt="" src="https://archive.org/download/Yiddish-Dialect-Maps/Herzog4-43-46-VantShtotTsung-133.jpg" /></p>
+<h2>WESTERN</h2>
+<h3>Oyberland (West Transcarpathian)</h3>
+<p>eˑr vɔjnt ausər də štoˑt ער וווינט אויסער די שטאָט {WTCP, Dunajská Streda, 47179}<br />
+-   fyn ə ʔandərə štoˑt, fyn ə andərə štɔːt פֿון אַ אַנדערע שטאָט</p>
+<p>fyn ə andərə štoːt פֿון אַ אַנדערע שטאָט {WTCP, Vác, 47197}<br />
+-   ausəᴿ də štoːt אויסער דער שטאָט</p>
+<p>vɔjnt oːzər də štoət וווינט אויסער די שטאָט {WTCP, Berettyó-Újfalu, 47212}<br />
+-   fyn ən andərə štoˑt פֿון אַן אַנדערע שטאָט</p>
+<p>ousər də štuət vo/ɔjnt ər אויסער די שטאָט וווינט ער {WTCP, Hajdúhadház, 47219}</p>
+<h2>CENTRAL</h2>
+<p>štuːt, {štuwət} {Jacobs 96}</p>
+<p>{ʃtuu̯ɛt} {Warsaw, Geller 2001: 69}</p>
+<h3>Unterland (East Transcarpathian)</h3>
+<p>štūət 'Stadt' {ETCP, Beranek 1941}</p>
+<p>fɩn an ándərə štut פֿון אַן אַנדערע שטאָט {ETCP, Teiuș, 46233}</p>
+<p>xic də štuət vɔjnt mən חוץ די שטאָט וווינט מען {ETCP, Sîg Felső Szek, 47223}<br />
+-   fɩn andərə štuət פֿון אַנדערע שטאָט<br />
+-   šteˑt שטעט</p>
+<p>ær vojnt óusər dɩ štúət ער וווינט אויסער דער שטאָט {ETCP, Mănăștur 47236}</p>
+<p>fɩn a andərə štuˑt פֿון אַ אַנדערע שטאָט {ETCP, Bistriţa, 47241}</p>
+<p>fɩn an ándərə štuət פֿון אַן אַנדערע שטאָט {ETCP, Mukachevo, 48226}</p>
+<p>štuət {ETCP, Nyzhnya Apsha, 48233}<br />
+-   fɩn an ándərə štuət פֿון אַן אַנדערע שטאָט</p>
+<p>ʀɩs fɩn a ʔándəʀə štúɪt ער איז פֿון אַ אַנדערע שטאָט {POLAND, Wolbrom, 50196}</p>
+<p>ᵻn ʃtuːt arã אין שטאָט אַרײַן {Warsaw, Geller 2001: 231}<br />
+-   azɔj, ts-an-ɛjʃ ᵻz jɛjdɛ d'antɬɔfn fᵻn ʃ'tuu̯ɛt אַזוי צו אַן ערשט {!} איז יעדער אַנטלאָפֿן פֿון שטאָט {p. 259}<br />
+-   ɛs kiɛnt gajn jɛjdɛ-r-ᵻn ʃtuu̯t arã i mɛjɛ עס קענט {!} גיין יעדער אין שטאָט אַרײַן אי מער {p. 267}<br />
+-   gantsɛ ʃtuu̯ɛt גאַנצע שטאָט {p. 269}<br />
+-   dus ᵻz-a zɛks kilɔmɛjtɛ tsᵻ zᵻbm fᵻn ʃtuu̯ɛt דאָס איז אַ זעקס קילאָמעטער צי זיבן פֿון שטאָט {p. 275}<br />
+-   vus-i jiɛvɛjn ᵻn ʃtuu̯ɛt וואָס איז געווען {!} אין שטאָט {p. 275}<br />
+-   ᵻn bᵻn-d-antɬɔːfn ka maːnɛ stuu̯ɛt arã און בין אַנטלאָפֿן {!} קיין מײַנע {!} שטאָט {!} אַרײַן {p. 295}<br />
+-   nɔː axᵻts jɛx, aɬɛ zɛnɛ giɛjaɲgiɛ tsrᵻk ᵻn ʃtuu̯ɛt נאָר אַחוץ איך, אַלע זענען געגאַנגען צוריק אין שטאָט {p. 299}<br />
+-   jɛx bᵻn fᵻn... ʃtuu̯t ɬaskɔv איך בין פֿון לאַסקאַרעוו {p. 331}<br />
+-   fuu̯-arã mᵻt-arã, gaj-n stuu̯t-ɔx פֿאָר אַרײַן מיט {מיר} אַרײַן, {איך} גיי אין שטאָט {!} אויך {p. 331}<br />
+-   jɛx bᵻn du ᵻbɛgiɛɬɛjpt, ᵻn mijɛx ᵻn ʃtuu̯ɛt kiɛn mɛ gants gijt איך בין דאָ איבערגעלעבט, און מיך אין שטאָט קען מען גאַנץ גוט {p. 333}<br />
+-   jɛx-ɔ nɔx tsaːt arã-tsᵻgɛj ᵻn ʃtuu̯ɛt arã איך האָב נאָך צײַט אַרײַנצוגיין אין שטאָט אַרײַן {p. 333}<br />
+-   jɛx bɬaːp duː, du maː stuu̯t ɛʃ איך בלײַב דאָ, דאָ {איז} מײַן שטאָט {!} ערשט {p. 333}<br />
+-   nax dᵻ xᵻrbm bᵻn-ɔx araː-ᵻn dᵻ ʃtuu̯t arã נאָך די חורבן בין איך אַרײַן אין די שטאָט אַרײַן {p. 335}<br />
+-   bᵻn-ɔx aɬɛmuu̯ giɛvɛj-nᵻ ʃtuu̯ɛt בין איך אַלע מאָל געווען אין שטאָט {p. 335}<br />
+-   duu̯-ᵻz dã ʃtuu̯t דאָ איז דײַן שטאָט {p. 341}<br />
+ejə vojnt ɩn dərosn fɩn də štuˑɩt ער וווינט אין דרויסן פֿון די שטאָט {POLAND, Warsaw, 52211}<br />
+-   ɩntə/ə7 dɩ štuˑɩt הינטער די שטאָט (7 = backing)<br />
+-   štejtlox שטעטלעך<br />
+-   fn̩ anandər štuˑɩt פֿון אַן אַנדער שטאָט </p>
+<h2>HASIDIC</h2>
+<h3>AMERICA</h3>
+<p>štuːt ~ štuət<br />
+der štuˑt דער שטאָט<br />
+štejt שטעט<br />
+štejtələx שטעטעלעך<br />
+ˈɔfənə štejt ɩn farˈmaxtə štejt אָפֿענע שטעט און פֿאַרמאַכטע שטעט<br />
+dɩ štut nɩnvaj די שטאָט נינווה</p>
+<h3>EUROPE</h3>
+<p>mə tuʀ nɩšt aʀɔsgajn fɩn štut מע טאָר נישט אַרויסגיין פֿון שטאָט {Antwerp, Mendy Cahan}</p>
+<h3>ISRAEL</h3>
+<p>ajn cadɩk ɩn štut איין צדיק אין שטאָט {Bnei Brak, Eli Benedict (Karlin)}</p>
+<h2>NORTHEASTERN</h2>
+<p 453="453" _1951_:="(1951):" _אונדזער="&quot;אונדזער" ייִדיש_="ייִדיש&quot;" ליטווישער="ליטווישער" מאַרק_="מאַרק,">(intermediate gender) די שטאָט, הינטערן שטאָט<br /></p>
+<h3>Lithuania</h3>
+<p>stetlax שטעטלעך {LITHUANIA, Kaunas, 54239}</p>
+<p>štot {LITHUANIA, Vilnius, 54257}<br />
+-   er vejnt ojserm ᶊtot ער וווינט אויסערן שטאָט</p>
+<p>er vejnt ojsərn štot ער וווינט אויסערן שטאָט {BELARUS, Gomel, 52314}</p>
+<h2>SOUTHEASTERN</h2>
+<p>štŭt {ROMANIA, Brăila, 45273}<br />
+-   ɛr vojnt arous fin dər štut ער וווינט אַרויס פֿון דער שטאָט<br />
+-   fɩn an andere što˰ːt פֿון אַן אַנדערע שטאָט</p>
+<p><audio controls src="https://archive.org/download/MangerLexicon/Manger%20-%20A%20Lid%20Vegn%20Eliyohu%20Hanovi%20-%20un%20vayte%20farkholemte%20shtet.mp3"></audio><br />
+štejt<br />
+און ווײַטע פֿאַרחלומטע שטעט</p>
+</div>
+
+</main>
+<footer>
+  Yiddish Dialect Dictionary &nbsp;·&nbsp; 10,034 entries
+</footer>
+<script>const BASE_URL = '/Yiddish-Dialect-Dictionary';</script>
+<script>
+(function() {
+  let index = null;
+  const input = document.getElementById('search-input');
+  const results = document.getElementById('search-results');
+  if (!input) return;
+
+  async function loadIndex() {
+    if (index) return;
+    try {
+      const r = await fetch(BASE_URL + '/search-index.json');
+      index = await r.json();
+    } catch(e) { console.error('Could not load search index', e); }
+  }
+
+  function search(q) {
+    q = q.trim().toLowerCase();
+    if (!q || !index) return [];
+    return index
+      .filter(e =>
+        e.hw.toLowerCase().includes(q) ||
+        (e.gl && e.gl.toLowerCase().includes(q))
+      )
+      .slice(0, 20);
+  }
+
+  function renderResults(items, q) {
+    if (!items.length) {
+      results.innerHTML = '<div class="search-no-results">No results found.</div>';
+      results.classList.add('show');
+      return;
+    }
+    results.innerHTML = items.map(e => `
+      <a class="search-result-item" href="${e.url}">
+        <span class="search-result-hw">${e.hw}</span>
+        ${e.gl ? `<span class="search-result-gloss">'${e.gl}'</span>` : ''}
+      </a>`).join('');
+    results.classList.add('show');
+  }
+
+  let timer;
+  input.addEventListener('input', async () => {
+    clearTimeout(timer);
+    const q = input.value;
+    if (!q.trim()) { results.classList.remove('show'); return; }
+    await loadIndex();
+    timer = setTimeout(() => renderResults(search(q), q), 120);
+  });
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.header-search')) results.classList.remove('show');
+  });
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { results.classList.remove('show'); input.blur(); }
+  });
+})();
+</script>
+</body>
+</html>

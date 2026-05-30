@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="yi" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>פֿוס – Yiddish Dialect Dictionary</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #faf9f6;
+  --surface: #ffffff;
+  --border: #e0ddd5;
+  --text: #1c1b18;
+  --muted: #6b6860;
+  --accent: #1a4480;
+  --accent-light: #e8eef7;
+  --link: #1a4480;
+  --link-hover: #0d2a52;
+  --hebrew-font: 'Ezra SIL', 'SBL Hebrew', 'David', 'Frank Ruehl CLM', serif;
+  --body-font: Georgia, 'Times New Roman', serif;
+  --ui-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+body {
+  font-family: var(--body-font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  font-size: 16px;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--link-hover); text-decoration: underline; }
+
+/* ── Header ── */
+.site-header {
+  background: var(--accent);
+  color: white;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0,0,0,.25);
+}
+.site-header a { color: white; font-family: var(--ui-font); font-size: .9rem; }
+.site-header a.home { font-weight: 700; font-size: 1rem; white-space: nowrap; }
+.site-header a:hover { text-decoration: underline; }
+
+/* search in header */
+.header-search {
+  flex: 1;
+  max-width: 480px;
+  position: relative;
+}
+.header-search input {
+  width: 100%;
+  padding: .45rem .9rem .45rem 2.2rem;
+  border: none;
+  border-radius: 4px;
+  font-family: var(--ui-font);
+  font-size: .95rem;
+  background: rgba(255,255,255,.15);
+  color: white;
+  outline: none;
+}
+.header-search input::placeholder { color: rgba(255,255,255,.65); }
+.header-search input:focus { background: rgba(255,255,255,.25); }
+.header-search .icon {
+  position: absolute;
+  left: .6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: .7;
+  pointer-events: none;
+}
+.search-results {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.15);
+  max-height: 360px;
+  overflow-y: auto;
+  z-index: 200;
+}
+.search-results.show { display: block; }
+.search-result-item {
+  display: block;
+  padding: .6rem 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.search-result-item:last-child { border-bottom: none; }
+.search-result-item:hover { background: var(--accent-light); }
+.search-result-hw {
+  font-size: 1.1rem;
+  font-family: var(--hebrew-font);
+  direction: rtl;
+  display: inline-block;
+  margin-right: .5rem;
+}
+.search-result-gloss { color: var(--muted); font-style: italic; }
+.search-no-results { padding: .8rem 1rem; color: var(--muted); font-family: var(--ui-font); }
+
+/* ── Layout ── */
+.page-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+/* ── Alphabet nav (homepage + letter pages) ── */
+.alphabet-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin: 1.5rem 0;
+}
+.alphabet-nav a {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: .5rem .75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  text-decoration: none;
+  min-width: 52px;
+  transition: background .15s, border-color .15s;
+}
+.alphabet-nav a:hover, .alphabet-nav a.active {
+  background: var(--accent-light);
+  border-color: var(--accent);
+}
+.alphabet-nav a .heb {
+  font-family: var(--hebrew-font);
+  font-size: 1.4rem;
+  line-height: 1;
+  direction: rtl;
+}
+.alphabet-nav a .translit {
+  font-family: var(--ui-font);
+  font-size: .65rem;
+  color: var(--muted);
+  margin-top: .2rem;
+}
+
+/* ── Homepage ── */
+.hero {
+  text-align: center;
+  padding: 2.5rem 0 1.5rem;
+}
+.hero h1 {
+  font-size: 2.2rem;
+  color: var(--accent);
+  margin-bottom: .5rem;
+}
+.hero p {
+  color: var(--muted);
+  font-family: var(--ui-font);
+  font-size: 1rem;
+}
+.section-label {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 2rem 0 .75rem;
+}
+
+/* ── Letter page ── */
+.letter-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: .75rem;
+}
+.letter-header .heb-big {
+  font-family: var(--hebrew-font);
+  font-size: 3rem;
+  direction: rtl;
+  line-height: 1;
+  color: var(--accent);
+}
+.letter-header .info {
+  font-family: var(--ui-font);
+}
+.letter-header .translit-big { font-size: 1.4rem; font-weight: 600; }
+.letter-header .count { color: var(--muted); font-size: .9rem; }
+
+.entry-list {
+  list-style: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface);
+}
+.entry-list li {
+  border-bottom: 1px solid var(--border);
+}
+.entry-list li:last-child { border-bottom: none; }
+.entry-list a {
+  display: flex;
+  align-items: baseline;
+  gap: .75rem;
+  padding: .65rem 1rem;
+  color: var(--text);
+  text-decoration: none;
+}
+.entry-list a:hover { background: var(--accent-light); }
+.entry-list .hw {
+  font-family: var(--hebrew-font);
+  font-size: 1.15rem;
+  direction: rtl;
+  flex-shrink: 0;
+}
+.entry-list .gl {
+  font-style: italic;
+  color: var(--muted);
+  font-size: .9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Entry page ── */
+.entry-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--accent);
+}
+.entry-headword {
+  font-family: var(--hebrew-font);
+  font-size: 2.6rem;
+  direction: rtl;
+  line-height: 1.2;
+  color: var(--text);
+}
+.entry-gloss {
+  font-style: italic;
+  color: var(--muted);
+  font-size: 1.05rem;
+  margin-top: .3rem;
+}
+
+.entry-body h2 {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 1.8rem 0 .6rem;
+  padding-bottom: .3rem;
+  border-bottom: 1px solid var(--border);
+}
+.entry-body h3 {
+  font-family: var(--ui-font);
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin: 1rem 0 .4rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.entry-body p {
+  margin-bottom: .8rem;
+  line-height: 1.7;
+}
+.entry-body ul, .entry-body ol {
+  margin: .5rem 0 .8rem 1.5rem;
+}
+.entry-body li { margin-bottom: .3rem; }
+.entry-body audio {
+  display: block;
+  margin: .75rem 0;
+  max-width: 100%;
+}
+.entry-body img {
+  max-width: 100%;
+  height: auto;
+  margin: .75rem 0;
+  border-radius: 4px;
+}
+.entry-body blockquote {
+  border-left: 3px solid var(--border);
+  padding-left: 1rem;
+  color: var(--muted);
+  margin: .5rem 0;
+}
+
+/* back/nav bar above entry */
+.entry-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.entry-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .3rem .7rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--text);
+}
+.entry-nav a:hover {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  text-decoration: none;
+}
+
+/* ── Footer ── */
+footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  margin-top: 3rem;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .hero h1 { font-size: 1.6rem; }
+  .alphabet-nav a { min-width: 44px; padding: .4rem .55rem; }
+  .alphabet-nav a .heb { font-size: 1.2rem; }
+  .entry-headword { font-size: 2rem; }
+  .header-search { max-width: none; }
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <a href="/Yiddish-Dialect-Dictionary/" class="home">Yiddish Dialect Dictionary</a>
+  <div class="header-search">
+    <svg class="icon" width="16" height="16" fill="white" viewBox="0 0 16 16">
+      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.868-3.834zm-5.242 1.406a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+    </svg>
+    <input type="search" id="search-input" placeholder="Search entries…" autocomplete="off">
+    <div id="search-results" class="search-results"></div>
+  </div>
+</header>
+<main class="page-wrap">
+
+<div class="entry-nav">
+  <a href="/Yiddish-Dialect-Dictionary/letter/pey/">← Pey</a>
+  <a href="/Yiddish-Dialect-Dictionary/">Home</a>
+</div>
+<div class="entry-header">
+  <div class="entry-headword" dir="rtl">פֿוס</div>
+  <div class="entry-gloss">‘foot; leg’</div>
+</div>
+<div class="entry-body" dir="auto">
+<p>פֿוס<br />
+פֿיס<br />
+דער<br />
+(NORTHEASTERN די = intermediate gender)<br />
+'foot; leg'</p>
+<h2>ETYMOLOGY</h2>
+<p 427_="427," 531="531" 55_="55," Fliciński="Fliciński">{Although the meaning 'leg' (in addition to 'foot') is present in some German dialects, in EY it is certainly under the influence of Slavic languages: Polish noga 'leg; foot'; Ukrainian нога́ 'leg; foot.}<br />
+Got. fotus, ON fótr, OE fōt, English foot, OS fōt, Dutch voet, OHG fuoz, MHG vuoz, NHG Fuß ; from PGmc ✱fōt- (or ✱fōt-(u)-); from PIE ✱pōd- &lt; ✱pṓd-s, gen. ✱pḗd-s, ✱pód-m. Germanic generalized the lengthened grade of the root ✱pód-,/✱péd-.<br />
+Related: Hittite pāt- ~ pat-, Sanskrit pā́t-, pad-, Greek (Doric) πώς, (Ionic-Attic) πούς, Latin pēs, pedis.<br />
+{EWA 3: 649; DW² 9: 1348; Feist 159; Kluge/Seebold 2011: 326; Kroonen 2013: 152}<br />
+Vowel 52, Proto-Yiddish ✱ū<br />
+{Katz 1982: 59}<br />
+The idiom מיט איין פֿוס אויף יענער וועלט 'with one foot in the world to come (i.e., almost dead, very ill)' appears to be a calque of Polish być jedną nogą na tamtym świecie. Similarly, the idiom מיט איין פֿוס אין קבֿר 'with one foot in the grave' appears to be a calque of Polish być jedną nogą w grobie.<br />
+{Fliciński 35}<br />
+The idiom אונטערשטעלן עמעצן אַ פֿיסל 'to trip someone, undermine' appears to be a calque of Polish<br />
+podstawić/podstawiać komuś nogę. <br />
+{Fliciński 298}<br />
+The idiom שטעלן אויף די פֿיס 'to put on (their/its) feet' might be a calque of Polish postawić na nogi.<br />
+{Fliciński 311}<br />
+The idiom אויפֿשטיין מיטן לינקן פֿוס 'to get up with the left foot (i.e., on the wrong side of the bed, be in a bad mood)' appears to be a calque of Polish wstać lewą nogą. <br />
+{Fliciński 473}<br />
+The idiom אויסציִען די פֿיס 'to pull out the feet (i.e., to die, kick the bucket)' appears to be a calque of Polish wyciągnąć nogi.<br />
+{Fliciński 478}<br />
+The idiom אָנכאַפּן גאָט פֿאַר די פֿיס 'to grab God by the feet (i.e., to be happy over success)' appears to be a calque of Polish  chwycić / trzymać / złapać Pana Boga za nogi.<br /></p>
+<p><img alt="" src="https://archive.org/download/shprakhatlas/ShprakhatlasKarte20-Optimized.jpg" /><br />
+{Yiddish Language Atlas of the Soviet Union 1931, map 20}<br />
+<img alt="" src="https://archive.org/download/Yiddish-Dialect-Maps/Herzog4-23-VajnFusShtalHaldz-119.jpg" /><br />
+<img alt="" src="https://archive.org/download/Yiddish-Dialect-Maps/Herzog4-35-GenderChangesInAccordWithTheSlavicModel-125.jpg" /></p>
+<p>צו פֿוס<br />
+'by foot'</p>
+<h2>WESTERN</h2>
+<p 1845:="1845:" 45="45" Handelewos_="Handelewos," LEIPZIG="LEIPZIG" Maißim="Maißim" Schnokes="Schnokes" e="e" un="un" vun="vun">Warf die Katz wie du willst fallt sie auf die Füs.<br /></p>
+<p FRANKFURT_="FRANKFURT," Tendlau="Tendlau" №84="№84">Die Schmue hot nit Hand un nit Fuß!<br /></p>
+<h3>Holland (Netherlands)</h3>
+<p>fuss; die fiess {HOLLAND, Beem, Jerosche}<br />
+-   Wen e katz falt, falt er auf die fiess. {Jerosche №434}</p>
+<h3>Alsace (France)</h3>
+<p>fys {ALSACE - LOWER RHINE, Zuckerman 1969, 45}</p>
+<p>dʁ̩- lɩŋgə fys דער לינקע פֿוס {ALSACE, 47075 Mulhouse, 030-020}<br />
+- məʁ̥ kʰɛn sɩç dʁ̥̩ fyˑs fəʁ̥šdɔ̞ːɣ-ə מען קען זיך דער פֿוס פֿאַרשטויכן 'you can twist your ankle' {030-030}<br />
+un is meŋsmoul ts fus bis uf tsɔrtsiç un rekiŋə gəlofə און איז מאַנכמאָל צו פֿוס ביז אויף צורצאַך און רעקינגען געלאָפֿן {Endingen, Gustav Dreifuss, Fleischer 2005:84} </p>
+<h3>Oyberland (West Transcarpathian)</h3>
+<p>fǖs 'foot, leg' {WTCP, Budapest, Hutterer 1965: 127, 137}</p>
+<p>fīs פֿיס {WTCP, SOUTHWESTERN HUNGARY, Garvin 1965: 98}</p>
+<p>dα fyˑs דער פֿוס 'foot; paw' {WTCP, Dunajská Streda, 47179}<br />
+-   fiˑs פֿיס<br />
+-   ɔf hiːnɔ/αnə fiːs אויף הינערנע פֿיס<br />
+-   də fɔdərə fiˑs די פֿאָדערע פֿיס<br />
+-   də yntαštə fiˑs די אונטערשטע פֿיס<br />
+-   mit ə kraŋk fyˑs מיט אַ קראַנק פֿוס</p>
+<p>də/α fyːs, fyˑs דער פֿוס {WTCP, Vác, 47197}<br />
+-   diˑəxt fyn ə ganz, der ɔ́jbərə fyˑs דיכט פֿון אַ גאַנדז, דער אויבערע בוס<br />
+-   dɩ fordəʳštə / hʲintərə fiˑs די פֿאָרדערשטע / הינטערע פֿיס<br />
+-   mɩt ə kraŋk͡ŋ fyˑs מיט אַ קראַנקן פֿוס</p>
+<p>gancər fyˑs גאַנצער פֿוס {WTCP, Berettyó-Újfalu, 47212}<br />
+-   mit ə kraŋk fiˑsl nɛbəx מיט אַ קראַנק פֿיסל נעבעך</p>
+<h2>CENTRAL</h2>
+<h3>Unterland (East Transcarpathian)</h3>
+<p>a krɩmən fiːs אַ קרומען פֿוס {ETCP, Teiuș, 46233}</p>
+<p>fiːs {ETCP, Sîg Felső Szek, 47223}<br />
+-   gajt ɔf aɫə fiˑr fiˑs גייט אויף אַלע פֿיר פֿיס<br />
+-   dɩ fɔrntə fiːs די פֿאָרנטע פֿיס<br />
+-   hʲintɛ/ərɛ/ə fiːs הינטערע פֿיס<br />
+-   kraŋkə fiːs קראַנקע פֿיס<br />
+-   fíːsnštìˑlələ פֿוסנשטולעלע</p>
+<p>fiˑskɔp פֿוסקאָפּ 'ankle' {ETCP, near Sighet, 47228}<br />
+-   fiˑsštɛklʲ פֿוסשטעקל 'heel'</p>
+<p>dər fiˑs {ETCP, Mukachevo, 48226}</p>
+<p>ær heŋkt ɔf a fiˑs ער הינקט אויף אַ פֿוס {ETCP, Nyzhnya Apsha, 48233}</p>
+<p>dɛ fiˑs דער פֿוס {POLAND, Wolbrom, 50196}<br />
+-   a fiˑs 'calf's foot jelly'<br />
+-   hiˑnəʀnə fiˑsɫəx הינערנע פֿיסלעך<br />
+-   mɩt͡n kʀaŋk͡ŋ fiˑs מיטן קראַנקן פֿוס</p>
+<p>מאַכן פֿיס<br />
+('אַנטלויפֿן, זיך אַרויסמאַכן, אַנטרינען')<br />
+{Warsaw, Tsanin, מאַמעשי, מאַמעשי, שלוף נישט, p. 142}<br />
+-   יאַך האָב געטראַכט ווי צו מאַכן פֿיס {p. 131}<br />
+kraɲk' ɔf, ɔf-a rojs fᵻn fis קראַנק אויף... אויף אַ רויז פֿון פֿוס {Warsaw, Geller 2001: 161}<br />
+-   x-ɔb gᵻhat vaːtɛ a-rɔjs fᵻn-ᵻm tsvajtn fis איך האָב געהאַט ווײַטער אַ רויז פֿונעם צווייטן פֿוס {p. 193}<br />
+-   tsᵻ gajᵻn tsᵻ fis צו גיין צו פֿוס {p. 205}<br />
+-   x-zɔɬ nᵻʃ gajn tsᵻ fis ᵻn dɔrf arã איך זאָל נישט גיין צו פֿוס אין דאָרף אַרײַן {p. 237}<br />
+da lɩŋke fiˑs דער לינקער פֿוס {POLAND, Warsaw, 52211}<br />
+-   fis פֿיס (hooves of horse)<br />
+-   dus kɩnt mɩtn gɩzɩntn punɩm n, mɩtn kraŋkŋ fiˑs דאָס קינד מיטן געזונטן פּנים און מיטן קראַנקן פֿוס<br />
+-   oj vaj gɩmo taj taj ɩz bitə gɩme cɩkə cɩkər ɩziˑs gɩmo fiˑs fiˑs ɩz kalt krixɩn valt valt ɩz mojrə kojf zɩx sxojrə sxojrɩz taje gaj ɩn faje אוי וויי, גיב מיר טיי. טיי איז ביטער, גיב מיר צוקער. צוקער איז זיס, גיב מיר פֿוס. פֿוס איז קאַלט, קריך אין וואַלד. וואַלד איז מורא, קויף זיך סחורה. סחורה איז טײַער, גיי אין פֿײַער</p>
+<h2>HASIDIC</h2>
+<h3>AMERICA</h3>
+<p>ˈkɔrcə fiːs קורצע פֿיס<br />
+ɔf ajn fiːs אויף איין פֿוס<br />
+mɩtn kɔp arup ɩn fis arɔf מיטן קאָפּ אַראָפּ און פֿיס אַרויף<br />
+vɛn mɛ hajpt hɛnt, hajpt mɛn fiˑs ווען מע הייבט הענט, הייבט מען פֿיס (i.e., run away)</p>
+<h3>EUROPE</h3>
+<p>di kac hɔt lib fɩš nɔʀ zi vɩl dɩ fis ništ ajnɛcn̩ די קאַץ האָט ליב פֿיש, נאָר זי וויל די פֿיס נישט אײַננעצן {Vienna, Eidel Malowicki}</p>
+<h3>ISRAEL</h3>
+<p>faʀ a blɩndəʀ zɔlt iʀ nɩšt ɩntəʀštɛln a fisl פֿאַר אַ בלינדער זאָלט איר נישט אונטערשטעלן אַ פֿיסל {translation of לפֿני עוור לא תתן מכשול} {Bnei Brak, Eli Benedict (Karlin)}</p>
+<h2>NORTHEASTERN</h2>
+<h3>Lithuania</h3>
+<p>mitn kraŋk͡ŋ fisɫ מיטן קראַנקן פֿיסל {LITHUANIA, Vilnius, 54257}<br />
+-   mit dɩ kraŋkʲɛ físɛɫɛ nɛbɛx מיט די קראַנקע פֿיסעלע נעבעך</p>
+<h2>SOUTHEASTERN</h2>
+<p>(Ein Geldbetrag z. B. Hindart Gildn) geiin ništ tsi Fîs. הונדערט גולדן גייען נישט צו פֿוס 'Hundert Gulden sind keine Kleinigkeit. p. Sto czerwonych złotych nie piechotą chodzi, wörtlich: Hundert Goldgulden gehen nicht zu Fuß = sind nichts alltägliches, dem man auf Schritt und Tritt begegnet.' {EAST GALICIA, Brody, Landau 1923, №33}<br />
+-   Geiin wî dar Keizar geit tsi Fîs. גיין וווּ דער קייזער גיין צו פֿוס 'Hingehen wo der Kaiser zu Fuß hingeht. Frz. aller ou le roi va á pied. P. gdzie car piechotą chodzi. Klr. де цїсар oder царь пішки ходит.' {№34}</p>
+<p>dr fiˑs {ROMANIA, Brăila, 45273}</p>
+<p><audio controls src="https://archive.org/download/MangerLexicon/Manger%20-%20Avrom%20Shikt%20Eliezern%20Zukhn%20Far%20Yitskhok%20a%20Vayb%20-%20shpan%20ayn%20dayne%20alte%20getraye%20fis.mp3"></audio><br />
+AUDIO Itzik Manger {Czernowitz / Chernivtsi, BUKOVINA}<br />
+fiːs<br />
+שפּאַן אײַן דײַנע אַלטע געטרײַע פֿיס</p>
+<p>𝐓𝐇𝐄𝐀𝐓𝐄𝐑 𝐃𝐈𝐀𝐋𝐄𝐂𝐓 ({SOUTHEASTERN})</p>
+<video controls src="https://archive.org/download/FilmLexicon/Dybbuk1937-IkhGeyTsuFus.mp4"></video>
+<p>The Dybbuk (Poland, 1937)<br />
+ce fiːs<br />
+איך גיי צו פוס.</p>
+</div>
+
+</main>
+<footer>
+  Yiddish Dialect Dictionary &nbsp;·&nbsp; 10,034 entries
+</footer>
+<script>const BASE_URL = '/Yiddish-Dialect-Dictionary';</script>
+<script>
+(function() {
+  let index = null;
+  const input = document.getElementById('search-input');
+  const results = document.getElementById('search-results');
+  if (!input) return;
+
+  async function loadIndex() {
+    if (index) return;
+    try {
+      const r = await fetch(BASE_URL + '/search-index.json');
+      index = await r.json();
+    } catch(e) { console.error('Could not load search index', e); }
+  }
+
+  function search(q) {
+    q = q.trim().toLowerCase();
+    if (!q || !index) return [];
+    return index
+      .filter(e =>
+        e.hw.toLowerCase().includes(q) ||
+        (e.gl && e.gl.toLowerCase().includes(q))
+      )
+      .slice(0, 20);
+  }
+
+  function renderResults(items, q) {
+    if (!items.length) {
+      results.innerHTML = '<div class="search-no-results">No results found.</div>';
+      results.classList.add('show');
+      return;
+    }
+    results.innerHTML = items.map(e => `
+      <a class="search-result-item" href="${e.url}">
+        <span class="search-result-hw">${e.hw}</span>
+        ${e.gl ? `<span class="search-result-gloss">'${e.gl}'</span>` : ''}
+      </a>`).join('');
+    results.classList.add('show');
+  }
+
+  let timer;
+  input.addEventListener('input', async () => {
+    clearTimeout(timer);
+    const q = input.value;
+    if (!q.trim()) { results.classList.remove('show'); return; }
+    await loadIndex();
+    timer = setTimeout(() => renderResults(search(q), q), 120);
+  });
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.header-search')) results.classList.remove('show');
+  });
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { results.classList.remove('show'); input.blur(); }
+  });
+})();
+</script>
+</body>
+</html>

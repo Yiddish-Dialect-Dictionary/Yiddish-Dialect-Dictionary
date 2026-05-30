@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="yi" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>הויז – Yiddish Dialect Dictionary</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #faf9f6;
+  --surface: #ffffff;
+  --border: #e0ddd5;
+  --text: #1c1b18;
+  --muted: #6b6860;
+  --accent: #1a4480;
+  --accent-light: #e8eef7;
+  --link: #1a4480;
+  --link-hover: #0d2a52;
+  --hebrew-font: 'Ezra SIL', 'SBL Hebrew', 'David', 'Frank Ruehl CLM', serif;
+  --body-font: Georgia, 'Times New Roman', serif;
+  --ui-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+body {
+  font-family: var(--body-font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  font-size: 16px;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--link-hover); text-decoration: underline; }
+
+/* ── Header ── */
+.site-header {
+  background: var(--accent);
+  color: white;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0,0,0,.25);
+}
+.site-header a { color: white; font-family: var(--ui-font); font-size: .9rem; }
+.site-header a.home { font-weight: 700; font-size: 1rem; white-space: nowrap; }
+.site-header a:hover { text-decoration: underline; }
+
+/* search in header */
+.header-search {
+  flex: 1;
+  max-width: 480px;
+  position: relative;
+}
+.header-search input {
+  width: 100%;
+  padding: .45rem .9rem .45rem 2.2rem;
+  border: none;
+  border-radius: 4px;
+  font-family: var(--ui-font);
+  font-size: .95rem;
+  background: rgba(255,255,255,.15);
+  color: white;
+  outline: none;
+}
+.header-search input::placeholder { color: rgba(255,255,255,.65); }
+.header-search input:focus { background: rgba(255,255,255,.25); }
+.header-search .icon {
+  position: absolute;
+  left: .6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: .7;
+  pointer-events: none;
+}
+.search-results {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.15);
+  max-height: 360px;
+  overflow-y: auto;
+  z-index: 200;
+}
+.search-results.show { display: block; }
+.search-result-item {
+  display: block;
+  padding: .6rem 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.search-result-item:last-child { border-bottom: none; }
+.search-result-item:hover { background: var(--accent-light); }
+.search-result-hw {
+  font-size: 1.1rem;
+  font-family: var(--hebrew-font);
+  direction: rtl;
+  display: inline-block;
+  margin-right: .5rem;
+}
+.search-result-gloss { color: var(--muted); font-style: italic; }
+.search-no-results { padding: .8rem 1rem; color: var(--muted); font-family: var(--ui-font); }
+
+/* ── Layout ── */
+.page-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+/* ── Alphabet nav (homepage + letter pages) ── */
+.alphabet-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin: 1.5rem 0;
+}
+.alphabet-nav a {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: .5rem .75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  text-decoration: none;
+  min-width: 52px;
+  transition: background .15s, border-color .15s;
+}
+.alphabet-nav a:hover, .alphabet-nav a.active {
+  background: var(--accent-light);
+  border-color: var(--accent);
+}
+.alphabet-nav a .heb {
+  font-family: var(--hebrew-font);
+  font-size: 1.4rem;
+  line-height: 1;
+  direction: rtl;
+}
+.alphabet-nav a .translit {
+  font-family: var(--ui-font);
+  font-size: .65rem;
+  color: var(--muted);
+  margin-top: .2rem;
+}
+
+/* ── Homepage ── */
+.hero {
+  text-align: center;
+  padding: 2.5rem 0 1.5rem;
+}
+.hero h1 {
+  font-size: 2.2rem;
+  color: var(--accent);
+  margin-bottom: .5rem;
+}
+.hero p {
+  color: var(--muted);
+  font-family: var(--ui-font);
+  font-size: 1rem;
+}
+.section-label {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 2rem 0 .75rem;
+}
+
+/* ── Letter page ── */
+.letter-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: .75rem;
+}
+.letter-header .heb-big {
+  font-family: var(--hebrew-font);
+  font-size: 3rem;
+  direction: rtl;
+  line-height: 1;
+  color: var(--accent);
+}
+.letter-header .info {
+  font-family: var(--ui-font);
+}
+.letter-header .translit-big { font-size: 1.4rem; font-weight: 600; }
+.letter-header .count { color: var(--muted); font-size: .9rem; }
+
+.entry-list {
+  list-style: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface);
+}
+.entry-list li {
+  border-bottom: 1px solid var(--border);
+}
+.entry-list li:last-child { border-bottom: none; }
+.entry-list a {
+  display: flex;
+  align-items: baseline;
+  gap: .75rem;
+  padding: .65rem 1rem;
+  color: var(--text);
+  text-decoration: none;
+}
+.entry-list a:hover { background: var(--accent-light); }
+.entry-list .hw {
+  font-family: var(--hebrew-font);
+  font-size: 1.15rem;
+  direction: rtl;
+  flex-shrink: 0;
+}
+.entry-list .gl {
+  font-style: italic;
+  color: var(--muted);
+  font-size: .9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Entry page ── */
+.entry-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--accent);
+}
+.entry-headword {
+  font-family: var(--hebrew-font);
+  font-size: 2.6rem;
+  direction: rtl;
+  line-height: 1.2;
+  color: var(--text);
+}
+.entry-gloss {
+  font-style: italic;
+  color: var(--muted);
+  font-size: 1.05rem;
+  margin-top: .3rem;
+}
+
+.entry-body h2 {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 1.8rem 0 .6rem;
+  padding-bottom: .3rem;
+  border-bottom: 1px solid var(--border);
+}
+.entry-body h3 {
+  font-family: var(--ui-font);
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin: 1rem 0 .4rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.entry-body p {
+  margin-bottom: .8rem;
+  line-height: 1.7;
+}
+.entry-body ul, .entry-body ol {
+  margin: .5rem 0 .8rem 1.5rem;
+}
+.entry-body li { margin-bottom: .3rem; }
+.entry-body audio {
+  display: block;
+  margin: .75rem 0;
+  max-width: 100%;
+}
+.entry-body img {
+  max-width: 100%;
+  height: auto;
+  margin: .75rem 0;
+  border-radius: 4px;
+}
+.entry-body blockquote {
+  border-left: 3px solid var(--border);
+  padding-left: 1rem;
+  color: var(--muted);
+  margin: .5rem 0;
+}
+
+/* back/nav bar above entry */
+.entry-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.entry-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .3rem .7rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--text);
+}
+.entry-nav a:hover {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  text-decoration: none;
+}
+
+/* ── Footer ── */
+footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  margin-top: 3rem;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .hero h1 { font-size: 1.6rem; }
+  .alphabet-nav a { min-width: 44px; padding: .4rem .55rem; }
+  .alphabet-nav a .heb { font-size: 1.2rem; }
+  .entry-headword { font-size: 2rem; }
+  .header-search { max-width: none; }
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <a href="/Yiddish-Dialect-Dictionary/" class="home">Yiddish Dialect Dictionary</a>
+  <div class="header-search">
+    <svg class="icon" width="16" height="16" fill="white" viewBox="0 0 16 16">
+      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.868-3.834zm-5.242 1.406a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+    </svg>
+    <input type="search" id="search-input" placeholder="Search entries…" autocomplete="off">
+    <div id="search-results" class="search-results"></div>
+  </div>
+</header>
+<main class="page-wrap">
+
+<div class="entry-nav">
+  <a href="/Yiddish-Dialect-Dictionary/letter/hey/">← Hey</a>
+  <a href="/Yiddish-Dialect-Dictionary/">Home</a>
+</div>
+<div class="entry-header">
+  <div class="entry-headword" dir="rtl">הויז</div>
+  <div class="entry-gloss">‘house’</div>
+</div>
+<div class="entry-body" dir="auto">
+<p>הויז<br />
+הײַזער<br />
+דאָס<br />
+(SOUTHEASTERN די, NORTHEASTERN די = intermediate gender)<br />
+'house'</p>
+<h2>ETYMOLOGY</h2>
+<p>MHG hûs</p>
+<p 1982:="1982:" 61="61" Katz="Katz">Vowel 44, Proto-Yiddish ✱ɔu<br /></p>
+<p><img alt="" src="https://archive.org/download/Yiddish-Dialect-Maps/map%20-%20FoY3-79%20-%20hoyz%20-%20development%20of%20vowel%2054.jpg" /><br />
+<img alt="" src="https://archive.org/download/Yiddish-Dialect-Maps/map%20-%20FoY3-158%20-%20likht%20-%20hoyz.jpg" /><br />
+<img alt="" src="https://archive.org/download/Yiddish-Dialect-Maps/Herzog4-36-GenderChangesCounterToSlavicModel-126.jpg" /><br />
+<img alt="" src="https://archive.org/download/Yiddish-Dialect-Maps/Herzog4-4-6-MojlHemdBetEjHojxHojz-105.jpg" /><br />
+<img alt="" src="https://archive.org/download/Yiddish-Dialect-Maps/Herzog4-7-DiffusionOfNewGenderCategories-107.jpg" /></p>
+<h2>WESTERN</h2>
+<p>haisər הײַזער {Schnitzler, Prager Judendeutsch, 21}</p>
+<p 1845:="1845:" 44="44" Handelewos_="Handelewos," LEIPZIG="LEIPZIG" Maißim="Maißim" Schnokes="Schnokes" e="e" un="un" vun="vun">Mit an Stan baut me kan Haus.<br /></p>
+<h3>Holland (Netherlands)</h3>
+<p>hous {ɔu} {HOLLAND, Beem, Jerosche}<br />
+-   Wo hot 'n hond hous? 'Where does a dog have a house? What do you imagine?' {Jerosche №356}<br />
+-   Besser a leddeg hous wie e schleschte einwouner. {Jerosche №364}<br />
+-   Es hous verliert niks. Var. Was es hous verliert, gibt es hous widder. 'If something has been lost at home, it will eventually turn up. Don't spend too long looking for it.' {Jerosche №365}<br />
+-   In kaan jiddisch hous gedocht. 'Phrase used to ward off accidents.' {Jerosche №366}<br />
+-   Mit viel halt man hous, mit winzeg komt man ous. 'Met veel houdt men huis, met weinig komt men uit. With a lot of people one keeps a home, with little one comes out. Who has a lot can be generous. who has little, must see it come true. {???}' {Jerosche №367}</p>
+<h3>Alsace (France)</h3>
+<p>ə hɔ̞ux hɔ̞us אַ הויך הויז  {ALSACE, 47075 Mulhouse, 055-010}<br />
+- hajd cə daːg bɔ̞ud mər hejçəri hajsr̩ הײַנט־צו־טאָג בויט מען העכערע הײַזער {p055-030}<br />
+- cvaːʃdegɩg hɔ̞us אַ צוויישטעקיג הויז {q056-020}<br />
+- ə hɔ̞us mɩdəmə šiːfə dax אַ הויז מיט אַ שיפֿע דאַך {q056-030}</p>
+<h3>Switzerland</h3>
+<p>si hen liːdliç un gədiçtliç gəlɛnt un gen fun hauz tsu hauz זיי האָבן לידלעך און געדיכטלעך געלערנט און גייען פֿון הויז צו הויז {Endingen, Isaak Guggenheim-Bloch, Fleischer 2005:74}<br />
+- un maxəd undərˈobsiç faʃt s gants hauz און מאַכן אונטעראָבזיך פֿאַסט דאָס גאַנצע הויז {p75}</p>
+<h3>Czechia</h3>
+<p>haus {CZECHIA and western SLOVAKIA, Beranek 1936: 72}</p>
+<h3>Oyberland (West Transcarpathian)</h3>
+<p>Hinter ünser Haus stehn draj schene Epplbam, mit rajte Eppeloch הינטער אונדזער הויז שטייען דרײַ שיינע עפּלביים מיט רויטע עפּעלעך {WTCP, Frauenkirchen, Fleischer and Schäfer 2014: 7}</p>
+<p>haus {WTCP, Budapest, Hutterer 1965: 129, 130}<br />
+-   hęi̯zər הײַזער</p>
+<p>hauz {WTCP, SOUTHWESTERN HUNGARY, Garvin 1965: 95, 98}<br />
+-   hauzganəv הויז־גנבֿ</p>
+<p>hauz {WTCP, SOUTH-CENTRAL HUNGARY, Garvin 1965: 102}<br />
+-   gortn̥hauz גאָרטנהויז</p>
+<p>houz {WTCP, NORTHEASTERN HUNGARIAN, Garvin 1965: 107}</p>
+<p>ə hɔjəx ha˰uz  אַ הויך הויז {WTCP, Dunajská Streda, 47179}<br />
+-   mə baut šø hɛxərə yn grɛsərə hæjzə מע בויט שוין העכערע און גרעסערע הײַזער<br />
+-   ə cvaˑštɔkʲək, cvaːštɔkʲɩgəs ha˰uz  אַ צוויישטאָקיק הויז</p>
+<p>cvaj štɔkɩg hauz צוויישטאָקיק הויז {ɴᴏᴛᴇ: דײַטש} {WTCP, Vác, 47197}<br />
+-   a hɔjəx haus אַ הויך הויז<br />
+-   hajn bauət mαn hɔjxərə / héərə {?} hajzər הײַנט בויט מען העכערע הײַזער</p>
+<p>hɔjz {WTCP, Berettyó-Újfalu, 47212}<br />
+-   hɔjax hoːz הויך הויז<br />
+-   gʲəmoˑrt hous געמויערט הויז <br />
+-   hɛxərə hajzər bout mən העכערע הײַזער בויט מען<br />
+-   ə cvaːštɔkʲədɩg houᵊz̥ אַ צוויישטאָקעדיק הויז<br />
+-   càdɩkədɩ́n-h{a}jzlʲ</p>
+<p>cɩ houz̥/s צו הויז 'at home' {WTCP, Hajdúhadház, 47219}</p>
+<h2>CENTRAL</h2>
+<p>hous {Hutterer 1965: 141}</p>
+<p>hoːs, {howəs} (underlying ou) {Jacobs 96}</p>
+<p>hinter insəʳm hō̩s šda̩iən dʀai šaĩnə e̩pəl̥ba̩ĩməʳ mid ʀo̩itə e̩pəʀləχ (beide ə stark nach a hin!) הינטער אונדזער הויז שטייען דרײַ שיינע עפּלביימער מיט רויטע עפּעלעך {POLAND, Kobyla Góra, Wenkerbogen 09746 Kobylagora (dated 1881); Fleischer and Schäfer 2014: 7}</p>
+<p>Hinter ünser Hous stehn drai schaine Bämelēch mit roite Äpelech הינטער אונדזער הויז שטייען דרײַ שיינע ביימעלעך מיט רויטע עפּעלעך {POLAND, Kobyla Góra, Wenkerbogen 09746 Kobylagora (dated 1881); Fleischer and Schäfer 2014: 7}</p>
+<p>hous {eastern SLOVAKIA and CARPATHO-RUTHENIA, Beranek 1936: 72}</p>
+<h3>Unterland (East Transcarpathian)</h3>
+<p>a hoːz mɩt cvaj štɔk͡ŋ אַ הויז מיט צוויי שטאָקן  {ETCP, Teiuș, 46233}</p>
+<p>a cvajštɔkədɩk houz, a/ə cvájštɔ́kədɩk houz̥ אַ צוויישטאָקעדיק הויז {ETCP, Sîg Felső Szek, 47223}<br />
+-   ə hɔjəx houz אַ הויך הויז<br />
+-   ə štɔkədɩk houz אַ שטאָקעדיק הויז<br />
+-   a houz mit a kriməm dax אַ הויז מיט אַ קרומען דאַך<br />
+-   dɔrt tiːt mən bouən hɛxərə hajzər דאָרט טוט מען בויען העכערע הײַזער<br />
+-   zoubərkat in houz זויבערקייט אין הויז </p>
+<p>a hous mit cvaj štɔk͡ŋ אַ הויז מיט צוויי שטאָקן {ETCP, Bistriţa, 47241}</p>
+<p>haˑnt bout mən grɛsərə haːzər &gt; štiˑbər הײַנט בויט מען גרעסערע הײַזער &lt; שטיבער {ETCP, Nyzhnya Apsha, 48233}</p>
+<p>a hojx hojs אַ הויך הויז {POLAND, Wolbrom, 50196}<br />
+-   a hoːs fɩn cvaj štɔk אַ הויז פֿון צוויי שטאָק<br />
+-   s hoos {?} ס'הויז</p>
+<ul>
+<li>hajnt bout mɛn hexəʀə haːzɛᴿ הײַנט בויט מען העכערע הײַזער</li>
+</ul>
+<p>{hɔ:s} {Warsaw, Geller 2001: 72}<br />
+baː-r-ᵻnts-i giɛvɛjn-a grɔjs ɔːs בײַ אונדז איז געווען אַ גרויס הויז {p. 237}<br />
+-   ɔt-mɛ giɛbrɛnt dᵻ haːzɛ האָט מען געברענט די הײַזער {p. 261}<br />
+-   i-vɛjn gɛbɬᵻbm ɛps draː fijɛ haːzɛ איז געווען געבליבן עפּעס דרײַ־פֿיר הײַזער {p. 269}<br />
+hoz a kejlər הויז אַ קעלער {POLAND, Warsaw, 52211}<br />
+-   a hojəx hos / hoˑs אַ הוך הויז<br />
+-   a hos fɩn cvaj štok אַ הויז פֿון צוויי שטאָק<br />
+-   ɩn hoz aran אין הויז אַרײַן</p>
+<video controls src="https://archive.org/download/SarahRivkahLefkowitsLexicon/oysgeroybt%20di%20gantse%20hoyz%20-%20Sarah%20Rivkah%20Lefkowits.mp4"></video>
+<p>VIDEO Sarah Rivkah Lefkowits from Hajdúnánás, Hungary, June 26, 2018<br />
+אויסגערויבט די גאַנצע הויז<br />
+<audio controls src="https://archive.org/download/Gosia-and-Luza-Pod/Gosia%20Pod%205%20August%202018%20-%20a%20groys%20hoyz.mp3"></audio><br />
+AUDIO Gosia Pod {Mikulintse / Mikulińce / Микулинці, East Galicia} August 5, 2018<br />
+אַ גרויס הויז<br />
+<audio controls src="https://archive.org/download/MiriamHoffman/Miriam%20Hoffman%2025%20August%202018%20-%20hayzer%20-%20nisht%20hayzer%20nor.mp3"></audio><br />
+AUDIO Miriam Hoffman {parents from Łódź, POLAND} 25 August 2018<br />
+hajzəʳ {influence of STANDARD}</p>
+<h2>HASIDIC</h2>
+<h3>AMERICA</h3>
+<p>hɔwz̥<br />
+bɔwt mɛn ouf a houz בויט מען אויף אַ הויז<br />
+ˈhaːzələx הײַזעלעך (diminutive)<br />
+haːskl̥ הײַזקל (diminutive)<br />
+a klajn ˈhaskələ אַ קליין הײַזקעלע<br />
+ˈfarn̩ ˈvasn̩ ˈhɔwz̥ פֿאַרן ווײַסן הויז<br />
+dɛr ɛlctər fɩn zan hɔwz דער עלטסטער פֿון זײַן הויז<br />
+klapm̩ fɩn hɔws cɩ hɔws קלאַפּן פֿון הויז צו הויז<br />
+a haˑskələ אַ הײַזקעלע<br />
+a vɩrtšaft ɩn də hows אַ ווירטשאַפֿט אין די הויז</p>
+<h3>EUROPE</h3>
+<p>ɩnc gajn cɩm hɔˑz אונדז גייען צום הויז {Vienna, Eidel Malowicki}</p>
+<h3>ISRAEL</h3>
+<p>dɛ ɔjz {Bnei Brak, Eli Benedict (Karlin)}</p>
+<h2>NORTHEASTERN</h2>
+<p>{זאַמעט} אַ מאָוז איז אין האָוז<br />
+{אַנדערע טיילן פֿון ליטע} דאָרטן וואוינט מען שוין אין אַ האָיז<br />
+{מאַרק, "אונדזער ליטווישער ייִדיש" (1951): 440־441}<br />
+די הויז און דער פֿאָרהויז און דער פֿירהויז (פֿירעז) {ז' 452}</p>
+<h2>SOUTHEASTERN</h2>
+<p>hous {דער גאַנצער בנין} {ROMANIA, Brăila, 45273}<br />
+-   aːnt bouətn ǽxərə haːzər הײַנט בויט מען העכערע הײַזער<br />
+-   a houz mɩt a kveːrn dax אַ הויז מיט אַ קווערן דאַך</p>
+<p><audio controls src="https://archive.org/download/MangerLexicon/Manger%20-%20A%20Lid%20Vegn%20Eliyohu%20Hanovi%20-%20nor%20dem%20shenstn%20nign%20shpilt%20er%20far%20dem%20same%20oremstn%20hoyz.mp3"></audio><br />
+AUDIO Itzik Manger {Czernowitz / Chernivtsi, BUKOVINA}<br />
+hojs<br />
+נאָר דעם שענסטן ניגון שפּילט ער פֿאַר דעם סאַמע אָרעמסטן הויז</p>
+</div>
+
+</main>
+<footer>
+  Yiddish Dialect Dictionary &nbsp;·&nbsp; 10,034 entries
+</footer>
+<script>const BASE_URL = '/Yiddish-Dialect-Dictionary';</script>
+<script>
+(function() {
+  let index = null;
+  const input = document.getElementById('search-input');
+  const results = document.getElementById('search-results');
+  if (!input) return;
+
+  async function loadIndex() {
+    if (index) return;
+    try {
+      const r = await fetch(BASE_URL + '/search-index.json');
+      index = await r.json();
+    } catch(e) { console.error('Could not load search index', e); }
+  }
+
+  function search(q) {
+    q = q.trim().toLowerCase();
+    if (!q || !index) return [];
+    return index
+      .filter(e =>
+        e.hw.toLowerCase().includes(q) ||
+        (e.gl && e.gl.toLowerCase().includes(q))
+      )
+      .slice(0, 20);
+  }
+
+  function renderResults(items, q) {
+    if (!items.length) {
+      results.innerHTML = '<div class="search-no-results">No results found.</div>';
+      results.classList.add('show');
+      return;
+    }
+    results.innerHTML = items.map(e => `
+      <a class="search-result-item" href="${e.url}">
+        <span class="search-result-hw">${e.hw}</span>
+        ${e.gl ? `<span class="search-result-gloss">'${e.gl}'</span>` : ''}
+      </a>`).join('');
+    results.classList.add('show');
+  }
+
+  let timer;
+  input.addEventListener('input', async () => {
+    clearTimeout(timer);
+    const q = input.value;
+    if (!q.trim()) { results.classList.remove('show'); return; }
+    await loadIndex();
+    timer = setTimeout(() => renderResults(search(q), q), 120);
+  });
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.header-search')) results.classList.remove('show');
+  });
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { results.classList.remove('show'); input.blur(); }
+  });
+})();
+</script>
+</body>
+</html>

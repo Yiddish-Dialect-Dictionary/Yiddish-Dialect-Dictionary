@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="yi" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kuf (ק) – Yiddish Dialect Dictionary</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #faf9f6;
+  --surface: #ffffff;
+  --border: #e0ddd5;
+  --text: #1c1b18;
+  --muted: #6b6860;
+  --accent: #1a4480;
+  --accent-light: #e8eef7;
+  --link: #1a4480;
+  --link-hover: #0d2a52;
+  --hebrew-font: 'Ezra SIL', 'SBL Hebrew', 'David', 'Frank Ruehl CLM', serif;
+  --body-font: Georgia, 'Times New Roman', serif;
+  --ui-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+body {
+  font-family: var(--body-font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  font-size: 16px;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--link-hover); text-decoration: underline; }
+
+/* ── Header ── */
+.site-header {
+  background: var(--accent);
+  color: white;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0,0,0,.25);
+}
+.site-header a { color: white; font-family: var(--ui-font); font-size: .9rem; }
+.site-header a.home { font-weight: 700; font-size: 1rem; white-space: nowrap; }
+.site-header a:hover { text-decoration: underline; }
+
+/* search in header */
+.header-search {
+  flex: 1;
+  max-width: 480px;
+  position: relative;
+}
+.header-search input {
+  width: 100%;
+  padding: .45rem .9rem .45rem 2.2rem;
+  border: none;
+  border-radius: 4px;
+  font-family: var(--ui-font);
+  font-size: .95rem;
+  background: rgba(255,255,255,.15);
+  color: white;
+  outline: none;
+}
+.header-search input::placeholder { color: rgba(255,255,255,.65); }
+.header-search input:focus { background: rgba(255,255,255,.25); }
+.header-search .icon {
+  position: absolute;
+  left: .6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: .7;
+  pointer-events: none;
+}
+.search-results {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.15);
+  max-height: 360px;
+  overflow-y: auto;
+  z-index: 200;
+}
+.search-results.show { display: block; }
+.search-result-item {
+  display: block;
+  padding: .6rem 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.search-result-item:last-child { border-bottom: none; }
+.search-result-item:hover { background: var(--accent-light); }
+.search-result-hw {
+  font-size: 1.1rem;
+  font-family: var(--hebrew-font);
+  direction: rtl;
+  display: inline-block;
+  margin-right: .5rem;
+}
+.search-result-gloss { color: var(--muted); font-style: italic; }
+.search-no-results { padding: .8rem 1rem; color: var(--muted); font-family: var(--ui-font); }
+
+/* ── Layout ── */
+.page-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+/* ── Alphabet nav (homepage + letter pages) ── */
+.alphabet-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin: 1.5rem 0;
+}
+.alphabet-nav a {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: .5rem .75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  text-decoration: none;
+  min-width: 52px;
+  transition: background .15s, border-color .15s;
+}
+.alphabet-nav a:hover, .alphabet-nav a.active {
+  background: var(--accent-light);
+  border-color: var(--accent);
+}
+.alphabet-nav a .heb {
+  font-family: var(--hebrew-font);
+  font-size: 1.4rem;
+  line-height: 1;
+  direction: rtl;
+}
+.alphabet-nav a .translit {
+  font-family: var(--ui-font);
+  font-size: .65rem;
+  color: var(--muted);
+  margin-top: .2rem;
+}
+
+/* ── Homepage ── */
+.hero {
+  text-align: center;
+  padding: 2.5rem 0 1.5rem;
+}
+.hero h1 {
+  font-size: 2.2rem;
+  color: var(--accent);
+  margin-bottom: .5rem;
+}
+.hero p {
+  color: var(--muted);
+  font-family: var(--ui-font);
+  font-size: 1rem;
+}
+.section-label {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 2rem 0 .75rem;
+}
+
+/* ── Letter page ── */
+.letter-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: .75rem;
+}
+.letter-header .heb-big {
+  font-family: var(--hebrew-font);
+  font-size: 3rem;
+  direction: rtl;
+  line-height: 1;
+  color: var(--accent);
+}
+.letter-header .info {
+  font-family: var(--ui-font);
+}
+.letter-header .translit-big { font-size: 1.4rem; font-weight: 600; }
+.letter-header .count { color: var(--muted); font-size: .9rem; }
+
+.entry-list {
+  list-style: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface);
+}
+.entry-list li {
+  border-bottom: 1px solid var(--border);
+}
+.entry-list li:last-child { border-bottom: none; }
+.entry-list a {
+  display: flex;
+  align-items: baseline;
+  gap: .75rem;
+  padding: .65rem 1rem;
+  color: var(--text);
+  text-decoration: none;
+}
+.entry-list a:hover { background: var(--accent-light); }
+.entry-list .hw {
+  font-family: var(--hebrew-font);
+  font-size: 1.15rem;
+  direction: rtl;
+  flex-shrink: 0;
+}
+.entry-list .gl {
+  font-style: italic;
+  color: var(--muted);
+  font-size: .9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Entry page ── */
+.entry-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--accent);
+}
+.entry-headword {
+  font-family: var(--hebrew-font);
+  font-size: 2.6rem;
+  direction: rtl;
+  line-height: 1.2;
+  color: var(--text);
+}
+.entry-gloss {
+  font-style: italic;
+  color: var(--muted);
+  font-size: 1.05rem;
+  margin-top: .3rem;
+}
+
+.entry-body h2 {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 1.8rem 0 .6rem;
+  padding-bottom: .3rem;
+  border-bottom: 1px solid var(--border);
+}
+.entry-body h3 {
+  font-family: var(--ui-font);
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin: 1rem 0 .4rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.entry-body p {
+  margin-bottom: .8rem;
+  line-height: 1.7;
+}
+.entry-body ul, .entry-body ol {
+  margin: .5rem 0 .8rem 1.5rem;
+}
+.entry-body li { margin-bottom: .3rem; }
+.entry-body audio {
+  display: block;
+  margin: .75rem 0;
+  max-width: 100%;
+}
+.entry-body img {
+  max-width: 100%;
+  height: auto;
+  margin: .75rem 0;
+  border-radius: 4px;
+}
+.entry-body blockquote {
+  border-left: 3px solid var(--border);
+  padding-left: 1rem;
+  color: var(--muted);
+  margin: .5rem 0;
+}
+
+/* back/nav bar above entry */
+.entry-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.entry-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .3rem .7rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--text);
+}
+.entry-nav a:hover {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  text-decoration: none;
+}
+
+/* ── Footer ── */
+footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  margin-top: 3rem;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .hero h1 { font-size: 1.6rem; }
+  .alphabet-nav a { min-width: 44px; padding: .4rem .55rem; }
+  .alphabet-nav a .heb { font-size: 1.2rem; }
+  .entry-headword { font-size: 2rem; }
+  .header-search { max-width: none; }
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <a href="/Yiddish-Dialect-Dictionary/" class="home">Yiddish Dialect Dictionary</a>
+  <div class="header-search">
+    <svg class="icon" width="16" height="16" fill="white" viewBox="0 0 16 16">
+      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.868-3.834zm-5.242 1.406a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+    </svg>
+    <input type="search" id="search-input" placeholder="Search entries…" autocomplete="off">
+    <div id="search-results" class="search-results"></div>
+  </div>
+</header>
+<main class="page-wrap">
+
+<div class="letter-header">
+  <span class="heb-big">ק</span>
+  <div class="info">
+    <div class="translit-big">Kuf</div>
+    <div class="count">671 entries</div>
+  </div>
+</div>
+<ul class="entry-list">
+<li><a href="/Yiddish-Dialect-Dictionary/entry/Kuf%20%D7%A7%D7%95%D7%A3/"><span class="hw">Kuf קוף</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%22%D7%A0/"><span class="hw">ק"נ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%91%D7%99%D7%A0%D7%A2%D7%98/"><span class="hw">קאַבינעט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%93%D7%A8%D7%99%D7%9C/"><span class="hw">קאַדריל</span><span class="gl">‘quadrille (dance)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%95%D7%95%D7%A2/"><span class="hw">קאַווע</span><span class="gl">‘coffee’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%95%D7%95%D7%A2%D6%BE%D7%90%D6%B8%D7%A4%D6%BC%D7%96%D7%A2%D7%A5/"><span class="hw">קאַווע־אָפּזעץ</span><span class="gl">‘coffee grounds’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%95%D7%95%D7%A2%D7%A0%D7%A2/"><span class="hw">קאַווענע</span><span class="gl">‘watermelon’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%95%D7%98%D7%A9%D7%95%20%28unattested%20editorial%20spelling%29/"><span class="hw">קאַוטשו (unattested editorial spelling)</span><span class="gl">‘rubber’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%96%D7%A9%D7%99%D7%9E%D7%99%D7%A2%D7%96%D7%A9/"><span class="hw">קאַזשימיעזש</span><span class="gl">‘Kazimierz (old Jewish district in Kraków)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%98%D7%90%D6%B8%D7%95%D7%95%D7%A2%D7%A1/"><span class="hw">קאַטאָוועס</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%98%D7%90%D6%B8%D7%A7/"><span class="hw">קאַטאָק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%98%D7%95%D7%99%D7%9C/"><span class="hw">קאַטויל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%98%D7%95%D7%99%D7%9C%D7%99%D7%A9/"><span class="hw">קאַטויליש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%98%D7%A2%D7%A8/"><span class="hw">קאַטער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%98%D7%A2%D7%A8%D7%99%D7%A0%D7%A7%D7%A2/"><span class="hw">קאַטערינקע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%98%D7%A2%D7%A8%D7%99%D7%A0%D7%A9%D7%98%D7%A9%D7%99%D7%A7/"><span class="hw">קאַטערינשטשיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%98%D7%A9%D7%9F/"><span class="hw">קאַטשן</span><span class="gl">‘cabbage stalt, cob ; fam. stupid person; bad actor or singer’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%98%D7%A9%D7%A2%D7%9F/"><span class="hw">קאַטשען</span><span class="gl">‘to role’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%98%D7%A9%D7%A7%D7%A2/"><span class="hw">קאַטשקע</span><span class="gl">‘duck’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%9B%D7%9C/"><span class="hw">קאַכל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%9C%202/"><span class="hw">קאַל 2</span><span class="gl">‘bald’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%9C%D7%90%D6%B8%D7%A9/"><span class="hw">קאַלאָש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%9C%D7%91/"><span class="hw">קאַלב</span><span class="gl">‘calf’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%9C%D7%91%D7%99%D7%A7/"><span class="hw">קאַלביק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%9C%D7%95%D7%96%D7%A9%D7%A2/"><span class="hw">קאַלוזשע</span><span class="gl">‘puddle’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%9C%D7%95%D7%A4%D6%BC%D7%A2%D7%A0%D7%A2%D7%9F/"><span class="hw">קאַלופּענען</span><span class="gl">‘to pick at, scratch slowly’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%9C%D7%98/"><span class="hw">קאַלט</span><span class="gl">‘cold’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%9C%D7%99%D7%A2/"><span class="hw">קאַליע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%9C%D7%99%D7%A7%D7%A2/"><span class="hw">קאַליקע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%9C%D7%9A/"><span class="hw">קאַלך</span><span class="gl">‘lime’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%9C%D7%9B%D7%90%D7%95%D7%99%D7%95%D7%95%D7%9F/"><span class="hw">קאַלכאויוון</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%9C%D7%A2%D7%96%D7%A9%D7%A2/"><span class="hw">קאַלעזשע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%9C%D7%A2%D7%9E%D7%95%D7%98%D7%A0%D7%A2/"><span class="hw">קאַלעמוטנע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%9D/"><span class="hw">קאַם</span><span class="gl">‘comb’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%9E%D7%90%D6%B8%D7%93/"><span class="hw">קאַמאָד</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%9E%D7%99%D7%96%D7%A2%D7%9C%D7%A7%D7%A2/"><span class="hw">קאַמיזעלקע</span><span class="gl">‘camisole, waistcoat, vest’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%9E%D7%99%D7%A9/"><span class="hw">קאַמיש</span><span class="gl">‘rush (type of reed)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%9E%D7%A2%D7%9F/"><span class="hw">קאַמען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%9E%D7%A2%D7%A0%D7%99%D7%A6%D7%A2/"><span class="hw">קאַמעניצע</span><span class="gl">‘building (stone, brick)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%9E%D7%A2%D7%A8/"><span class="hw">קאַמער</span><span class="gl">‘room, store-room, bedroom’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%9E%D7%A3/"><span class="hw">קאַמף</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%9E%D7%A4%D6%BC%D7%99%D7%99%D7%9F/"><span class="hw">קאַמפּיין</span><span class="gl">‘campaign’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%9F/"><span class="hw">קאַן</span><span class="gl">‘can’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A0%D7%90%D6%B7%D7%95%D7%95%D7%A2/"><span class="hw">קאַנאַווע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A0%D7%90%D6%B7%D7%A8%D7%99%D7%A7/"><span class="hw">קאַנאַריק</span><span class="gl">‘canary’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A0%D7%90%D6%B7%D7%A8%D7%A1%D7%99/"><span class="hw">קאַנאַרסי</span><span class="gl">‘Canarsie (area in eastern Brooklyn, NYC)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A0%D7%90%D6%B8%D7%A4%D6%BC%D7%9C%D7%99%D7%A2/"><span class="hw">קאַנאָפּליע</span><span class="gl">‘hemp’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A0%D7%93%D7%99%D7%93%D7%99%D7%A8%D7%9F/"><span class="hw">קאַנדידירן</span><span class="gl">‘to run for office’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A0%D7%93%D7%A2%D7%9C%D7%90%D6%B7%D7%91%D7%A2%D7%A8/"><span class="hw">קאַנדעלאַבער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A0%D7%95%D7%99%D7%A7%D7%A2%D7%9F/"><span class="hw">קאַנויקען</span><span class="gl">‘to whimper, whine’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A0%D7%98/"><span class="hw">קאַנט</span><span class="gl">‘edge; region, territory’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A0%D7%98%D7%90%D6%B8%D7%A8/"><span class="hw">קאַנטאָר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A1%D7%90%D6%B8%D7%A7%D7%A2/"><span class="hw">קאַסאָקע</span><span class="gl">‘crosseyed, squinty’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A1%D7%98%D7%9F/"><span class="hw">קאַסטן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A1%D7%A2%D7%98%D7%99%D7%A9/"><span class="hw">קאַסעטיש</span><span class="gl">‘counter (store)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A1%D7%A2%D7%98%D7%A2/"><span class="hw">קאַסעטע</span><span class="gl">‘cassette, tape’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A1%D7%A7%D7%A2/"><span class="hw">קאַסקע</span><span class="gl">‘helmet’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A4%D6%BC/"><span class="hw">קאַפּ</span><span class="gl">‘drop, a little’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A4%D6%BC%D7%90%D6%B7%D7%91%D7%9C/"><span class="hw">קאַפּאַבל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A4%D6%BC%D7%90%D6%B8%D7%98%D7%A2/"><span class="hw">קאַפּאָטע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A4%D6%BC%D7%95%D7%99%D7%A2%D7%A8/"><span class="hw">קאַפּויער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A4%D6%BC%D7%99%D7%98%D7%9C/"><span class="hw">קאַפּיטל</span><span class="gl">‘chapter’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A4%D6%BC%D7%99%D7%A9%D7%90%D6%B8%D7%9F/"><span class="hw">קאַפּישאָן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A4%D6%BC%D7%9C/"><span class="hw">קאַפּל</span><span class="gl">‘yarmulke, kippah, skullcap’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A4%D6%BC%D7%A2%D7%9C%D7%99%D7%95%D7%A9/"><span class="hw">קאַפּעליוש</span><span class="gl">‘hat, derby’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A4%D6%BC%D7%A2%D7%9C%D7%99%D7%95%D7%A9%D6%BE%D7%9E%D7%90%D6%B7%D7%9B%D7%A2%D7%A8/"><span class="hw">קאַפּעליוש־מאַכער</span><span class="gl">‘hat-maker’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A4%D6%BC%D7%A2%D7%9C%D7%99%D7%A2/"><span class="hw">קאַפּעליע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A4%D6%BC%D7%A2%D7%9F/"><span class="hw">קאַפּען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A4%D6%BC%D7%A8%D7%99%D7%96/"><span class="hw">קאַפּריז</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A4%D6%BC%D7%A8%D7%99%D7%96%D7%A0%D7%A2/"><span class="hw">קאַפּריזנע</span><span class="gl">‘capricious’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A4%D6%BF%D7%98%D7%9F/"><span class="hw">קאַפֿטן</span><span class="gl">‘coat’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A5/"><span class="hw">קאַץ</span><span class="gl">‘cat’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A7%D7%9F/"><span class="hw">קאַקן</span><span class="gl">‘to shit’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A8/"><span class="hw">קאַר</span><span class="gl">‘car’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A8%D7%90%D6%B7%D7%A0%D7%98/"><span class="hw">קאַראַנט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A8%D7%90%D6%B7%D7%A1/"><span class="hw">קאַראַס</span><span class="gl">‘crucian (fish)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A8%D7%92/"><span class="hw">קאַרג</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A8%D7%93%D7%95%D7%A4%D6%BC%D7%9C/"><span class="hw">קאַרדופּל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A8%D7%98%D7%90%D6%B8%D7%A4%D6%BF%D7%9C/"><span class="hw">קאַרטאָפֿל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A8%D7%98%D7%99%D7%A0%D7%A2/"><span class="hw">קאַרטינע</span><span class="gl">‘picture’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A8%D7%99%D7%90%D6%B8%D7%A0%D7%A7%D7%A2/"><span class="hw">קאַריאָנקע</span><span class="gl">‘pencil’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A8%D7%99%D7%A2%D7%A8%D7%A2/"><span class="hw">קאַריערע</span><span class="gl">‘career’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A8%D7%9C%D7%99%D7%9F/"><span class="hw">קאַרלין</span><span class="gl">‘Karlin (Hasidic group)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A8%D7%9C%D7%99%D7%A7/"><span class="hw">קאַרליק</span><span class="gl">‘dwarf’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A8%D7%A2%D7%98%D7%A2/"><span class="hw">קאַרעטע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A8%D7%A2%E2%80%8F%201/"><span class="hw">קאַרע‏ 1</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A8%D7%A4%D6%BC/"><span class="hw">קאַרפּ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A8%D7%A4%D6%BC%D7%A0%D7%A7%D7%90%D6%B8%D7%A4%D6%BC/"><span class="hw">קאַרפּנקאָפּ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A8%D7%A7/"><span class="hw">קאַרק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A8%D7%A9/"><span class="hw">קאַרש</span><span class="gl">‘cherry’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A9%D7%98%D7%9F/"><span class="hw">קאַשטן</span><span class="gl">‘chestnut’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A9%D7%98%D7%A0%D7%91%D7%95%D7%99%D7%9D/"><span class="hw">קאַשטנבוים</span><span class="gl">‘chestnut tree’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A9%D7%A2/"><span class="hw">קאַשע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B7%D7%A9%D7%A7%D7%A2%D7%98/"><span class="hw">קאַשקעט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%91%D7%99%D7%9C%D7%99%D7%A6%D7%A2%20%3F/"><span class="hw">קאָביליצע ?</span><span class="gl">‘stick for carrying pails of water’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%91%D7%99%D7%9C%D7%A2/"><span class="hw">קאָבילע</span><span class="gl">‘mare’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%91%D7%A8%D7%A2%D7%A5/"><span class="hw">קאָברעץ</span><span class="gl">‘carpet’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%95%D7%95%D7%90%D6%B7%D7%93%D7%9C%D7%A2/"><span class="hw">קאָוואַדלע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%95%D7%95%D7%90%D6%B7%D7%9C/"><span class="hw">קאָוואַל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%95%D7%95%D7%A0%D7%A2%D7%A8/"><span class="hw">קאָוונער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%96%D7%99%D7%90%D6%B8%D7%9C/"><span class="hw">קאָזיאָל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%96%D7%A2/"><span class="hw">קאָזע</span><span class="gl">‘goat; prison’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%96%D7%A2%D7%91%D7%A2%D7%A8%D7%93%D7%9C/"><span class="hw">קאָזעבערדל</span><span class="gl">‘goatee’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%96%D7%A9%D7%95%D7%9A/"><span class="hw">קאָזשוך</span><span class="gl">‘sheepskin coat’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%96%D7%A9%D7%9C%D7%A7%D7%A2/"><span class="hw">קאָזשלקע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%98%D7%A2%D7%A8/"><span class="hw">קאָטער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%98%D7%A9/"><span class="hw">קאָטש</span><span class="gl">‘carriage, coach’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%98%D7%A9%D7%A2%D7%A8/"><span class="hw">קאָטשער</span><span class="gl">‘drake, male duck’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%98%D7%A9%D7%A2%D7%A8%D7%A2/"><span class="hw">קאָטשערע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%9A/"><span class="hw">קאָך</span><span class="gl">‘cook’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%9B%D7%9C%D7%A2%D7%A4%D6%BF%D7%9C/"><span class="hw">קאָכלעפֿל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%9B%D7%9F/"><span class="hw">קאָכן</span><span class="gl">‘to cook’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%9C%D7%90%D6%B7%D7%A6%D7%99%D7%A2/"><span class="hw">קאָלאַציע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%9C%D7%90%D6%B8%D7%9E%D7%99%D7%99/"><span class="hw">קאָלאָמיי</span><span class="gl">‘Kolomyia—city in western Ukraine’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%9C%D7%91%D7%90%D6%B7%D7%A1/"><span class="hw">קאָלבאַס</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%9C%D7%93%D7%A8%D7%A2/"><span class="hw">קאָלדרע</span><span class="gl">‘blanket’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%9C%D7%98%D7%9F/"><span class="hw">קאָלטן</span><span class="gl">‘burr’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%9C%D7%99%D7%A7%20%5B%3F%5D/"><span class="hw">קאָליק [?]</span><span class="gl">‘rod to which bucket is attached in a well’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%9C%D7%99%D7%A8/"><span class="hw">קאָליר</span><span class="gl">‘color’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%9C%D7%99%D7%A8%D7%9F/"><span class="hw">קאָלירן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%9C%D7%99%D7%A9/"><span class="hw">קאָליש</span><span class="gl">‘Kalisz (Polish city west of Łódź)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%9C%D7%9B%D7%90%D6%B8%D7%96/"><span class="hw">קאָלכאָז</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%9C%D7%9F/"><span class="hw">קאָלן</span><span class="gl">‘to call’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%9C%D7%A0%D7%A2%D7%A8/"><span class="hw">קאָלנער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%9C%D7%A2%D7%92%D7%A2/"><span class="hw">קאָלעגע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%9C%D7%A2%D7%98%D7%90%D6%B8%D7%95%D7%95%D7%A2/"><span class="hw">קאָלעטאָווע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%9C%D7%A2%D7%A8%D7%9F/"><span class="hw">קאָלערן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%9C%D7%A7%D7%A2/"><span class="hw">קאָלקע</span><span class="gl">‘carnation (shoe); cardboard cigarette holder; burr’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%9E%D7%90%D6%B7%D7%A0%D7%93%D7%A2%D7%95%D7%95%D7%A2%D7%9F/"><span class="hw">קאָמאַנדעווען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%9E%D7%91%D7%99%D7%A0%D7%99%D7%A8%D7%9F/"><span class="hw">קאָמבינירן</span><span class="gl">‘to combine’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%9E%D7%95%D7%A0%D7%99%D7%A1%D7%98/"><span class="hw">קאָמוניסט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%9E%D7%95%D7%A0%D7%99%D7%A1%D7%98%D7%99%D7%A9/"><span class="hw">קאָמוניסטיש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%9E%D7%A2%D7%A0%D7%93%D7%90%D6%B7%D7%A0%D7%98/"><span class="hw">קאָמענדאַנט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%9E%D7%A4%D6%BC%D7%90%D6%B7%D7%A0%D7%99%D7%A2/"><span class="hw">קאָמפּאַניע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%9E%D7%A4%D6%BC%D7%90%D6%B8%D7%96%D7%99%D7%98%D7%90%D6%B8%D7%A8/"><span class="hw">קאָמפּאָזיטאָר</span><span class="gl">‘composer’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%9E%D7%A4%D6%BC%D7%90%D6%B8%D7%98/"><span class="hw">קאָמפּאָט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%9E%D7%A4%D6%BC%D7%9C%D7%99%D7%9E%D7%A2%D7%A0%D7%98/"><span class="hw">קאָמפּלימענט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%9E%D7%A4%D6%BC%D7%9C%D7%99%D7%A6%D7%99%D7%A8%D7%98/"><span class="hw">קאָמפּליצירט</span><span class="gl">‘complicated’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A0%D7%95%D7%95%D7%99%D7%A0%D7%A1%D7%9F/"><span class="hw">קאָנווינסן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A0%D7%98%D7%A8%D7%90%D6%B7%D7%91%D7%90%D6%B7%D7%A0%D7%93/"><span class="hw">קאָנטראַבאַנד</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A0%D7%98%D7%A8%D7%90%D6%B7%D7%A7%D7%98/"><span class="hw">קאָנטראַקט</span><span class="gl">‘contract’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A0%D7%98%D7%A8%D7%90%D6%B8%D7%9C/"><span class="hw">קאָנטראָל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A0%D7%98%D7%A8%D7%90%D6%B8%D7%9C%D7%99%D7%A8%D7%9F/"><span class="hw">קאָנטראָלירן</span><span class="gl">‘to check’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A0%D7%98%D7%A9%D7%99/"><span class="hw">קאָנטשי</span><span class="gl">‘cross-eyed’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A0%D7%98%D7%A9%D7%A2%D7%9F/"><span class="hw">קאָנטשען</span><span class="gl">‘to finish’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A0%D7%99%D7%A9%D7%99%D7%A0%D7%A2/"><span class="hw">קאָנישינע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A0%D7%A2%D7%A7%D7%A9%D7%90%D6%B8%D7%9F/"><span class="hw">קאָנעקשאָן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A0%D7%A4%D6%BF%D7%99%D7%98%D7%95%D7%A8/"><span class="hw">קאָנפֿיטור</span><span class="gl">‘confiture’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A0%D7%A6%D7%A2%D7%A0%D7%98%D7%A8%D7%99%D7%A8%D7%98/"><span class="hw">קאָנצענטרירט</span><span class="gl">‘concentrated’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A1%D7%98/"><span class="hw">קאָסט</span><span class="gl">‘cost’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A1%D7%98%D7%99%D7%95%D7%9D/"><span class="hw">קאָסטיום</span><span class="gl">‘costume’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A1%D7%98%D7%9F/"><span class="hw">קאָסטן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A1%D7%A2/"><span class="hw">קאָסע</span><span class="gl">‘scythe’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A1%D7%A2%D7%95%D7%95/"><span class="hw">קאָסעוו</span><span class="gl">‘Kosiv—town in Ukraine’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A1%D7%A7%D7%A2/"><span class="hw">קאָסקע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A4%D6%BC/"><span class="hw">קאָפּ</span><span class="gl">‘head’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A4%D6%BC%D7%96%D7%90%D6%B8%D7%A8%D7%92/"><span class="hw">קאָפּזאָרג</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A4%D6%BC%D7%A2%201/"><span class="hw">קאָפּע 1</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A4%D6%BC%D7%A2%202/"><span class="hw">קאָפּע 2</span><span class="gl">‘hoe’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A4%D6%BC%D7%A2%D7%98%D7%A2/"><span class="hw">קאָפּעטע</span><span class="gl">‘hoof’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A4%D6%BC%D7%A2%D7%9F%202/"><span class="hw">קאָפּען 2</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A4%D6%BC%D7%A2%D7%9F%E2%80%8F%201/"><span class="hw">קאָפּען‏ 1</span><span class="gl">‘to kick’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A4%D6%BC%D7%A2%D7%A7%D7%A2/"><span class="hw">קאָפּעקע</span><span class="gl">‘kopeck’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A4%D6%BC%D7%A2%D7%A8/"><span class="hw">קאָפּער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A4%D6%BC%D7%A7%D7%A2/"><span class="hw">קאָפּקע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A4%D6%BC%D7%A9%D7%98%D7%99%D7%A7/"><span class="hw">קאָפּשטיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A4%D6%BC%D7%A9%D7%98%D7%B2%D6%B7%D7%A2%D7%A8/"><span class="hw">קאָפּשטײַער</span><span class="gl">‘poll tax’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A6%D7%A7/"><span class="hw">קאָצק</span><span class="gl">‘Kock—town in eastern Poland, known for the Hasidic dynasty of Rabbi Menachem Mendel of Kotzk’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A6%D7%A7%D7%A2%D7%A8/"><span class="hw">קאָצקער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A7/"><span class="hw">קאָק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A7%D7%9C%D7%99%D7%95%D7%A9/"><span class="hw">קאָקליוש</span><span class="gl">‘whooping cough’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A7%D7%A1/"><span class="hw">קאָקס</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A8%D7%91/"><span class="hw">קאָרב</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A8%D7%98/"><span class="hw">קאָרט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A8%D7%98%D7%A9%D7%A2%D7%95%D7%95/"><span class="hw">קאָרטשעוו</span><span class="gl">‘Karczew (town in central Poland)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A8%D7%98%D7%A9%D7%A2%D7%95%D7%95%D7%A2%D7%9F/"><span class="hw">קאָרטשעווען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A8%D7%98%D7%A9%D7%A2%D7%9F/"><span class="hw">קאָרטשען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A8%D7%99%D7%93%D7%90%D6%B8%D7%A8/"><span class="hw">קאָרידאָר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A8%D7%99%D7%A7/"><span class="hw">קאָריק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A8%D7%9F%201/"><span class="hw">קאָרן 1</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A8%D7%9F%202/"><span class="hw">קאָרן 2</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A8%D7%A0%D7%91%D7%A8%D7%95%D7%99%D7%98/"><span class="hw">קאָרנברויט</span><span class="gl">‘whole-grain bread’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A8%D7%A0%D7%A2%D7%A8/"><span class="hw">קאָרנער</span><span class="gl">‘corner’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A8%D7%A1%D7%A2%D7%98/"><span class="hw">קאָרסעט</span><span class="gl">‘corset’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A8%D7%A2/"><span class="hw">קאָרע</span><span class="gl">‘bark’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A8%D7%A2%D7%98%D7%A2/"><span class="hw">קאָרעטע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A8%D7%A2%D7%A1/"><span class="hw">קאָרעס</span><span class="gl">‘crucian carp’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A8%D7%A2%D7%A7%D7%98/"><span class="hw">קאָרעקט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A9%D7%98%D7%A9%D7%90%D6%B8%D7%9C/"><span class="hw">קאָשטשאָל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A9%D7%99%D7%A7/"><span class="hw">קאָשיק</span><span class="gl">‘basket’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%90%D6%B8%D7%A9%D7%A2%D7%9F/"><span class="hw">קאָשען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%91%D6%BF%D7%95%D7%A6%D7%94/"><span class="hw">קבֿוצה</span><span class="gl">‘group’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%91%D6%BF%D7%95%D7%A8%D7%94/"><span class="hw">קבֿורה</span><span class="gl">‘burial’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%91%D6%BF%D7%95%D7%A8%D7%AA%D6%BE%D7%97%D7%9E%D7%95%D7%A8/"><span class="hw">קבֿורת־חמור</span><span class="gl">‘dishonorable burial’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%91%D6%BF%D7%A8/"><span class="hw">קבֿר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%91%D6%BF%D7%A8%D6%BE%D7%90%D6%B8%D7%91%D6%BF%D7%95%D7%AA/"><span class="hw">קבֿר־אָבֿות</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%91%D7%9C%D7%94/"><span class="hw">קבלה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%91%D7%9C%D7%AA%D6%BE%D7%94%D7%AA%D6%BC%D7%95%D7%A8%D7%94/"><span class="hw">קבלת־התּורה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%91%D7%9C%D7%AA%D7%99/"><span class="hw">קבלתי</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%91%D7%A6%D7%9F/"><span class="hw">קבצן</span><span class="gl">‘pauper’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%91%D7%A8%D7%9F/"><span class="hw">קברן</span><span class="gl">‘gravedigger’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%93%D7%95%D7%A9/"><span class="hw">קדוש</span><span class="gl">‘martyr’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%93%D7%95%D7%A9%D7%94/"><span class="hw">קדושה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%93%D7%97%D7%AA/"><span class="hw">קדחת</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%93%D7%99%D7%A9/"><span class="hw">קדיש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%93%D7%A9%D7%99%D6%BE%D7%A7%D7%93%D7%A9%D7%99%D7%9D/"><span class="hw">קדשי־קדשים</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%94%D7%99%D7%9C%D7%94/"><span class="hw">קהילה</span><span class="gl">‘community’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%94%D7%9C/"><span class="hw">קהל</span><span class="gl">‘community’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%94%D7%9C%D7%9F%20%D7%96%D7%99%D7%9A/"><span class="hw">קהלן זיך</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95/"><span class="hw">קו</span><span class="gl">‘cow’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%91%D6%BF%D7%A2%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">קובֿע זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%91%D6%BF%D7%A8%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">קובֿר זײַן</span><span class="gl">‘to bury’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%91%D7%99%D7%A7%201/"><span class="hw">קוביק 1</span><span class="gl">‘cut, goblet’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%91%D7%9C%D7%99%D7%A7/"><span class="hw">קובליק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%92%D7%9C/"><span class="hw">קוגל</span><span class="gl">‘kugel, baked pudding’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%92%D7%9C%D6%BE%D7%9C%D7%A9%D7%95%D7%9F/"><span class="hw">קוגל־לשון</span><span class="gl">‘Kugel language (i.e. Yiddish)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%93%D7%9D/"><span class="hw">קודם</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%93%D7%9D%D6%BE%D7%9B%D6%BC%D7%9C/"><span class="hw">קודם־כּל</span><span class="gl">‘first of all’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%93%D7%A9/"><span class="hw">קודש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%95%D7%90%D6%B7%D7%98%D7%A2%D7%A8/"><span class="hw">קוואַטער</span><span class="gl">‘godfather’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%95%D7%90%D6%B7%D7%9C/"><span class="hw">קוואַל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%95%D7%90%D6%B7%D7%A1/"><span class="hw">קוואַס</span><span class="gl">‘kvass’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%95%D7%90%D6%B7%D7%A8%D7%98%D7%90%D6%B7%D7%9C/"><span class="hw">קוואַרטאַל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%95%D7%90%D6%B7%D7%A8%D7%98%D7%99%D7%A8%D7%9F/"><span class="hw">קוואַרטירן</span><span class="gl">‘to give quarters, house’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%95%D7%90%D6%B7%D7%A9%D7%A2%D7%A0%D7%A2/"><span class="hw">קוואַשענע</span><span class="gl">‘cow feet’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%95%D7%90%D6%B8%D7%93%D7%A2%D7%A8/"><span class="hw">קוואָדער</span><span class="gl">‘quarter (coin)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%95%D7%90%D6%B8%D7%9C/"><span class="hw">קוואָל</span><span class="gl">‘Kowal (town in central Poland)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%95%D7%90%D6%B8%D7%9C%D7%A2/"><span class="hw">קוואָלע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%95%D7%90%D6%B8%D7%A8%D7%98/"><span class="hw">קוואָרט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%95%D7%99%D7%98/"><span class="hw">קוויט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%95%D7%99%D7%98%D7%A9%D7%A2%D7%9F/"><span class="hw">קוויטשען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%95%D7%99%D7%99%D7%98/"><span class="hw">קווייט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%95%D7%A2%D7%98%D7%A9/"><span class="hw">קוועטש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%95%D7%A2%D7%98%D7%A9%D7%9F/"><span class="hw">קוועטשן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%95%D7%A2%D7%98%D7%A9%D7%A2%D7%A8/"><span class="hw">קוועטשער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%95%D7%A2%D7%9C%D7%9F/"><span class="hw">קוועלן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%95%D7%A2%D7%A8/"><span class="hw">קווער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%96%D7%99%D7%9F/"><span class="hw">קוזין</span><span class="gl">‘cousin’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%96%D7%99%D7%A0%D7%A2/"><span class="hw">קוזינע</span><span class="gl">‘cousin (f.)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%96%D7%9E%D7%90%D6%B7%D7%A8%D7%A7/"><span class="hw">קוזמאַרק</span><span class="gl">‘Kazimierz (district in Kraków, once site of the Jewish quarter)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%96%D7%9E%D7%99%D7%A8/"><span class="hw">קוזמיר</span><span class="gl">‘Kazimierz Dolny (town in eastern Poland)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%96%D7%A0%D7%99%D7%A2/"><span class="hw">קוזניע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%98%D7%90%D6%B7%D7%A1/"><span class="hw">קוטאַס</span><span class="gl">‘prick, penis’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%98%D7%A9%D7%9E%D7%A2/"><span class="hw">קוטשמע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%98%D7%A9%D7%A2%D7%A8/"><span class="hw">קוטשער</span><span class="gl">‘coachman’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%99%D7%91%D7%A2%D7%A8/"><span class="hw">קויבער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%99%D7%98/"><span class="hw">קויט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%99%D7%98%D7%99%D7%A7/"><span class="hw">קויטיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%99%D7%98%D7%A9/"><span class="hw">קויטש</span><span class="gl">‘couch, sofa’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%99%D7%9C%201/"><span class="hw">קויל 1</span><span class="gl">‘coal’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%99%D7%9C%202/"><span class="hw">קויל 2</span><span class="gl">‘sphere; bullet’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%99%D7%9C%203/"><span class="hw">קויל 3</span><span class="gl">‘Koło (town in central Poland)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%99%D7%9C%D7%9F%D6%BE%D7%A7%D7%90%D6%B7%D7%9E%D7%A2%D7%A8/"><span class="hw">קוילן־קאַמער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%99%D7%9C%D7%A2%D7%98%D7%A9/"><span class="hw">קוילעטש</span><span class="gl">‘challah’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%99%D7%9C%D7%A2%D7%9F/"><span class="hw">קוילען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%99%D7%9C%D7%A2%D7%A8%D7%9F/"><span class="hw">קוילערן</span><span class="gl">‘to roll’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%99%D7%9D/"><span class="hw">קוים</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%99%D7%9E%D7%A2%D7%9F/"><span class="hw">קוימען</span><span class="gl">‘chimney’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%99%D7%9E%D7%A2%D7%9F%D6%BE%D7%A7%D7%A2%D7%A8%D7%A2%D7%A8/"><span class="hw">קוימען־קערער</span><span class="gl">‘chimney sweep’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%99%D7%A3/"><span class="hw">קויף</span><span class="gl">‘barrel’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%99%D7%A4%D6%BC/"><span class="hw">קויפּ</span><span class="gl">‘heap, mound’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%99%D7%A4%D6%BF%D7%9F/"><span class="hw">קויפֿן</span><span class="gl">‘to buy, purchase’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%99%D7%A9/"><span class="hw">קויש</span><span class="gl">‘basket’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%9B%D7%9F/"><span class="hw">קוכן</span><span class="gl">‘cake’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%9B%D7%A2%D7%A8/"><span class="hw">קוכער</span><span class="gl">‘cook (male)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%9C/"><span class="hw">קול</span><span class="gl">‘voice’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%9C%20%D7%A7%D7%95%D7%A8%D7%90%20%D7%91%D7%9E%D7%93%D7%91%D7%A8/"><span class="hw">קול קורא במדבר</span><span class="gl">‘a voice in the wilderness’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%9C%D7%90%D6%B7%D7%A7%201/"><span class="hw">קולאַק 1</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%9C%D7%98%D7%A2%D7%95%D7%95%D7%A2/"><span class="hw">קולטעווע</span><span class="gl">‘washing beetle, beater (for laundry)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%9C%D7%99%D7%90%D6%B7%D7%95%D7%95%D7%A2/"><span class="hw">קוליאַווע</span><span class="gl">‘lame’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%9C%D7%99%D7%A1/"><span class="hw">קוליס</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%9C%D7%99%D7%A2%202/"><span class="hw">קוליע 2</span><span class="gl">‘crutch’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%9C%D7%99%D7%A7/"><span class="hw">קוליק</span><span class="gl">‘fist’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%9E%D7%99%D7%A1%D7%91%D7%A8%D7%95%D7%99%D7%98/"><span class="hw">קומיסברויט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%9E%D7%A2%D7%93%D7%99%D7%A7/"><span class="hw">קומעדיק</span><span class="gl">‘coming, future; next’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%9E%D7%A2%D7%9F/"><span class="hw">קומען</span><span class="gl">‘to come’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%A0%D7%93%D7%A1/"><span class="hw">קונדס</span><span class="gl">‘clown, joker’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%A0%D7%94/"><span class="hw">קונה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%A0%D7%A1%D7%98/"><span class="hw">קונסט</span><span class="gl">‘art’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%A0%D7%A2/"><span class="hw">קונע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%A0%D7%A5/"><span class="hw">קונץ</span><span class="gl">‘trick’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%A1%D7%98/"><span class="hw">קוסט</span><span class="gl">‘shrub, brush’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%A1%D7%A2%D7%9C%D7%A2%D7%9A/"><span class="hw">קוסעלעך</span><span class="gl">‘squash’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%A4%D6%BC%D7%A2/"><span class="hw">קופּע</span><span class="gl">‘heap’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%A4%D6%BC%D7%A2%D7%A8/"><span class="hw">קופּער</span><span class="gl">‘copper’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%A4%D6%BC%D7%A2%D7%A8%D7%9F/"><span class="hw">קופּערן</span><span class="gl">‘copper, of copper (adjective)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%A4%D6%BC%D7%A7%D7%A2/"><span class="hw">קופּקע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%A4%D6%BC%D7%A8%D7%90%D6%B7%D7%A7/"><span class="hw">קופּראַק</span><span class="gl">‘hunchback’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%A4%D6%BF%D7%A2%D7%A8%D7%98/"><span class="hw">קופֿערט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%A6%D7%9F/"><span class="hw">קוצן</span><span class="gl">‘to cough’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%A7/"><span class="hw">קוק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%A7%D7%95%D7%95%D7%99%D7%A0%D7%A7%D7%9C/"><span class="hw">קוקווינקל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%A7%D7%95%D7%A8%D7%95%D7%96%D7%A2/"><span class="hw">קוקורוזע</span><span class="gl">‘corn, maiz’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%A7%D7%9C/"><span class="hw">קוקל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%A7%D7%9F/"><span class="hw">קוקן</span><span class="gl">‘to look’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%A7%D7%A1%D7%A2/"><span class="hw">קוקסע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%A8%D7%90%D6%B7%D7%96%D7%A9/"><span class="hw">קוראַזש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%A8%D7%90%D6%B8%D7%A8%D7%98/"><span class="hw">קוראָרט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%A8%D7%95%D7%95%D7%A2/"><span class="hw">קורווע</span><span class="gl">‘slut, whore’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%A8%D7%96%D7%A9/"><span class="hw">קורזש</span><span class="gl">‘dust’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%A8%D7%97/"><span class="hw">קורח</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%A8%D7%99%D7%90%D6%B8%D7%96/"><span class="hw">קוריאָז</span><span class="gl">‘curious’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%A8%D7%A5/"><span class="hw">קורץ</span><span class="gl">‘short’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%A8%D7%A5%D6%BE%D7%A4%D6%BF%D7%A8%D7%B2%D6%B7%D7%98%D7%99%D7%A7/"><span class="hw">קורץ־פֿרײַטיק</span><span class="gl">‘the Friday before the winter solstice’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%A8%D7%A6%D7%96%D7%99%D7%9B%D7%98%D7%99%D7%A7/"><span class="hw">קורצזיכטיק</span><span class="gl">‘short-sighted’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%A9/"><span class="hw">קוש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%95%D7%A9%D7%9F/"><span class="hw">קושן</span><span class="gl">‘to kiss’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%98%D7%95%D7%A8%D7%AA/"><span class="hw">קטורת</span><span class="gl">‘incense; marijuana’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%98%D7%99%D7%92%D7%95%D7%A8/"><span class="hw">קטיגור</span><span class="gl">‘prosecutor; prosecuting angel’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%98%D7%9F/"><span class="hw">קטן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%98%D7%A0%D7%A2%D7%9F/"><span class="hw">קטנען</span><span class="gl">‘to urinate’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%98%D7%A3/"><span class="hw">קטף</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D6%B4%D7%A2%D7%95%D7%95/"><span class="hw">קיִעוו</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%91%D7%95%D7%A5%D6%BE%D7%92%D7%9C%D7%99%D7%95%D7%AA/"><span class="hw">קיבוץ־גליות</span><span class="gl">‘ingathering of exiles’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%91%D7%9C/"><span class="hw">קיבל</span><span class="gl">‘bucket’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%91%D7%A2%D7%A6%D7%90%D6%B7%D7%A8%D7%A0%D7%99%D7%A2/"><span class="hw">קיבעצאַרניע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%91%D7%A2%D7%A6%D7%9F/"><span class="hw">קיבעצן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%93%D7%95%D7%A9/"><span class="hw">קידוש</span><span class="gl">‘Kiddush (prayer over wine)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%93%D7%95%D7%A9%D6%BE%D7%94%D7%A9%D7%9D/"><span class="hw">קידוש־השם</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%93%D7%95%D7%A9%D6%BE%D7%9C%D7%91%D6%BF%D7%A0%D7%94%D6%BE%D7%90%D7%95%D7%AA%D7%99%D7%95%D7%AA/"><span class="hw">קידוש־לבֿנה־אותיות</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%93%D7%95%D7%A9%D7%99%D7%9F/"><span class="hw">קידושין</span><span class="gl">‘sanctification of marriage, marriage ceremony’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%93%D7%95%D7%A9%D7%99%D7%9F%D6%BE%D7%A4%D6%BF%D7%99%D7%A0%D7%92%D7%A2%D7%A8%D7%9C/"><span class="hw">קידושין־פֿינגערל</span><span class="gl">‘wedding ring’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%93%D7%95%D7%A9%D7%99%D7%9F%D6%BE%D7%A8%D7%99%D7%99%D7%A4%D6%BF%D7%9C/"><span class="hw">קידושין־רייפֿל</span><span class="gl">‘wedding ring’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%93%D7%95%D7%A9%D7%99%D7%9F%D6%BE%D7%A8%D7%99%D7%A0%D7%92%D7%9C/"><span class="hw">קידושין־רינגל</span><span class="gl">‘wedding ring’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%98%202/"><span class="hw">קיט 2</span><span class="gl">‘quince’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%98%D7%9C/"><span class="hw">קיטל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%98%D7%A7%D7%A2/"><span class="hw">קיטקע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%99%D7%96%D7%A2%D7%A8/"><span class="hw">קייזער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%99%D7%98/"><span class="hw">קייט</span><span class="gl">‘chain’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%99%D7%98%D7%A2%D7%A8%D7%9F/"><span class="hw">קייטערן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%99%D7%98%D7%A2%D7%A8%D7%A2%D7%A8/"><span class="hw">קייטערער</span><span class="gl">‘caterer’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%99%D7%9F%201/"><span class="hw">קיין 1</span><span class="gl">‘(not) any’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%99%D7%9F%202/"><span class="hw">קיין 2</span><span class="gl">‘to (preposition)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%99%D7%9F%20%D7%9E%D7%90%D6%B8%D7%9C/"><span class="hw">קיין מאָל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%99%D7%9F%20%D7%A2%D7%99%D7%9F%D6%BE%D7%94%D7%A8%D7%A2/"><span class="hw">קיין עין־הרע</span><span class="gl">‘no evil eye’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%99%D7%A0%D7%A2%D7%A8/"><span class="hw">קיינער</span><span class="gl">‘no one’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%99%D7%A1%D7%A2%D7%9A/"><span class="hw">קייסעך</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%99%D7%A1%D7%A2%D7%A8/"><span class="hw">קייסער</span><span class="gl">‘emperor’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%99%D7%A1%D7%A2%D7%A8%D7%9C%D7%A2%D7%9A/"><span class="hw">קייסערלעך</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%9A/"><span class="hw">קיך</span><span class="gl">‘kitchen’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%9B%D7%9C/"><span class="hw">קיכל</span><span class="gl">‘cookie’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%9C/"><span class="hw">קיל</span><span class="gl">‘cool’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%9C%D7%90%D6%B8/"><span class="hw">קילאָ</span><span class="gl">‘kilo’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%9C%D7%90%D6%B8%D7%9E%D7%A2%D7%98%D7%A2%D7%A8/"><span class="hw">קילאָמעטער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%9C%D7%99%D7%A0%D7%98%D7%A9/"><span class="hw">קילינטש</span><span class="gl">‘doorknob’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%9C%D7%A2%D6%BE%D7%91%D7%A2%D7%A0%D7%93%D7%9C/"><span class="hw">קילע־בענדל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%9C%D7%A2%D7%A8/"><span class="hw">קילער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%9E%D7%9C/"><span class="hw">קימל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%9E%D7%A2%D7%A8%D7%9F/"><span class="hw">קימערן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%9E%D7%A4%D6%BC%D7%A2%D7%98/"><span class="hw">קימפּעט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%9E%D7%A4%D6%BC%D7%A2%D7%98%D7%90%D6%B8%D7%A8%D7%99%D7%9F/"><span class="hw">קימפּעטאָרין</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%9F%201/"><span class="hw">קין 1</span><span class="gl">‘chin, jaw’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%9F%202/"><span class="hw">קין 2</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%9F%203/"><span class="hw">קין 3</span><span class="gl">‘Cain, brother of Abel’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%A0%D7%90%D6%B8/"><span class="hw">קינאָ</span><span class="gl">‘movie theater, cinema’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%A0%D7%90%D7%94/"><span class="hw">קינאה</span><span class="gl">‘envy’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%A0%D7%90%D7%94%D6%BE%D7%A9%D7%82%D7%99%D7%A0%D7%90%D7%94/"><span class="hw">קינאה־שׂינאה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%A0%D7%93/"><span class="hw">קינד</span><span class="gl">‘child’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%A0%D7%93%D7%95%D7%95%D7%B2%D6%B7%D7%96/"><span class="hw">קינדווײַז</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%A0%D7%93%D7%9C%201/"><span class="hw">קינדל 1</span><span class="gl">‘small child (diminutive)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%A0%D7%93%D7%9C%202/"><span class="hw">קינדל 2</span><span class="gl">‘match’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%A0%D7%93%D7%9C%203/"><span class="hw">קינדל 3</span><span class="gl">‘Purim pastry’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%A0%D7%93%D7%A2%D7%9C%D7%A2/"><span class="hw">קינדעלע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%A0%D7%93%D7%A2%D7%A8%D7%98%D7%95%D7%9A/"><span class="hw">קינדערטוך</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%A0%D7%93%D7%A2%D7%A8%D7%99%D7%90%D6%B8%D7%A8%D7%9F/"><span class="hw">קינדעריאָרן</span><span class="gl">‘childhood’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%A0%D7%93%D7%A2%D7%A8%D7%9C%D7%90%D6%B8%D7%96/"><span class="hw">קינדערלאָז</span><span class="gl">‘childless’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%A0%D7%94/"><span class="hw">קינה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%A0%D7%99%D7%92%D7%9F/"><span class="hw">קיניגן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%A0%D7%A4%D6%BF%D7%98%D7%99%D7%A7/"><span class="hw">קינפֿטיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%A1%D7%A8/"><span class="hw">קיסר</span><span class="gl">‘emperor’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%A4%D6%BC%D7%9C/"><span class="hw">קיפּל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%A6%D7%91%D6%BF%D7%94/"><span class="hw">קיצבֿה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%A6%D7%95%D7%A0%D7%99%D7%A9/"><span class="hw">קיצוניש</span><span class="gl">‘extreme’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%A6%D7%95%D7%A8/"><span class="hw">קיצור</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%A6%D7%9C/"><span class="hw">קיצל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%A6%D7%9C%D7%A2%D7%9F/"><span class="hw">קיצלען</span><span class="gl">‘to tickle, titillate’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%A8%D7%91%D7%A2%D7%A1/"><span class="hw">קירבעס</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%A8%D7%96%D7%A9%D7%A0%D7%A2%D7%A8/"><span class="hw">קירזשנער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%A9%D6%BE%D7%A7%D7%99%D7%A9%D6%BE%D7%A7%D7%99%D7%A9/"><span class="hw">קיש־קיש־קיש</span><span class="gl">‘call to chickens’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%A9%D7%9F/"><span class="hw">קישן</span><span class="gl">‘pillow, cushion’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%A9%D7%A7%D7%A2/"><span class="hw">קישקע</span><span class="gl">‘intestine, gut’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%99%D7%AA%D6%BC%D7%94-%D7%9E%D7%A8%D7%99%D7%A8%D7%94/"><span class="hw">קיתּה-מרירה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C/"><span class="hw">קל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D6%BE%D7%95%D7%97%D7%95%D7%9E%D7%A8/"><span class="hw">קל־וחומר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%90%D6%B7%D7%93%D7%A7%D7%A2/"><span class="hw">קלאַדקע</span><span class="gl">‘footbridge’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%90%D6%B7%D7%98%D7%A7%D7%A2/"><span class="hw">קלאַטקע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%90%D6%B7%D7%98%D7%A9/"><span class="hw">קלאַטש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%90%D6%B7%D7%A1/"><span class="hw">קלאַס</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%90%D6%B7%D7%A4%D6%BC/"><span class="hw">קלאַפּ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%90%D6%B7%D7%A4%D6%BC%D7%9F/"><span class="hw">קלאַפּן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%90%D6%B7%D7%A4%D6%BC%D7%A2%D7%A8/"><span class="hw">קלאַפּער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%90%D6%B7%D7%A4%D6%BC%D7%A2%D7%A8%D7%9F/"><span class="hw">קלאַפּערן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%90%D6%B8%D7%92%D7%9F/"><span class="hw">קלאָגן</span><span class="gl">‘to lament’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%90%D6%B8%D7%92%D7%A2%D7%A8/"><span class="hw">קלאָגער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%90%D6%B8%D7%9E%D7%A4%D6%BC%D7%9F%D6%BE%D7%9E%D7%90%D6%B7%D7%9B%D7%A2%D7%A8/"><span class="hw">קלאָמפּן־מאַכער</span><span class="gl">‘clog maker’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%90%D6%B8%D7%A4%D6%BC/"><span class="hw">קלאָפּ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%90%D6%B8%D7%A4%D6%BC%D7%9F/"><span class="hw">קלאָפּן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%90%D6%B8%D7%A5/"><span class="hw">קלאָץ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%90%D6%B8%D7%A5%D6%BE%D7%A7%D7%A9%D7%99%D7%90/"><span class="hw">קלאָץ־קשיא</span><span class="gl">‘difficult question; stupid question’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%90%D6%B8%D7%A6%D7%9F/"><span class="hw">קלאָצן</span><span class="gl">‘to do nothing’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%90%D6%B8%D7%A8/"><span class="hw">קלאָר</span><span class="gl">‘clear’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%95%D7%92/"><span class="hw">קלוג</span><span class="gl">‘smart, clever’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%95%D7%92%D7%A9%D7%90%D6%B7%D7%A4%D6%BF%D7%98/"><span class="hw">קלוגשאַפֿט</span><span class="gl">‘intelligence’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%95%D7%99%D7%96/"><span class="hw">קלויז</span><span class="gl">‘small synagogue’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%95%D7%99%D7%96%D7%A0%D7%91%D7%95%D7%A8%D7%92/"><span class="hw">קלויזנבורג</span><span class="gl">‘Cluj-Napoca (city in Romania; Hungarian Kolozsvár, German Klausenburg)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%95%D7%99%D7%A1%D7%98%D7%A2%D7%A8/"><span class="hw">קלויסטער</span><span class="gl">‘church’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%95%D7%99%D7%A6%D7%A2%D7%9F/"><span class="hw">קלויצען</span><span class="gl">‘to stir vigorously’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%95%D7%9E%D7%A4%D6%BC%D7%A2/"><span class="hw">קלומפּע</span><span class="gl">‘clog’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%95%D7%A0%D7%99%D7%9E%D7%95%D7%A1/"><span class="hw">קלונימוס</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%95%D7%AA%D6%BE%D7%A8%D7%90%D6%B8%D7%A9/"><span class="hw">קלות־ראָש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%99%D7%90%D6%B7%D7%98%D7%A9%D7%A2/"><span class="hw">קליאַטשע</span><span class="gl">‘mare’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%99%D7%90%D6%B7%D7%9E%D7%A7%D7%A2/"><span class="hw">קליאַמקע</span><span class="gl">‘(door)knob’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%99%D7%90%D6%B8%D7%98%D7%A9%D7%A2/"><span class="hw">קליאָטשע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%99%D7%90%D6%B8%D7%9F/"><span class="hw">קליאָן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%99%D7%90%D6%B8%D7%A7/"><span class="hw">קליאָק</span><span class="gl">‘marrow’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%99%D7%99/"><span class="hw">קליי</span><span class="gl">‘glue’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%99%D7%99%D7%93/"><span class="hw">קלייד</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%99%D7%99%D7%93%D7%95%D7%A0%D7%92/"><span class="hw">קליידונג</span><span class="gl">‘clothing’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%99%D7%99%D7%93%D7%9C/"><span class="hw">קליידל</span><span class="gl">‘little dress (diminutive)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%99%D7%99%D7%93%D7%9F/"><span class="hw">קליידן</span><span class="gl">‘to fit’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%99%D7%99%D7%98/"><span class="hw">קלייט</span><span class="gl">‘store, shop’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%99%D7%99%D7%9F/"><span class="hw">קליין</span><span class="gl">‘small’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%99%D7%99%D7%9F%20%D7%A9%D7%A1/"><span class="hw">קליין שס</span><span class="gl">‘deck of cards (because one could play cards on Hanukkah and Purim)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%99%D7%99%D7%A0%D7%90%D6%B8%D7%93/"><span class="hw">קליינאָד</span><span class="gl">‘jewel, gem’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%99%D7%99%D7%A0%D7%95%D7%95%D7%90%D6%B7%D7%A8%D7%93%D7%99%D7%99%D7%9F/"><span class="hw">קליינוואַרדיין</span><span class="gl">‘Kisvárda (city in eastern Hungary; German: Kleinwardein)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%99%D7%99%D7%A0%D7%95%D7%95%D7%95%D6%BC%D7%A7%D7%A1%D7%99%D7%A7/"><span class="hw">קליינוווּקסיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%99%D7%99%D7%A0%D7%98%D7%A9%D7%99%D7%A7/"><span class="hw">קליינטשיק</span><span class="gl">‘very small (diminutive)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%99%D7%99%D7%A0%D7%99%D7%A7%D7%99%D7%99%D7%98/"><span class="hw">קלייניקייט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%99%D7%9F/"><span class="hw">קלין</span><span class="gl">‘clean’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%99%D7%A0%D7%92/"><span class="hw">קלינג</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%99%D7%A0%D7%92%D7%A2%D7%9F/"><span class="hw">קלינגען</span><span class="gl">‘to ring, call’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%99%D7%A0%D7%92%D7%A2%D7%A8%202/"><span class="hw">קלינגער 2</span><span class="gl">‘pendulum’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%99%D7%A1%D7%A7%D7%A2/"><span class="hw">קליסקע</span><span class="gl">‘gnocchi’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%99%D7%A2%D7%A0%D7%98/"><span class="hw">קליענט</span><span class="gl">‘client, customer’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%99%D7%A4%D6%BC%D6%BE%D7%90%D7%95%D7%9F%D6%BE%D7%A7%D7%9C%D7%90%D6%B8%D7%A8/"><span class="hw">קליפּ־און־קלאָר</span><span class="gl">‘clear’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%99%D7%A4%D6%BC%D7%94/"><span class="hw">קליפּה</span><span class="gl">‘evil spirit; shrew (woman)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%9C%D7%94/"><span class="hw">קללה</span><span class="gl">‘curse’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%9C%D7%94%D7%A0%D7%A2%D7%9F%20%5B%3F%5D/"><span class="hw">קללהנען [?]</span><span class="gl">‘to curse’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%9E%D7%9F/"><span class="hw">קלמן</span><span class="gl">‘Kalman (name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%A2%D7%96%D7%9E%D7%A2%D7%A8/"><span class="hw">קלעזמער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%A2%D7%99%D7%90%D6%B8%D7%A0%D7%A7%D7%A2/"><span class="hw">קלעיאָנקע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%A2%D7%A4%D6%BC%D7%9F/"><span class="hw">קלעפּן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%A2%D7%A4%D6%BC%D7%A7%D7%A2/"><span class="hw">קלעפּקע</span><span class="gl">‘stave (of barrel); stop (in a musical instrument)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%A2%D7%A7%D7%9F/"><span class="hw">קלעקן</span><span class="gl">‘to suffice’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%A2%D7%A7%D7%A4%D6%BC%D7%90%D6%B7%D7%A4%D6%BC%D7%99%D7%A8/"><span class="hw">קלעקפּאַפּיר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%A2%D7%A8%D7%9F/"><span class="hw">קלערן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%A3/"><span class="hw">קלף</span><span class="gl">‘parchment’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%B2%D6%B7%D7%91%D7%9F/"><span class="hw">קלײַבן</span><span class="gl">‘to collect; to plan, intend’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9C%D7%B2%D6%B7%D7%A2%D7%9F/"><span class="hw">קלײַען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9E%D7%97/"><span class="hw">קמח</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9E%D7%99%D7%A2/"><span class="hw">קמיע</span><span class="gl">‘amulet, talisman’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9E%D7%A5/"><span class="hw">קמץ</span><span class="gl">‘Vandyk beard (diminutive)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9E%D7%A5%D6%BE%D7%90%D6%B7%D7%9C%D7%A3/"><span class="hw">קמץ־אַלף</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9E%D7%A5%D6%BE%D7%91%D7%A2%D7%A8%D7%93%D7%9C/"><span class="hw">קמץ־בערדל</span><span class="gl">‘Vandyke beard’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%9E%D7%A6%D7%9F/"><span class="hw">קמצן</span><span class="gl">‘miser’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A0%D7%90%D6%B7%D7%A4%D6%BC/"><span class="hw">קנאַפּ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A0%D7%90%D6%B7%D7%A4%D6%BF%D7%9C/"><span class="hw">קנאַפֿל</span><span class="gl">‘heel’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A0%D7%90%D6%B7%D7%A7/"><span class="hw">קנאַק</span><span class="gl">‘snap, pop, click, crack’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A0%D7%90%D6%B7%D7%A7%D7%9F/"><span class="hw">קנאַקן</span><span class="gl">‘to crack’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A0%D7%90%D6%B7%D7%A7%D7%A2%D7%93%D7%99%D7%A7/"><span class="hw">קנאַקעדיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A0%D7%90%D6%B8%D7%91%D7%9C/"><span class="hw">קנאָבל</span><span class="gl">‘garlic’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A0%D7%90%D6%B8%D7%91%D7%9C%D7%96%D7%95%D7%A4%D6%BC/"><span class="hw">קנאָבלזופּ</span><span class="gl">‘garlic soup’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A0%D7%90%D6%B8%D7%95%D7%AA/"><span class="hw">קנאָות</span><span class="gl">‘zealousness, fanaticism’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A0%D7%90%D6%B8%D7%98%D7%9F/"><span class="hw">קנאָטן</span><span class="gl">‘knot’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A0%D7%90%D6%B8%D7%A1%D7%A4%D6%BC/"><span class="hw">קנאָספּ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A0%D7%90%D6%B8%D7%A4%D6%BC/"><span class="hw">קנאָפּ</span><span class="gl">‘button’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A0%D7%90%D7%AA%D6%BE%D7%A1%D7%95%D7%A4%D6%BF%D7%A8%D7%99%D7%9D/"><span class="hw">קנאת־סופֿרים</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A0%D7%95%D7%99%D7%98/"><span class="hw">קנויט</span><span class="gl">‘wick’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A0%D7%95%D7%99%D7%9C/"><span class="hw">קנויל</span><span class="gl">‘ball’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A0%D7%95%D7%A4%D6%BC/"><span class="hw">קנופּ</span><span class="gl">‘button’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A0%D7%99/"><span class="hw">קני</span><span class="gl">‘knee’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A0%D7%99%D7%94%D7%A2/"><span class="hw">קניהע</span><span class="gl">‘ruminant's third stomach’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A0%D7%99%D7%99%D7%93%D7%9C/"><span class="hw">קניידל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A0%D7%99%D7%99%D7%98%D7%A9/"><span class="hw">קנייטש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A0%D7%99%D7%99%D7%98%D7%A9%D7%9F/"><span class="hw">קנייטשן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A0%D7%99%D7%9F/"><span class="hw">קנין</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A0%D7%99%D7%A0%D7%A2%D7%9F/"><span class="hw">קנינען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A0%D7%99%D7%A4%D6%BC%D7%99%D7%A7%202/"><span class="hw">קניפּיק 2</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A0%D7%99%D7%A4%D6%BC%D7%9C/"><span class="hw">קניפּל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A0%D7%99%D7%A4%D6%BC%D7%9F/"><span class="hw">קניפּן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A0%D7%A1/"><span class="hw">קנס</span><span class="gl">‘fine’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A0%D7%A2%D7%98%D7%9F/"><span class="hw">קנעטן</span><span class="gl">‘to knead’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A0%D7%A2%D7%9B%D7%98/"><span class="hw">קנעכט</span><span class="gl">‘slave, thrall, vassal’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A0%D7%A2%D7%9B%D7%9C/"><span class="hw">קנעכל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A0%D7%A2%D7%9B%D7%9C%D7%91%D7%99%D7%99%D7%9F/"><span class="hw">קנעכלביין</span><span class="gl">‘anklebone’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A0%D7%A2%D7%9C%D7%9F/"><span class="hw">קנעלן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A0%D7%A2%D7%A4%D6%BC%D7%9C%D7%9C%D7%90%D6%B8%D7%9A/"><span class="hw">קנעפּללאָך</span><span class="gl">‘buttonhole’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A0%D7%B2%D6%B7%D7%A4%D6%BC%D7%9F/"><span class="hw">קנײַפּן</span><span class="gl">‘to pinch’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A1%D7%99%D7%90%D6%B8%D7%A0%D7%93%D7%96/"><span class="hw">קסיאָנדז</span><span class="gl">‘priest’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%92%D7%9F/"><span class="hw">קעגן</span><span class="gl">‘against’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%92%D7%A0%D7%90%D7%99%D7%91%D7%A2%D7%A8/"><span class="hw">קעגנאיבער</span><span class="gl">‘opposite (preposition)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%92%D7%A0%D7%95%D7%95%D7%90%D6%B7%D7%A8%D7%98/"><span class="hw">קעגנוואַרט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%92%D7%A0%D7%96%D7%B2%D6%B7%D7%98%D7%99%D7%A7/"><span class="hw">קעגנזײַטיק</span><span class="gl">‘mutual’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%92%D7%A0%D7%A2%D7%A8/"><span class="hw">קעגנער</span><span class="gl">‘opponent’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%96/"><span class="hw">קעז</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%96%D7%A7%D7%95%D7%9B%D7%9F/"><span class="hw">קעזקוכן</span><span class="gl">‘cheesecake’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%9B%D7%99%D7%9F/"><span class="hw">קעכין</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%9C/"><span class="hw">קעל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%9C%D7%91%D7%99%D7%A7/"><span class="hw">קעלביק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%9C%D7%91%D7%9F/"><span class="hw">קעלבן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%9C%D7%91%D7%A2%D7%A8%D7%9F/"><span class="hw">קעלבערן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%9C%D7%91%D7%A2%D7%A8%D7%A0%D7%A1/"><span class="hw">קעלבערנס</span><span class="gl">‘veal’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%9C%D7%98/"><span class="hw">קעלט</span><span class="gl">‘cold’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%9C%D7%99%D7%A9%D7%A2%D7%A7/"><span class="hw">קעלישעק</span><span class="gl">‘glass’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%9C%D7%A0%D7%A2%D7%A8/"><span class="hw">קעלנער</span><span class="gl">‘waiter’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%9C%D7%A2%D7%A8/"><span class="hw">קעלער</span><span class="gl">‘basement, cellar’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%9C%D7%A5/"><span class="hw">קעלץ</span><span class="gl">‘Kielce (Polish city)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%9E%D7%9C%201/"><span class="hw">קעמל 1</span><span class="gl">‘comb (diminutive of קאַם); burr’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%9E%D7%9C%202/"><span class="hw">קעמל 2</span><span class="gl">‘camel’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%9E%D7%9C%D6%BE%D7%98%D7%A8%D7%B2%D6%B7%D7%91%D7%A2%D7%A8/"><span class="hw">קעמל־טרײַבער</span><span class="gl">‘camel driver’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%9E%D7%A2%D7%9F/"><span class="hw">קעמען</span><span class="gl">‘to comb (imperfective)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%9E%D7%A2%D7%A8%D7%9C/"><span class="hw">קעמערל</span><span class="gl">‘cell’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%9E%D7%A4%D6%BC/"><span class="hw">קעמפּ</span><span class="gl">‘camp’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%9E%D7%A4%D6%BC%D7%A2/"><span class="hw">קעמפּע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%9E%D7%A4%D6%BF%D7%9F/"><span class="hw">קעמפֿן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%A0%D7%98%D7%9C%D7%A2%D7%9A/"><span class="hw">קענטלעך</span><span class="gl">‘familiar’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%A0%D7%98%D7%A2%D7%A0%D7%99%D7%A9/"><span class="hw">קענטעניש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%A0%D7%99%D7%92/"><span class="hw">קעניג</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%A0%D7%99%D7%92%D7%9C%D7%A2%D7%9A/"><span class="hw">קעניגלעך</span><span class="gl">‘royal’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%A0%D7%99%D7%92%D7%A8%D7%B2%D6%B7%D7%9A/"><span class="hw">קעניגרײַך</span><span class="gl">‘kingdom’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%A0%D7%9C%20%28unattested%20editorial%20spelling%29/"><span class="hw">קענל (unattested editorial spelling)</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%A0%D7%A2%D7%9F/"><span class="hw">קענען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%A0%D7%A2%D7%A8/"><span class="hw">קענער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%A1%D7%98%201/"><span class="hw">קעסט 1</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%A1%D7%98%202/"><span class="hw">קעסט 2</span><span class="gl">‘chestnut’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%A1%D7%98%D7%9C%D7%A2%D7%9F/"><span class="hw">קעסטלען</span><span class="gl">‘to checker’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%A1%D7%9C/"><span class="hw">קעסל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%A1%D7%A2%D7%9A/"><span class="hw">קעסעך</span><span class="gl">‘Easter’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%A4%D6%BC%D7%9C/"><span class="hw">קעפּל</span><span class="gl">‘little head (diminutive)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%A4%D6%BC%D7%A1%D7%95%D7%95%D7%B2%D6%B7%D7%91/"><span class="hw">קעפּסווײַב</span><span class="gl">‘paramour’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%A4%D6%BF%D7%A2%D7%A8/"><span class="hw">קעפֿער</span><span class="gl">‘bug, beetle’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%A6%D7%9C%D7%A2%D7%9F/"><span class="hw">קעצלען</span><span class="gl">‘to have kittens’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%A7%D7%A2%D7%A6%D7%9F/"><span class="hw">קעקעצן</span><span class="gl">‘to stutter’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%A8%201/"><span class="hw">קער 1</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%A8%202/"><span class="hw">קער 2</span><span class="gl">‘care’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%A8%D7%90%D6%B8%D7%A1%D7%99%D7%9F/"><span class="hw">קעראָסין</span><span class="gl">‘kerosene’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%A8%D7%94/"><span class="hw">קערה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%A8%D7%9E%D7%A2%D7%A9/"><span class="hw">קערמעש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%A8%D7%9F%201/"><span class="hw">קערן 1</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%A8%D7%9F%202/"><span class="hw">קערן 2</span><span class="gl">‘to turn; to sweep’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%A8%D7%9F%203/"><span class="hw">קערן 3</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%A8%D7%9F%204/"><span class="hw">קערן 4</span><span class="gl">‘to care’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%A8%D7%A2%D7%95%D7%95%D7%A2%D7%9F/"><span class="hw">קערעווען</span><span class="gl">‘turn’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%A8%D7%A4%D6%BC%D7%A2%D7%A8%D7%A9%D7%90%D6%B7%D7%A4%D6%BF%D7%98/"><span class="hw">קערפּערשאַפֿט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%A8%D7%A6%D7%A2%D7%9C%D7%99%D7%90%D6%B7%D7%A7/"><span class="hw">קערצעליאַק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%A8%D7%A7%D7%A2%D7%A8/"><span class="hw">קערקער</span><span class="gl">‘prison’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A2%D7%A9%D7%A2%D7%A0%D7%A2/"><span class="hw">קעשענע</span><span class="gl">‘pocket’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A5/"><span class="hw">קץ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A6%D7%91%D6%BF/"><span class="hw">קצבֿ</span><span class="gl">‘butcher’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A6%D7%91%D6%BF%D7%95%D7%AA/"><span class="hw">קצבֿות</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A6%D7%99%D7%9F/"><span class="hw">קצין</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%90%D6%B7%D7%92%D7%9F/"><span class="hw">קראַגן</span><span class="gl">‘collar’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%90%D6%B7%D7%95%D7%95%D7%90%D6%B7%D7%98/"><span class="hw">קראַוואַט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%90%D6%B7%D7%98/"><span class="hw">קראַט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%90%D6%B7%D7%9A/"><span class="hw">קראַך</span><span class="gl">‘crash’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%90%D6%B7%D7%9B%D7%9F/"><span class="hw">קראַכן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%90%D6%B7%D7%9B%D7%A2%D7%A8/"><span class="hw">קראַכער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%90%D6%B7%D7%9E%D7%A3/"><span class="hw">קראַמף</span><span class="gl">‘cramp’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%90%D6%B7%D7%9E%D7%A4%D6%BF%D7%9F/"><span class="hw">קראַמפֿן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%90%D6%B7%D7%9F/"><span class="hw">קראַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%90%D6%B7%D7%A0%D7%98/"><span class="hw">קראַנט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%90%D6%B7%D7%A0%D7%A5/"><span class="hw">קראַנץ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%90%D6%B7%D7%A0%D7%A7/"><span class="hw">קראַנק</span><span class="gl">‘sick’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%90%D6%B7%D7%A0%D7%A7%D7%99%D7%99%D7%98/"><span class="hw">קראַנקייט</span><span class="gl">‘illness’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%90%D6%B7%D7%A0%D7%A7%D7%A2%D7%A8%D7%94%D7%99%D7%99%D7%98/"><span class="hw">קראַנקערהייט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%90%D6%B7%D7%A4%D6%BC/"><span class="hw">קראַפּ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%90%D6%B7%D7%A4%D6%BF%D7%98/"><span class="hw">קראַפֿט</span><span class="gl">‘power’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%90%D6%B7%D7%A6%D7%9F/"><span class="hw">קראַצן</span><span class="gl">‘to scratch’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%90%D6%B7%D7%A6%D7%A2%D7%A8/"><span class="hw">קראַצער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%90%D6%B8/"><span class="hw">קראָ</span><span class="gl">‘crow’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%90%D6%B8%D7%92%D7%9F/"><span class="hw">קראָגן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%90%D6%B8%D7%9B%D7%9E%D7%90%D6%B7%D7%9C/"><span class="hw">קראָכמאַל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%90%D6%B8%D7%9B%D7%9E%D7%90%D6%B7%D7%9C%D7%99%D7%A2%D7%9F/"><span class="hw">קראָכמאַליען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%90%D6%B8%D7%9D/"><span class="hw">קראָם</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%90%D6%B8%D7%A0%D7%A2/"><span class="hw">קראָנע</span><span class="gl">‘Krone (coin)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%90%D6%B8%D7%A1%D7%A0%D7%A2%20%5B%3F%5D/"><span class="hw">קראָסנע [?]</span><span class="gl">‘Crasna (town in Romania; Hungarian Kraszna)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%90%D6%B8%D7%A4%D6%BC%201/"><span class="hw">קראָפּ 1</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%90%D6%B8%D7%A4%D6%BC%202%0A%D7%A7%D7%A8%D7%90%D6%B8%D7%A4%D6%BC%202%0A/"><span class="hw">קראָפּ 2
+קראָפּ 2
+</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%90%D6%B8%D7%A4%D6%BC%D7%A2%D7%95%D7%95%D7%A2/"><span class="hw">קראָפּעווע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%90%D6%B8%D7%A7%D7%95%D7%95%D7%A2/"><span class="hw">קראָקווע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%90%D6%B8%D7%A7%D7%A2/"><span class="hw">קראָקע</span><span class="gl">‘Cracow—old capital city of Poland’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%90%D6%B8%D7%A9%D7%A0%D7%99%D7%A7/"><span class="hw">קראָשניק</span><span class="gl">‘Kraśnik (town in southeastern Poland)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%90%D6%B8%D7%A9%D7%A0%D7%A2%D7%95%D7%95%D7%99%D7%A5/"><span class="hw">קראָשנעוויץ</span><span class="gl">‘Krośniewice’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%91%D7%9F/"><span class="hw">קרבן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%95%D7%91%D6%BF/"><span class="hw">קרובֿ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%95%D7%91%D6%BF%D6%BE%D7%9C%D7%95%D7%95%D7%93%D7%90%D7%99/"><span class="hw">קרובֿ־לוודאי</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%95%D7%91%D6%BF%D7%99%D7%9D%D6%BE%D7%9E%D7%90%D6%B8%D7%9C/"><span class="hw">קרובֿים־מאָל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%95%D7%91%D6%BF%D7%99%D7%A5/"><span class="hw">קרובֿיץ</span><span class="gl">‘holiday prayer book’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%95%D7%92/"><span class="hw">קרוג</span><span class="gl">‘jug, pitcher’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%95%D7%98%D7%A9%D7%A7%D7%A2/"><span class="hw">קרוטשקע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%95%D7%99%D7%98/"><span class="hw">קרויט</span><span class="gl">‘cabbage’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%95%D7%99%D7%9F/"><span class="hw">קרוין</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%95%D7%99%D7%A1%D7%98%D7%A2%D7%A0%D7%A2%D7%9F%20%D7%96%D7%99%D7%9A/"><span class="hw">קרויסטענען זיך</span><span class="gl">‘to move house, relocate’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%95%D7%9B%D7%9C%D7%A2/"><span class="hw">קרוכלע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%95%D7%9D/"><span class="hw">קרום</span><span class="gl">‘crooked’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%95%D7%9E%D7%A4%D6%BC%D7%99%D7%A8/"><span class="hw">קרומפּיר</span><span class="gl">‘potato’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%95%D7%9E%D7%A7%D7%90%D6%B8%D7%A4%D6%BC/"><span class="hw">קרומקאָפּ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%95%D7%A2%D6%BE%D7%91%D7%9C%D7%95%D7%A2/"><span class="hw">קרוע־בלוע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%95%D7%A7/"><span class="hw">קרוק</span><span class="gl">‘hook’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%99%20%D7%95%D7%9B%D6%BC%D7%AA%D7%99%D7%91%D6%BF/"><span class="hw">קרי וכּתיבֿ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%99%D7%90%D7%94/"><span class="hw">קריאה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%99%D7%90%D7%AA%D6%BE%D7%A9%D7%9E%D7%A2/"><span class="hw">קריאת־שמע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%99%D7%90%D7%AA%D6%BE%D7%A9%D7%9E%D7%A2%D6%BE%D7%9C%D7%99%D7%99%D7%A2%D7%A0%D7%A2%D7%9F/"><span class="hw">קריאת־שמע־לייענען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%99%D7%92/"><span class="hw">קריג</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%99%D7%92%D7%9F%201/"><span class="hw">קריגן 1</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%99%D7%92%D7%9F%202/"><span class="hw">קריגן 2</span><span class="gl">‘to quarrel’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%99%D7%92%D7%A2%D7%A8%D7%B2%D6%B7/"><span class="hw">קריגערײַ</span><span class="gl">‘argument’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%99%D7%96%D7%A9/"><span class="hw">קריזש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%99%D7%98%D7%99%D7%A7%D7%99%D7%A8%D7%9F/"><span class="hw">קריטיקירן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%99%D7%98%D7%99%D7%A9/"><span class="hw">קריטיש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%99%D7%99%D7%96%D7%9C/"><span class="hw">קרייזל</span><span class="gl">‘element of women's clothing’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%99%D7%99%D7%A0%D7%93%D7%9C/"><span class="hw">קריינדל</span><span class="gl">‘Kreyndl (woman's name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%99%D7%99%D7%A2%D7%9F/"><span class="hw">קרייען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%99%D7%99%D7%A5/"><span class="hw">קרייץ</span><span class="gl">‘cross’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%99%D7%99%D7%A6%D7%9F/"><span class="hw">קרייצן</span><span class="gl">‘to cross’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%99%D7%99%D7%A6%D7%A6%D7%99%D7%92%D7%9C%D7%A2%D7%A8/"><span class="hw">קרייצציגלער</span><span class="gl">‘crusader’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%99%D7%9B%D7%9F/"><span class="hw">קריכן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%99%D7%9B%D7%A2%D7%93%D7%99%D7%A7/"><span class="hw">קריכעדיק</span><span class="gl">‘creeping, creepy’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%99%D7%9D%201/"><span class="hw">קרים 1</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%99%D7%9D%202/"><span class="hw">קרים 2</span><span class="gl">‘Crimea’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%99%D7%9E%D7%A2%D7%9F/"><span class="hw">קרימען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%99%D7%A1%D7%98/"><span class="hw">קריסט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%99%D7%A1%D7%98%D7%90%D6%B7%D7%9C/"><span class="hw">קריסטאַל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%99%D7%A1%D7%98%D7%9C%D7%A2%D7%9A/"><span class="hw">קריסטלעך</span><span class="gl">‘Christian’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%99%D7%A1%D7%98%D7%9C%D7%A2%D7%9F%20%D7%96%D7%99%D7%9A/"><span class="hw">קריסטלען זיך</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%99%D7%A2%D7%94/"><span class="hw">קריעה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%99%D7%A4%D6%BC/"><span class="hw">קריפּ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%99%D7%A5/"><span class="hw">קריץ</span><span class="gl">‘scratch’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%99%D7%A6%D7%95%D7%A0%D7%92/"><span class="hw">קריצונג</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%99%D7%A6%D7%9C%D7%A2%D7%9F/"><span class="hw">קריצלען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%99%D7%A6%D7%9F/"><span class="hw">קריצן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%99%D7%A7/"><span class="hw">קריק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%99%D7%A8%D7%94/"><span class="hw">קרירה</span><span class="gl">‘extreme cold’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%99%D7%A9/"><span class="hw">קריש</span><span class="gl">‘crumb’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%99%D7%AA%D6%BE%D7%90%D6%B7%D7%A8%D7%91%D7%A2/"><span class="hw">קרית־אַרבע</span><span class="gl">‘Kiryat Arba (town near Hebron)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%9F/"><span class="hw">קרן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%A2%D7%98%D7%A9%D7%9E%D7%A2/"><span class="hw">קרעטשמע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%A2%D7%98%D7%A9%D7%9E%D7%A2%D7%A8/"><span class="hw">קרעטשמער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%A2%D7%9B%D7%A6%D7%9F/"><span class="hw">קרעכצן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%A2%D7%9C%202/"><span class="hw">קרעל 2</span><span class="gl">‘bead’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%A2%D7%9E%D7%99%D7%A9%D7%9C%D7%A2%D7%A1/"><span class="hw">קרעמישלעס</span><span class="gl">‘water-carrier's yoke’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%A2%D7%9E%D7%A2%D7%A8/"><span class="hw">קרעמער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%A2%D7%9E%D7%A4%D6%BC%D7%A2/"><span class="hw">קרעמפּע</span><span class="gl">‘stocky, thickset’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%A2%D7%9E%D7%A4%D6%BC%D7%A2%D7%95%D7%95%D7%A2%D7%9F/"><span class="hw">קרעמפּעווען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%A2%D7%A0%D7%99%D7%A6%D7%A2/"><span class="hw">קרעניצע</span><span class="gl">‘well’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%A2%D7%A0%D7%A7/"><span class="hw">קרענק</span><span class="gl">‘illness, ailment’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%A2%D7%A0%D7%A7%D7%9C%D7%A2%D7%9A/"><span class="hw">קרענקלעך</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%A2%D7%A4%D6%BC%D7%9C%20%3E%20%D7%A7%D7%A8%D7%90%D6%B7%D7%A4%D6%BC/"><span class="hw">קרעפּל > קראַפּ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%A2%D7%A5/"><span class="hw">קרעץ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%A2%D7%A6%D7%99%D7%A7/"><span class="hw">קרעציק</span><span class="gl">‘leprous’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%A2%D7%A7%D7%A2%D7%A0%D7%A2%D7%A1/"><span class="hw">קרעקענעס</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%A7%D7%A4%D6%BF%D7%AA%D6%BC%D7%90%20%D7%93%D7%9C%D7%90%20%D7%9E%D7%A0%D7%97%20%D7%AA%D6%BC%D7%A4%D6%BF%D7%99%D7%9C%D7%99%D7%9F/"><span class="hw">קרקפֿתּא דלא מנח תּפֿילין</span><span class="gl">‘person (lit. skull) that does not put on tefillin’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%A9%D7%99%D7%9D/"><span class="hw">קרשים</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%B2%D6%B7%D7%96/"><span class="hw">קרײַז</span><span class="gl">‘circle’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%B2%D6%B7%D7%A1%D7%99%D7%A7/"><span class="hw">קרײַסיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%B2%D6%B7%D7%A1%D7%9F/"><span class="hw">קרײַסן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%B2%D6%B7%D7%A6%D7%A2%D7%A8/"><span class="hw">קרײַצער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A8%D7%B2%D6%B7%D7%A9%D7%9F/"><span class="hw">קרײַשן</span><span class="gl">‘to cry, scream’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A9%D7%90%D6%B7%D7%A7/"><span class="hw">קשאַק</span><span class="gl">‘shrub’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A9%D7%94/"><span class="hw">קשה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A9%D7%94%D6%BE%D7%A2%D7%95%D7%A8%D7%A3/"><span class="hw">קשה־עורף</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%A9%D7%99%D7%90/"><span class="hw">קשיא</span><span class="gl">‘question’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%B2%D6%B7/"><span class="hw">קײַ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%B2%D6%B7%D7%96%D7%A2%D7%A8%D7%A7%D7%A2/"><span class="hw">קײַזערקע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%B2%D6%B7%D7%9B%D7%94%D7%95%D7%A1%D7%98/"><span class="hw">קײַכהוסט</span><span class="gl">‘whooping cough’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%B2%D6%B7%D7%9B%D7%9F/"><span class="hw">קײַכן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%B2%D6%B7%D7%9C%D7%9F/"><span class="hw">קײַלן</span><span class="gl">‘slaughter (non-kosher)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%B2%D6%B7%D7%9C%D7%A2%D7%9B%D7%93%D7%99%D7%A7/"><span class="hw">קײַלעכדיק</span><span class="gl">‘round’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%B2%D6%B7%D7%9C%D7%A2%D7%A8/"><span class="hw">קײַלער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%B2%D6%B7%D7%A2%D7%9F/"><span class="hw">קײַען</span><span class="gl">‘chew’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A7%D7%B2%D6%B7%D7%A7%D7%9C%D7%A2%D7%9F/"><span class="hw">קײַקלען</span><span class="gl">‘to roll’</span></a></li>
+
+</ul>
+
+</main>
+<footer>
+  Yiddish Dialect Dictionary &nbsp;·&nbsp; 10,034 entries
+</footer>
+<script>const BASE_URL = '/Yiddish-Dialect-Dictionary';</script>
+<script>
+(function() {
+  let index = null;
+  const input = document.getElementById('search-input');
+  const results = document.getElementById('search-results');
+  if (!input) return;
+
+  async function loadIndex() {
+    if (index) return;
+    try {
+      const r = await fetch(BASE_URL + '/search-index.json');
+      index = await r.json();
+    } catch(e) { console.error('Could not load search index', e); }
+  }
+
+  function search(q) {
+    q = q.trim().toLowerCase();
+    if (!q || !index) return [];
+    return index
+      .filter(e =>
+        e.hw.toLowerCase().includes(q) ||
+        (e.gl && e.gl.toLowerCase().includes(q))
+      )
+      .slice(0, 20);
+  }
+
+  function renderResults(items, q) {
+    if (!items.length) {
+      results.innerHTML = '<div class="search-no-results">No results found.</div>';
+      results.classList.add('show');
+      return;
+    }
+    results.innerHTML = items.map(e => `
+      <a class="search-result-item" href="${e.url}">
+        <span class="search-result-hw">${e.hw}</span>
+        ${e.gl ? `<span class="search-result-gloss">'${e.gl}'</span>` : ''}
+      </a>`).join('');
+    results.classList.add('show');
+  }
+
+  let timer;
+  input.addEventListener('input', async () => {
+    clearTimeout(timer);
+    const q = input.value;
+    if (!q.trim()) { results.classList.remove('show'); return; }
+    await loadIndex();
+    timer = setTimeout(() => renderResults(search(q), q), 120);
+  });
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.header-search')) results.classList.remove('show');
+  });
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { results.classList.remove('show'); input.blur(); }
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="yi" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>גוי – Yiddish Dialect Dictionary</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #faf9f6;
+  --surface: #ffffff;
+  --border: #e0ddd5;
+  --text: #1c1b18;
+  --muted: #6b6860;
+  --accent: #1a4480;
+  --accent-light: #e8eef7;
+  --link: #1a4480;
+  --link-hover: #0d2a52;
+  --hebrew-font: 'Ezra SIL', 'SBL Hebrew', 'David', 'Frank Ruehl CLM', serif;
+  --body-font: Georgia, 'Times New Roman', serif;
+  --ui-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+body {
+  font-family: var(--body-font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  font-size: 16px;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--link-hover); text-decoration: underline; }
+
+/* ── Header ── */
+.site-header {
+  background: var(--accent);
+  color: white;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0,0,0,.25);
+}
+.site-header a { color: white; font-family: var(--ui-font); font-size: .9rem; }
+.site-header a.home { font-weight: 700; font-size: 1rem; white-space: nowrap; }
+.site-header a:hover { text-decoration: underline; }
+
+/* search in header */
+.header-search {
+  flex: 1;
+  max-width: 480px;
+  position: relative;
+}
+.header-search input {
+  width: 100%;
+  padding: .45rem .9rem .45rem 2.2rem;
+  border: none;
+  border-radius: 4px;
+  font-family: var(--ui-font);
+  font-size: .95rem;
+  background: rgba(255,255,255,.15);
+  color: white;
+  outline: none;
+}
+.header-search input::placeholder { color: rgba(255,255,255,.65); }
+.header-search input:focus { background: rgba(255,255,255,.25); }
+.header-search .icon {
+  position: absolute;
+  left: .6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: .7;
+  pointer-events: none;
+}
+.search-results {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.15);
+  max-height: 360px;
+  overflow-y: auto;
+  z-index: 200;
+}
+.search-results.show { display: block; }
+.search-result-item {
+  display: block;
+  padding: .6rem 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.search-result-item:last-child { border-bottom: none; }
+.search-result-item:hover { background: var(--accent-light); }
+.search-result-hw {
+  font-size: 1.1rem;
+  font-family: var(--hebrew-font);
+  direction: rtl;
+  display: inline-block;
+  margin-right: .5rem;
+}
+.search-result-gloss { color: var(--muted); font-style: italic; }
+.search-no-results { padding: .8rem 1rem; color: var(--muted); font-family: var(--ui-font); }
+
+/* ── Layout ── */
+.page-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+/* ── Alphabet nav (homepage + letter pages) ── */
+.alphabet-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin: 1.5rem 0;
+}
+.alphabet-nav a {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: .5rem .75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  text-decoration: none;
+  min-width: 52px;
+  transition: background .15s, border-color .15s;
+}
+.alphabet-nav a:hover, .alphabet-nav a.active {
+  background: var(--accent-light);
+  border-color: var(--accent);
+}
+.alphabet-nav a .heb {
+  font-family: var(--hebrew-font);
+  font-size: 1.4rem;
+  line-height: 1;
+  direction: rtl;
+}
+.alphabet-nav a .translit {
+  font-family: var(--ui-font);
+  font-size: .65rem;
+  color: var(--muted);
+  margin-top: .2rem;
+}
+
+/* ── Homepage ── */
+.hero {
+  text-align: center;
+  padding: 2.5rem 0 1.5rem;
+}
+.hero h1 {
+  font-size: 2.2rem;
+  color: var(--accent);
+  margin-bottom: .5rem;
+}
+.hero p {
+  color: var(--muted);
+  font-family: var(--ui-font);
+  font-size: 1rem;
+}
+.section-label {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 2rem 0 .75rem;
+}
+
+/* ── Letter page ── */
+.letter-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: .75rem;
+}
+.letter-header .heb-big {
+  font-family: var(--hebrew-font);
+  font-size: 3rem;
+  direction: rtl;
+  line-height: 1;
+  color: var(--accent);
+}
+.letter-header .info {
+  font-family: var(--ui-font);
+}
+.letter-header .translit-big { font-size: 1.4rem; font-weight: 600; }
+.letter-header .count { color: var(--muted); font-size: .9rem; }
+
+.entry-list {
+  list-style: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface);
+}
+.entry-list li {
+  border-bottom: 1px solid var(--border);
+}
+.entry-list li:last-child { border-bottom: none; }
+.entry-list a {
+  display: flex;
+  align-items: baseline;
+  gap: .75rem;
+  padding: .65rem 1rem;
+  color: var(--text);
+  text-decoration: none;
+}
+.entry-list a:hover { background: var(--accent-light); }
+.entry-list .hw {
+  font-family: var(--hebrew-font);
+  font-size: 1.15rem;
+  direction: rtl;
+  flex-shrink: 0;
+}
+.entry-list .gl {
+  font-style: italic;
+  color: var(--muted);
+  font-size: .9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Entry page ── */
+.entry-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--accent);
+}
+.entry-headword {
+  font-family: var(--hebrew-font);
+  font-size: 2.6rem;
+  direction: rtl;
+  line-height: 1.2;
+  color: var(--text);
+}
+.entry-gloss {
+  font-style: italic;
+  color: var(--muted);
+  font-size: 1.05rem;
+  margin-top: .3rem;
+}
+
+.entry-body h2 {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 1.8rem 0 .6rem;
+  padding-bottom: .3rem;
+  border-bottom: 1px solid var(--border);
+}
+.entry-body h3 {
+  font-family: var(--ui-font);
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin: 1rem 0 .4rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.entry-body p {
+  margin-bottom: .8rem;
+  line-height: 1.7;
+}
+.entry-body ul, .entry-body ol {
+  margin: .5rem 0 .8rem 1.5rem;
+}
+.entry-body li { margin-bottom: .3rem; }
+.entry-body audio {
+  display: block;
+  margin: .75rem 0;
+  max-width: 100%;
+}
+.entry-body img {
+  max-width: 100%;
+  height: auto;
+  margin: .75rem 0;
+  border-radius: 4px;
+}
+.entry-body blockquote {
+  border-left: 3px solid var(--border);
+  padding-left: 1rem;
+  color: var(--muted);
+  margin: .5rem 0;
+}
+
+/* back/nav bar above entry */
+.entry-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.entry-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .3rem .7rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--text);
+}
+.entry-nav a:hover {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  text-decoration: none;
+}
+
+/* ── Footer ── */
+footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  margin-top: 3rem;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .hero h1 { font-size: 1.6rem; }
+  .alphabet-nav a { min-width: 44px; padding: .4rem .55rem; }
+  .alphabet-nav a .heb { font-size: 1.2rem; }
+  .entry-headword { font-size: 2rem; }
+  .header-search { max-width: none; }
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <a href="/Yiddish-Dialect-Dictionary/" class="home">Yiddish Dialect Dictionary</a>
+  <div class="header-search">
+    <svg class="icon" width="16" height="16" fill="white" viewBox="0 0 16 16">
+      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.868-3.834zm-5.242 1.406a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+    </svg>
+    <input type="search" id="search-input" placeholder="Search entries…" autocomplete="off">
+    <div id="search-results" class="search-results"></div>
+  </div>
+</header>
+<main class="page-wrap">
+
+<div class="entry-nav">
+  <a href="/Yiddish-Dialect-Dictionary/letter/giml/">← Giml</a>
+  <a href="/Yiddish-Dialect-Dictionary/">Home</a>
+</div>
+<div class="entry-header">
+  <div class="entry-headword" dir="rtl">גוי</div>
+  <div class="entry-gloss">‘non-Jew’</div>
+</div>
+<div class="entry-body" dir="auto">
+<p>גוי<br />
+גויים<br />
+דער<br />
+'non-Jew'</p>
+<p>דער גוי<br />
+'thumb' {מאַקס ווײַנרײַך, געשיכטע פֿון דער ייִדישער שפּראַך, 1: 209}</p>
+<h2>WESTERN</h2>
+<p>e goj {Friedrich 1784: 5}<br />
+-   gog {sic] 'ein Volk. Es wird jedoch unter diesem Wort nichts anders als ein Christ verstanden' {21}</p>
+<p 1845:="1845:" 45="45" Handelewos_="Handelewos," LEIPZIG="LEIPZIG" Maißim="Maißim" Schnokes="Schnokes" e="e" un="un" vun="vun">Tate steh auf laß den Goi setzen.<br /></p>
+<h3>Holland (Netherlands)</h3>
+<p>gôj, gooj, Gŏj; Gŏjem {HOLLAND, Beem, Jerosche]<br />
+-   Gŏj 'ne-emon, chăser kôscher. 'A trusted non-Jew, a kosher pig. Matters of kashrut cannot be left to a non-Jew.' {Jerosche №277}<br />
+-   An e goj, der jiddisch redt, dou is kaan brooche an. 'From a non-Jew, who has dealt with Jews a lot and therefore knows trade and trade terms, one cannot earn.' {Jerosche №278}<br />
+M.J.V. 1899. blz. 26, no. 13 - Der goj, was red loschen hakoudesch und die Jidene was lernt gemore sollen werden a kepore.<br />
+Bernst 186 - A hihn, wus krejhet, a goj, wus jüdische redt, ün a jüdin, was lernt toyru, is nit kejn güte ss'chorju.<br />
+-   Bei e goj is kaan ssod. {Jerosche №279}<br />
+V.P. 127. M.J.V. 22e jaarg. 1e Heft, blz. 9, no. 19. Beim goj is kan Ssineh ün kan Ssod.<br />
+-   Das sol man kaan goj lernen. 'Jokingly. More specifically in view of the products of Jewish cuisine. {Jerosche №280}<br />
+Tendlau 491.<br />
+-   Der fangt mit aanem an wie e goj mit e jehude (jid). 'He acts improperly or unreasonably.' {Jerosche №281}<br />
+-   E goj hot chăser in s'n kop. Var. er hot… 'A non-Jew is dumb. Based on the Jewish folk belief that eating ham makes you stupid.' {Jerosche №282}<br />
+Weill 240 - er hot 'Hazir im Kopf - il est bête.<br />
+-   E goj hot kaan chosh. 'A non-Jew has not understanding.' {Jerosche №283}<br />
+-   E goj hot's 's măsel. Var. Wie meer goj, wie meer măsel. 'Goy is here mostly a Jew not living traditionally. The smaller his attention for Judaism, the greater his apparent prosperity.' {Jerosche №284}<br />
+Tendlau 606<br />
+Nascher 8 - Masel wie ä Goj.<br />
+Bernst. 53 - Mehr goj - mehr masol.<br />
+Bernst 157.<br />
+Zivy 45.<br />
+-   E goj moss man schmeichen (schmadden). 'One must flatter a gentile.' {Jerosche №285}<br />
+-   Man zogt nit goj, wo'n ger bei schteit. Var. Man nent kaan… 'In the house of the hanged one does not speak about the hangman.' {Jerosche №286}<br />
+Bernst. 64. Far e gejr tur men kejn goj nit schelten. "weil der Neubekehrte sich mit seinem frueheren Glaubensgenossen noch immer solidarisch fuehlt."<br />
+-   Wo gojem auf einander schlagen, dou sol kaan guter jid sisch wagen. 'Where non-Jews fight, Jews should keep their distance.' {Jerosche №288}<br />
+-   Der Jid fangt mit dem goj an. 'Frowning on a Jew who himself provokes a conflict. Compare the English: "man bites dog."' {Jerosche №387}<br />
+Tendlau 373.<br />
+Weill 109.<br />
+-   E Jid sol nit mit e goj anfangen. 'A Jew should behave cautiously with regard to his non-Jewish surroundings.' {Jerosche №390}<br />
+-   Wer nit gebben wil an e Jid, moss gebben an e goj. 'Whoever does not want to give to a Jew will give his money on a non-Jew. Recalls the time when the Jews had to make excessive financial contributions to the Christian authorities of the city and country and sometimes sought a pretext to evade their obligations towards the Jewish community.' {Jerosche №396}</p>
+<h3>Alsace (France)</h3>
+<p>gʊ̞ˑɩm {ALSACE, 47075 Mulhouse, 001-060}</p>
+<p>gʊ̞j {ALSACE, 47075 Mulhouse, 018-070}<br />
+ - mr̩ hɔd gsaːd mʁ̩- sol cə ɛjsəf / cym gʊ̞j gej מע האָט געזאָגט, מע זאָל צו עשׂו / צום גוי גיין {q018-070}</p>
+<h3>Switzerland</h3>
+<p>un di hindərfɛrtəl, di hot mər bai di goiim fərhuˈziːrt און די הינטערפֿערטל, די האָט מען בײַ די גויים פֿאַרהויזירט {Endingen, Gustav Dreifuss, Fleischer 2005:83}</p>
+<h3>Oyberland (West Transcarpathian)</h3>
+<p>gåi̯ {WTCP, Budapest, Hutterer 1965: 128, 129}<br />
+-   gåi̯tə גויעטע</p>
+<p>gōyən (acc.) {WTCP, NORTHWESTERN HUNGARIAN, Garvin 1965: 104}</p>
+<p>dər gɔˑj {WTCP, Dunajská Streda, 47179}<br />
+-   bⲁj ə gɔˑj בײַ אַ גוי<br />
+-   gɔjəm, gɔ́ˑjəm גויים<br />
+-   də gɔjtə די גויטע<br />
+-   gɔˑjəm aːx dɔt gəarbət bæj də poˑšətə macəs ɔbα zej hɔm nɔr də mašíː gədrejt גויים אויך דאָרט געאַרבעט בײַ די פּשוטע מצות, אָבער זיי האָבן נאָר די מאַשין געדרייט<br />
+-   fyn deˑn gój zɔlstə dɔx zeː obaxt gebm, der nɛmdɔ də vajslʲ fyn də aːg͡ŋ əraus פֿון דעם גוי זאָלסטו דאָך זייער אָבאַכט געבן, דער נעמט דיר די ווײַסל פֿון די אויגן אַרויס</p>
+<p>də gojtəs aːx די גויטעס אויך {WTCP, Vác, 47197}<br />
+-   cniˑəs voˑr əfilə baj də goˑjəm צניעות וואָר אַפֿילו בײַ די גויים<br />
+-   gojtə גויטע<br />
+-   cyfrýː hɔt ə gɔj ájŋgəhàˑct צו פֿרי האָט אַ גוי אײַנגעהייצט</p>
+<p>gɔjtə גויטע {WTCP, Berettyó-Újfalu, 47212}</p>
+<p>gɔjtə גויטע {WTCP, Hajdúhadház, 47219}</p>
+<h2>CENTRAL</h2>
+<h3>Unterland (East Transcarpathian)</h3>
+<p>gɔːjəm גויים {ETCP, Sîg Felső Szek, 47223}</p>
+<p>goˑjəm {POLAND, Wolbrom, 50196}</p>
+<p>go {POLAND, Warsaw, 52211}<br />
+-   gojɩm, gojəm גויים</p>
+<p><audio controls src="https://archive.org/download/Gosia-and-Luza-Pod/Gosia%20Pod%205%20August%202018%20-%20di%20goyim%20hobn%20gevoynt%20oyser%20di%20shtot.mp3"></audio><br />
+AUDIO Gosia Pod {Mikulintse / Mikulińce / Микулинці, East Galicia] August 5, 2018<br />
+gojəm<br />
+די גוים האָבן געוווינט אויסער דער שטאָט<br />
+<audio controls src="https://archive.org/download/YitskhokNiborski/Yitskhok%20Niborski%2028%20August%202018%20-%20O-o-o%20shiker%20iz%20a%20go%20%28goy%29.mp3"></audio><br />
+AUDIO Yitskhok Niborski {parents from Poland] 28 August 2018<br />
+go<br />
+אָ־אָ־אָ שיכּור איז אַ גוי,<br />
+שיכּור איז ער, טרינקען מוז ער,<br />
+ווײַל ער איז אַ גוי (x2)</p>
+<h2>HASIDIC</h2>
+<h3>EUROPE</h3>
+<p>dɩ gɔjɩm ɩn lɔndɔn hɔbm̩ gɩʀɛt ɛŋglɩš די גויים אין לאָנדאָן האָבן גערעדט ענגליש {London, Izzy Jacob]</p>
+<h2>NORTHEASTERN</h2>
+<h3>Lithuania</h3>
+<p>goj {LITHUANIA, Kaunas, 54239}</p>
+<p>gójɩm {LITHUANIA, Vilnius, 54257}</p>
+<h2>SOUTHEASTERN</h2>
+<p>Ûngibindn a Gôj mit dar Tšoprini in a Fas Bronfn. אָנגעבונדן אַ גוי מיט דער טשופּרינע אין אַ פֿאַס  'Einen Tantalusqualen ausstehen lassen.' {EAST GALICIA, Brody, Landau 1923, №1}</p>
+<p>𝐓𝐇𝐄𝐀𝐓𝐄𝐑 𝐃𝐈𝐀𝐋𝐄𝐂𝐓 ({SOUTHEASTERN})</p>
+<video controls src="https://archive.org/download/FilmLexicon/Tevye1939-AKleynikaytRebKhvedyeBerebMikiteGalagan-AzaMinGoyAzaMinYabednikVosKumtAroysFunSameMeyokhusim-DerZeydeZaynerTerentiOlev-hasholekhtsIzGevenAShikerHagodlHagiberHanoyreFlegtShlogiDosVaybDraybMolAVokh.mp4"></video>
+<p>VIDEO Tevya (USA, 1939): Maurice Schwartz<br />
+goj<br />
+אַ קלייניקייט: ר' כוועדיע ברב מיקיטע גאַלאַגאַן — אַזאַ מין גוי, אַזאַ מין יאַבעדניק וואָס קומט אַרויס פֿון סאַמע מְיוּחָסִים. דער זיידע זײַנער טערענטי עליו־השאָלעכץ איז געווען אַ שיכּור הגדול הגיבור הנורא, פֿלעגט שלאָגן דאָס ווײַב דרײַ מאָל אַ וואָך. און דער עלטער־זיידע זײַנער עליו־הפּאָקרישקע האָט כּל־ימיו געפּאַשעט חזירים און געשיילט קאַרטאָפֿליעס. אַײַ־אײַ־אײַ וואָס פֿאַר אַ ייִחוס!</p>
+</div>
+
+</main>
+<footer>
+  Yiddish Dialect Dictionary &nbsp;·&nbsp; 10,034 entries
+</footer>
+<script>const BASE_URL = '/Yiddish-Dialect-Dictionary';</script>
+<script>
+(function() {
+  let index = null;
+  const input = document.getElementById('search-input');
+  const results = document.getElementById('search-results');
+  if (!input) return;
+
+  async function loadIndex() {
+    if (index) return;
+    try {
+      const r = await fetch(BASE_URL + '/search-index.json');
+      index = await r.json();
+    } catch(e) { console.error('Could not load search index', e); }
+  }
+
+  function search(q) {
+    q = q.trim().toLowerCase();
+    if (!q || !index) return [];
+    return index
+      .filter(e =>
+        e.hw.toLowerCase().includes(q) ||
+        (e.gl && e.gl.toLowerCase().includes(q))
+      )
+      .slice(0, 20);
+  }
+
+  function renderResults(items, q) {
+    if (!items.length) {
+      results.innerHTML = '<div class="search-no-results">No results found.</div>';
+      results.classList.add('show');
+      return;
+    }
+    results.innerHTML = items.map(e => `
+      <a class="search-result-item" href="${e.url}">
+        <span class="search-result-hw">${e.hw}</span>
+        ${e.gl ? `<span class="search-result-gloss">'${e.gl}'</span>` : ''}
+      </a>`).join('');
+    results.classList.add('show');
+  }
+
+  let timer;
+  input.addEventListener('input', async () => {
+    clearTimeout(timer);
+    const q = input.value;
+    if (!q.trim()) { results.classList.remove('show'); return; }
+    await loadIndex();
+    timer = setTimeout(() => renderResults(search(q), q), 120);
+  });
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.header-search')) results.classList.remove('show');
+  });
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { results.classList.remove('show'); input.blur(); }
+  });
+})();
+</script>
+</body>
+</html>

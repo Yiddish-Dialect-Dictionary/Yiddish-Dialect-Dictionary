@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="yi" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>גיין – Yiddish Dialect Dictionary</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #faf9f6;
+  --surface: #ffffff;
+  --border: #e0ddd5;
+  --text: #1c1b18;
+  --muted: #6b6860;
+  --accent: #1a4480;
+  --accent-light: #e8eef7;
+  --link: #1a4480;
+  --link-hover: #0d2a52;
+  --hebrew-font: 'Ezra SIL', 'SBL Hebrew', 'David', 'Frank Ruehl CLM', serif;
+  --body-font: Georgia, 'Times New Roman', serif;
+  --ui-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+body {
+  font-family: var(--body-font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  font-size: 16px;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--link-hover); text-decoration: underline; }
+
+/* ── Header ── */
+.site-header {
+  background: var(--accent);
+  color: white;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0,0,0,.25);
+}
+.site-header a { color: white; font-family: var(--ui-font); font-size: .9rem; }
+.site-header a.home { font-weight: 700; font-size: 1rem; white-space: nowrap; }
+.site-header a:hover { text-decoration: underline; }
+
+/* search in header */
+.header-search {
+  flex: 1;
+  max-width: 480px;
+  position: relative;
+}
+.header-search input {
+  width: 100%;
+  padding: .45rem .9rem .45rem 2.2rem;
+  border: none;
+  border-radius: 4px;
+  font-family: var(--ui-font);
+  font-size: .95rem;
+  background: rgba(255,255,255,.15);
+  color: white;
+  outline: none;
+}
+.header-search input::placeholder { color: rgba(255,255,255,.65); }
+.header-search input:focus { background: rgba(255,255,255,.25); }
+.header-search .icon {
+  position: absolute;
+  left: .6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: .7;
+  pointer-events: none;
+}
+.search-results {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.15);
+  max-height: 360px;
+  overflow-y: auto;
+  z-index: 200;
+}
+.search-results.show { display: block; }
+.search-result-item {
+  display: block;
+  padding: .6rem 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.search-result-item:last-child { border-bottom: none; }
+.search-result-item:hover { background: var(--accent-light); }
+.search-result-hw {
+  font-size: 1.1rem;
+  font-family: var(--hebrew-font);
+  direction: rtl;
+  display: inline-block;
+  margin-right: .5rem;
+}
+.search-result-gloss { color: var(--muted); font-style: italic; }
+.search-no-results { padding: .8rem 1rem; color: var(--muted); font-family: var(--ui-font); }
+
+/* ── Layout ── */
+.page-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+/* ── Alphabet nav (homepage + letter pages) ── */
+.alphabet-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin: 1.5rem 0;
+}
+.alphabet-nav a {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: .5rem .75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  text-decoration: none;
+  min-width: 52px;
+  transition: background .15s, border-color .15s;
+}
+.alphabet-nav a:hover, .alphabet-nav a.active {
+  background: var(--accent-light);
+  border-color: var(--accent);
+}
+.alphabet-nav a .heb {
+  font-family: var(--hebrew-font);
+  font-size: 1.4rem;
+  line-height: 1;
+  direction: rtl;
+}
+.alphabet-nav a .translit {
+  font-family: var(--ui-font);
+  font-size: .65rem;
+  color: var(--muted);
+  margin-top: .2rem;
+}
+
+/* ── Homepage ── */
+.hero {
+  text-align: center;
+  padding: 2.5rem 0 1.5rem;
+}
+.hero h1 {
+  font-size: 2.2rem;
+  color: var(--accent);
+  margin-bottom: .5rem;
+}
+.hero p {
+  color: var(--muted);
+  font-family: var(--ui-font);
+  font-size: 1rem;
+}
+.section-label {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 2rem 0 .75rem;
+}
+
+/* ── Letter page ── */
+.letter-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: .75rem;
+}
+.letter-header .heb-big {
+  font-family: var(--hebrew-font);
+  font-size: 3rem;
+  direction: rtl;
+  line-height: 1;
+  color: var(--accent);
+}
+.letter-header .info {
+  font-family: var(--ui-font);
+}
+.letter-header .translit-big { font-size: 1.4rem; font-weight: 600; }
+.letter-header .count { color: var(--muted); font-size: .9rem; }
+
+.entry-list {
+  list-style: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface);
+}
+.entry-list li {
+  border-bottom: 1px solid var(--border);
+}
+.entry-list li:last-child { border-bottom: none; }
+.entry-list a {
+  display: flex;
+  align-items: baseline;
+  gap: .75rem;
+  padding: .65rem 1rem;
+  color: var(--text);
+  text-decoration: none;
+}
+.entry-list a:hover { background: var(--accent-light); }
+.entry-list .hw {
+  font-family: var(--hebrew-font);
+  font-size: 1.15rem;
+  direction: rtl;
+  flex-shrink: 0;
+}
+.entry-list .gl {
+  font-style: italic;
+  color: var(--muted);
+  font-size: .9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Entry page ── */
+.entry-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--accent);
+}
+.entry-headword {
+  font-family: var(--hebrew-font);
+  font-size: 2.6rem;
+  direction: rtl;
+  line-height: 1.2;
+  color: var(--text);
+}
+.entry-gloss {
+  font-style: italic;
+  color: var(--muted);
+  font-size: 1.05rem;
+  margin-top: .3rem;
+}
+
+.entry-body h2 {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 1.8rem 0 .6rem;
+  padding-bottom: .3rem;
+  border-bottom: 1px solid var(--border);
+}
+.entry-body h3 {
+  font-family: var(--ui-font);
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin: 1rem 0 .4rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.entry-body p {
+  margin-bottom: .8rem;
+  line-height: 1.7;
+}
+.entry-body ul, .entry-body ol {
+  margin: .5rem 0 .8rem 1.5rem;
+}
+.entry-body li { margin-bottom: .3rem; }
+.entry-body audio {
+  display: block;
+  margin: .75rem 0;
+  max-width: 100%;
+}
+.entry-body img {
+  max-width: 100%;
+  height: auto;
+  margin: .75rem 0;
+  border-radius: 4px;
+}
+.entry-body blockquote {
+  border-left: 3px solid var(--border);
+  padding-left: 1rem;
+  color: var(--muted);
+  margin: .5rem 0;
+}
+
+/* back/nav bar above entry */
+.entry-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.entry-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .3rem .7rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--text);
+}
+.entry-nav a:hover {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  text-decoration: none;
+}
+
+/* ── Footer ── */
+footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  margin-top: 3rem;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .hero h1 { font-size: 1.6rem; }
+  .alphabet-nav a { min-width: 44px; padding: .4rem .55rem; }
+  .alphabet-nav a .heb { font-size: 1.2rem; }
+  .entry-headword { font-size: 2rem; }
+  .header-search { max-width: none; }
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <a href="/Yiddish-Dialect-Dictionary/" class="home">Yiddish Dialect Dictionary</a>
+  <div class="header-search">
+    <svg class="icon" width="16" height="16" fill="white" viewBox="0 0 16 16">
+      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.868-3.834zm-5.242 1.406a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+    </svg>
+    <input type="search" id="search-input" placeholder="Search entries…" autocomplete="off">
+    <div id="search-results" class="search-results"></div>
+  </div>
+</header>
+<main class="page-wrap">
+
+<div class="entry-nav">
+  <a href="/Yiddish-Dialect-Dictionary/letter/giml/">← Giml</a>
+  <a href="/Yiddish-Dialect-Dictionary/">Home</a>
+</div>
+<div class="entry-header">
+  <div class="entry-headword" dir="rtl">גיין</div>
+  <div class="entry-gloss">‘to go’</div>
+</div>
+<div class="entry-body" dir="auto">
+<p>גיין<br />
+איז געגאַנגען<br />
+'to go'</p>
+<h2>ETYMOLOGY</h2>
+<p 181.="181." 2013:166.="2013:166." 335_="335;" 5:2376.="5:2376." DW_="DW¹" EWD="EWD" Feist="Feist" Fulk="Fulk" Kroonen="Kroonen" Pfeiffer="Pfeiffer" _gehen_.="&quot;gehen&quot;.">{Should Proto-Yiddish be ✱geːn or ✱geːən? NEY geɪn may be archaic.}<br />
+I. Proto-Yiddish ✱geːn; Proto-EY ✱geɪn; from MHG gên; cf. NHG gehen.<br />
+Protovowel E2.<br />
+MHG gangen<br />
+Vowel 11, Proto-Yiddish ✱a<br />
+(Also see [[גאַניק]].)<br />
+{Katz 1982: 59, 286}<br />
+II MHG gên, gân, gengen, gangen; from OHG gangan, gān, gēn. <br />
+III. Got. gaggan; Crimean Got. geen; ON ganga; OE gongan, gangan, gengan, gān; English go; OS gangan;<br />
+a mixed paradigm from PGmc ✱gēnaⁿ; from PIE ✱ĝheh₁-; cf. Greek κιχάνειν 'to reach'; Sanskrit jíhītē 'jumps up';<br />
+and from PGmc ✱ganganaⁿ ~ ✱gunganⁿ; from PIE ✱ĝʰóngʰ-e-; cf. Lithuanian žeñgti 'to stride'; Sanskrit jáṅghā 'shank, lower leg'.<br /></p>
+<p>IV. The idiom עס גייט מיר אין 'for me it is a question of, matter of' appears to be a calque of Polish chodzi mi o.</p>
+<p><img alt="" src="https://archive.org/download/Yiddish-Dialect-Maps/Herzog4-76-78-IzOrHotGeshlofnGegagenGezesn-148.jpg" /></p>
+<p>NEY /gejn/<br />
+CY /gajn/</p>
+<h2>WESTERN</h2>
+<h3>Old Literary Yiddish (ca. 1100-1800)</h3>
+<p>גינגן<br />
+{Cambridge Codex, ca. 1382; Eli Katz (1963) 80ff.}<br />
+Approximate pronunciation: /giŋgən/ (cf. MHG gingen)</p>
+<p 1696_="1696," 307="307" מעשׂה="מעשׂה" ניקלסבורג="ניקלסבורג">דער בחור איז גנגין משתין זיין אויף איין ברג מישט<br />
+'the young man went to urinate on a pile of excrement'<br /></p>
+<p>geien, (hin)geien {Sprach-Meister 1742}</p>
+<p>gɛjn {NORTHWESTERN, Katz 1982: 286}</p>
+<p>geihn {EAST FRIESLAND, Aurich, Schulenrufen 1902}</p>
+<h3>Holland (Netherlands)</h3>
+<p>gein [ɛi}; gein (third person plural) [HOLLAND, Beem, Jerosche}<br />
+-   Geit's mir gut, geit's dir gut. 'Reply of a schnorrer.' {Jerosche №238}<br />
+-   Die guten gein; die beisen bleiben. 'Sigh at the death of a good person.' {Jerosche №239}</p>
+<h3>Alsace (France)</h3>
+<p>gɛjd əm gyd גייט אים גוט 'it fits him well' {ALSACE, 47075 Mulhouse, 039-080}</p>
+<h3>Switzerland</h3>
+<p>si hen liːdliç un gədiçtliç gəlɛnt un gen fun hauz tsu hauz זיי האָבן לידלעך און געדיכטלעך געלערנט און גייען פֿון הויז צו הויז {Endingen, Isaak Guggenheim-Bloch, Fleischer 2005:74}<br />
+- si gen uf də tantssaːl tsum intriˈgiːrə זיי גייען אויף די טאַנצזאַל צום אינטריגירן {p76}<br />
+gẽĩ, gei, geː {SWITZERLAND, Fleischer 2005}<br />
+-   is gaŋə איז געגאַנגען</p>
+<h3>Czechia</h3>
+<p>gai {CZECHIA, Šafov, Beranek 1936: 72}</p>
+<h3>Oyberland (West Transcarpathian)</h3>
+<p>gəgăŋ'ŋ̥ ~ gəgaŋən {WTCP, Budapest, Hutterer 1965: 135}</p>
+<p>gēt, geyt (3rd p. sg.) {WTCP, NORTHWESTERN HUNGARIAN, Garvin 1965: 103}</p>
+<p>výːhíˑn geːst|də וווּהין גייסטו {WTCP, Dunajská Streda, 47179}<br />
+-   geˑt krymp גייט קרום 'limps'<br />
+-   gʲeˑt fyˑn ziˑx əláː גייט פֿון זיך אַליין</p>
+<ul>
+<li>bis cym barmʲicvə bin ox gʲəgaŋə in xeˑdər ביז צום בר־מצווה בין איך געגאַנגען אין חדר</li>
+</ul>
+<p>gejmr cyzám špəciːrn גייען מיר צוזאַם שפּאַצירן {WTCP, Vác, 47197}<br />
+-   cy grynd geˑn צו גרונט גיין {ɴᴏᴛᴇ: אַ תּל ווערן}<br />
+-   geːt ofɱ fɛld akərn גייט אויפֿן פֿעלד אַרבעטן<br />
+-   iˑx bin niˑ gəgáŋən in də šuˑl איך בין ני געגאַנגען אין די שול</p>
+<p>gʲejmər cyzamən špəciˑrn גיימיר צוזאַמען שפּאַצירן {WTCP, Berettyó-Újfalu, 47212}<br />
+-   geˑ štaːt גיי שטאַט<br />
+-   gəganən געגאַנען</p>
+<p>gəjən vir cɩnəzámən špəciːrn גייען מיר צוזאַמען שפּאַצירן {WTCP, Hajdúhadház, 47219}<br />
+-   víːn geːstə וווּהין גייסטו<br />
+-   geˑən ziˑ גייען זי </p>
+<h2>CENTRAL</h2>
+<p>gajn {Katz 1982: 286}</p>
+<p>gain {eastern SLOVAKIA and CARPATHO-RUTHENIA, Beranek 1936: 72}</p>
+<h3>Unterland (East Transcarpathian)</h3>
+<p>gəgaŋgən {ETCP, Beranek 1941}</p>
+<p>gejstə גייסטו {ETCP, Frata, U. Weinreich 1964: 259}</p>
+<p>mər gajmər buˑdn cɩm pɔ́tɔk מיר גייען מיר באָדן צום פּאָטאָק {ETCP, Teiuș, 46233}</p>
+<p>zɔmr gajn cəzamən špəciːrn זאָלן מיר גיין צוזאַמען שפּאַצירן {ETCP, Sîg Felső Szek, 47223}<br />
+-   vi gajstə וווּ גייסטו<br />
+-   mə gejt ɩn dr haːm zíəxŋ מע גייט אין דער היים זוכן 'one visits at home'<br />
+-   gaj cɩm pɔtɔk גיי צום פּאָטאָק<br />
+-   iːx gej oux ~ iːx gaj aːx איך גיי אויך<br />
+-   gajt ɔf aɫə fiˑr fiˑs גייט אויף אַלע פֿיר פֿיס<br />
+-   dər vug͡ŋ hɔt niš/žtgəkʲɛnt gajn rɛxc דער וואָגן האָט נישט געקענט גיין רעכץ<br />
+-   ɩɣ bɩn káːmul nɩždgəgaŋgən ɩn xajdər איך בין קיין מאָל נישט געגאַנגען אין חדר</p>
+<p>lɔmər gajn cɩzàm ɔf a špacíːr לאָמיר גיין צוזאַם אויף אַ שפּאַציר {ETCP, Mănăștur 47236}</p>
+<p>lɔmər gajn ɩn ájnəm špaciˑrn לאָמיר גיין אין איינעם שפּאַצירן {ETCP, Nyzhnya Apsha, 48233}<br />
+-   mə darf gajn zejn vús ər tɨ́t מע דאַרף גיין זען וואָס ער טוט<br />
+-   gaj̩mər klʲoubm גייען מיר קלויבן 'let's go pick (berries)'</p>
+<p>gãj גיין {POLAND, Wolbrom, 50196}<br />
+-   gaj geəx גיי גיך<br />
+-   gãj cɩzam špaciːʀŋ גיין צוזאַמען שפּאַציר<br />
+-   aːjbɩk vel əx niš gaj̃ cɩ dejm jiˑt אייביק וועל איך נישט גין צו דעם ייִד<br />
+-   zɩ gajt a naːjɩm gʀiːnəm mantɫ̩ זי גייט אַ נײַעם גרינעם מאַנטל<br />
+-   gájɩndɩk גייענדיק<br />
+-   a gajt alãj ער גייט אַליין<br />
+-   xbɩn ɩn lejbm nɩš gɩgáŋgʲɩn ɩn xajdɛʀ aʀaˑn כ'בין אין לעבן נישט געגאַנגען אין חדר אַרײַן</p>
+<p>לאָז אייאָ גײַן מיט מיאָ<br />
+{Warsaw, Tsanin, מאַמעשי, מאַמעשי, שלוף נישט, p. 131}<br />
+-   זענען מיאָ געגאַנגען און געגאַנגען {p. 131}<br />
+tsᵻ gajɛn צו גיין {Warsaw, Geller 2001: 205}<br />
+-   jax bᵻn giɛganᵻn איך בין געגאַנגען {p. 175}<br />
+-   biɲ-gan tsᵻzamᵻn mᵻ-dɛ baɬbust-ᵻn giɛzɛtst dᵻ kartɔfɬ בין געגאַנגען צוזאַמען מיט די בעל־הביתטע און געזעצט די קאַרטאָפֿל {p. 181}<br />
+-   giɛganɛ mᵻtn frɔnt געגאַנגען מיטן פֿראָנט {p. 183}<br />
+-   tsᵻ gajɛn ᵻn kamf araː צו גיין אין קאַמף אַרײַן {p. 185}<br />
+-   nu, azɔj zᵻnᵻ jɛganᵻ dᵻ juu̯rn נו, אַזוי זענען געגאַנגען די יאָרן {p. 185}<br />
+-   x-ɔ-lip lɛjbm, x-ɔ-lip tsᵻ gajin איך האָב ליב לעבן, איך האָב צו גיין {p. 197}<br />
+-   tsᵻ gajᵻn tsᵻ fis צו גיין צו פֿוס {p. 205}<br />
+-   ɔb-ᵻn kinɔ bᵻn-jax jiɛgan אָבער אין קינאָ בין איך געגאַן {p. 205}<br />
+-   m-i ʃ'ᵻ ganᵻ zaː vejg' מען איז שוין געגאַנגען זײַן וועג {p. 207}<br />
+-   dɛ tatʃ'i ɔt giɛvɔɬt gajn arbɛtn דער טאַטעשי האָט געוואָלט גיין אַרבעטן {p. 209}<br />
+-   azɔj ᵻz giɛgaɲg'iɛn dᵻs lɛjbm אַזוי איז געגאַנגען דאָס לעבן {p. 209}<br />
+-   azɔj zᵻ-s lɛjbm giɛganᵻn און אַזוי איז דאָס לעבן געגאַנגען {p. 209}<br />
+-   biɲ-g'an ᵻn-a xajdɛ בין געגאַנגען אין אַ חדר {p. 229}<br />
+-   bᵻ jaɲiɛ בין געגעגאַנגען {p. 233}<br />
+-   jejaɲgiɛ mᵻ-dᵻ ʃtifmamɛn געגאַנגען מיט די שטיפֿמאַמען {p. 233}<br />
+-   x-zɔɬ nᵻʃ gajn tsᵻ fis ᵻn dɔrf arã איך זאָל נישט גיין צו פֿוס אין דאָרף אַרײַן {p. 237}<br />
+-   xɔ-x mᵻ jɛjaɲiɛ איך בין מיר געגאַנגען {p. 237}<br />
+-   daf jɛn a-xajm דאַרף גיין אַהיים {p. 247}<br />
+-   das-tᵻ nᵻʃ' gajn דאַרפֿסטו נישט גיין {p. 251}<br />
+-   jᵻjaɲiɛ געגאַנגען {p. 255}<br />
+-   a-zɛnɛ jaɲ fᵻn tsvajt frɔntn אַז זיי זענען געגאַנגען פֿון צוויי [!} פֿראָנטן {p. 259}<br />
+-   jɛjdɛ-r-ᵻz a-xajm giɛgangiɛ, tsᵻ zᵻx axajm יעדער איז אַהיים געגאַנגען, צו זיך אַהיים {p. 267}<br />
+-   jix bᵻn jan avɛk' ᵻn dɔrf arã איך בין געגאַנגען אַוועק אין דאָרף אַרײַן {p. 269}<br />
+-   bᵻn-i-jɛjaɲgiɛ pamɛjlɛ בין איך געגאַנגען פּאַמעלעך {p. 273}<br />
+-   ᵻx bᵻn jɛgaɲgiɛn arɔːs איך בין געגאַנגען אַרויס {p. 283}<br />
+-   bᵻ-jigajg'ɲ krᵻgn בין געגאַנגען קריגן {p. 287}<br />
+-   gaj-x mɛx ratɛvɛran גיי איך מיך ראַטעווען {p. 287}<br />
+-   bᵻ-jɛx jiɛjaɲgiɛ בין איך געגאַנגען {p. 291}<br />
+-   bi-jan-ᵻn dɔrf-a, zixn-an-ɔrt ɔfn kind maːn בין געגאַנגען אין דאָרף אַרײַן זוכן אַן אָרט אויפֿן קינד מײַן {p. 295}<br />
+-   jax bᵻn jangiɛ un-a pɔr איך בין געגאַנגען אָן אַ פּאָר {p. 295}<br />
+-   ba-nᵻm zɔɬ ma nᵻʃ gejm [!} בײַ אים זאָל מען נישט גיין {p. 295}<br />
+-   zɔu̯n zᵻ kimɛ tsᵻ-gajn זאָלן זיי קומען צו גיין {p. 297}<br />
+-   zɔɬn zᵻx kimɛ tsᵻ gajᵻn זאָל זיך קומען צו גיין {p. 299}<br />
+-   i jaɲgiɛ jɛjdɛ-r-ajnɛ איז געגאַנגען יעדער איינער {p. 299}<br />
+-   nɔx jɛjan arã ʃabɛs ba dᵻ naxt נאָך געגאַנגען אַרײַן שבת בײַ די נאַכט {p. 303}<br />
+-   vij-ɛt mɛ gajn, vij-ᵻt mɛ ʃtajn וווּ וועט מען גיין, וווּ וועט מען שטיין {p. 303}<br />
+-   m-gajt nᵻʃt מע גייט נישט {p. 305}<br />
+-   bin-ɔx jan בין איך געגאַנגען {p. 313}<br />
+-   bᵻn-ɔx giɛgaɲgiɛ a gantsɛ naxt, dur-a gantsɛ tuk בין איך געגאַנגען אַ גאַנצע נאַכט, דורך אַ גאַנצע טאָג {p. 315}<br />
+-   bᵻn-ɔx ja-nᵻ tsvajtn dɔrf ara בין איך געגאַנגען אין אַ צווייטן דאָרף אַרײַן {p. 317}<br />
+-   batuk bᵻ-x ʃɔj nᵻʃ giɛgaɲgiɛn בײַ טאָג בין איך שוין נישט געגאַנגען {p. 321}<br />
+-   nᵻ, mɛ mᵻz gajən arɔːs נו, מע מוז גיין אַרויס {p. 321}<br />
+-   zɛnᵻ janɛ vaːtɛ, jɛgaɲgiɛ vaːtɛ זענען געגאַנגען ווײַטער, געגאַנגען ווײַטער {p. 333}<br />
+-   gijt mɛn-ɔx tsᵻ zɛjn גייט מען אויך צו זען {p. 335}<br />
+-   s'uns'ad vɛt gajn, zuktɛ, ɛ-vɛt max masɛn סונסיאַד וועט גיין, זאָגט ער, ער וועט מיך מסרן (Polish sąsiad 'neighbor') {p. 337}<br />
+lomɩn gajn cɩzamɩn špacirn לאָמיר גיין צוזאַמען שפּאַצירן {POLAND, Warsaw, 52211}<br />
+-   e gejtn blojzn kop ער גייט אין בלויזן קאָפּ<br />
+-   bɩs cə də barmɩcvə bɩnəxəgangə ɩn xajdə ביז צו די בר־מיצווה בין איך געגאַנגען אין חדר</p>
+<p><audio controls src="https://archive.org/download/MiriamHoffman/Miriam%20Hoffman%2025%20August%202018%20-%20dos%20geyt.mp3"></audio><br />
+AUDIO Miriam Hoffman [parents from Łódź, POLAND} 25 August 2018<br />
+gajt<br />
+דאָס גייט?<br />
+<audio controls src="https://archive.org/download/MiriamHoffman/Miriam%20Hoffman%2025%20August%202018%20-%20hob%20ikh%20vu%20tsu%20geyn.mp3"></audio><br />
+gajn<br />
+האָב איך וווּ צו גיין</p>
+<h2>HASIDIC</h2>
+<h3>AMERICA</h3>
+<p>gajn<br />
+ɩnc gaj mir jɛct lernən אונדז גייען מיר יעצט לערנען<br />
+mir gajəmir lɛrnən מיר גיי־מיר לערנען<br />
+ɛfšər gajt ɛs azɔj, ɛfšər gajt ɛs aziˑ אפֿשר גייט עס אַזוי, אפֿשר גייט עס אַזי</p>
+<h3>EUROPE</h3>
+<p>ɩnc gajn cɩm hɔˑz אונדז גייען צום הויז [Vienna, Eidel Malowicki}<br />
+ɩx hɔb lib ci gajn ɔfn̩ gas איך האָב ליב צו גיין אויפֿן גאַס [Vienna, Eidel Malowicki}</p>
+<h3>ISRAEL</h3>
+<p>ɛʀ gejt ɛs maxən ɛmɔcjɔnal ער גייט עס מאַכן עמאָציאָנאַל [Bnei Brak, Eli Benedict (Karlin)}</p>
+<p>ven ets gaits paysexdik maxn ווען עץ גייטס פּסחדיק מאַכן  {HASIDIC, Assouline 2017: 50}<br />
+me tur niš gayn azoy מע טאָר נישט גיין אַזוי {HASIDIC, Assouline 2017: 79}</p>
+<h2>NORTHEASTERN</h2>
+<p>איך האָב געגאַנגען<br />
+{מאַרק, "אונדזער ליטווישער ייִדיש" (1951): 457}<br />
+איך האָב אים געזען גייענדיק (אנדערע דיאַלעקטן זאָגן: איך האָב אים געזען גיין. אַלע קענען זאָגן: איך האָב געזען ווי ער גייט) {ז' 457}</p>
+<p>gejn {Katz 1982: 286}</p>
+<h3>Lithuania</h3>
+<p>dɛʀ f. geːt ɩn fɛɫd ákʲɛʀŋ דער פֿערד גייט אין פֿעלד אַקערן {LITHUANIA, Vilnius, 54257}<br />
+-   ɩɣ bɩn kejnmol nid gigáŋgɛn ɩŋ xéjdəʀ איך בין קיין מאָל ניט געגאַנגען אין חדר</p>
+<h2>SOUTHEASTERN</h2>
+<p>Geiin wî dar Keizar geit tsi Fîs. גיין וווּ דער קייזער גיין צו פֿוס 'Hingehen wo der Kaiser zu Fuß hingeht. Frz. aller ou le roi va á pied. P. gdzie car piechotą chodzi. Klr. де цїсар oder царь пішки ходит.' {EAST GALICIA, Brody, Landau 1923, №34}</p>
+<p>gein {easternmost CARPATHO-RUTHENIA, Beranek 1936: 72}</p>
+<p>cɩ dejm menčn gejəmɩr kejn mul nɩšt צו דעם מענטשן גייען מיר קיין מאָל נישט {ROMANIA, Brăila, 45273}</p>
+<p><audio controls src="https://archive.org/download/MangerLexicon/Manger%20-%20Avrom%20Shikt%20Eliezern%20Zukhn%20Far%20Yitskhok%20a%20Vayb%20-%20un%20er%20geyt.mp3"></audio><br />
+AUDIO Itzik Manger [Czernowitz / Chernivtsi, BUKOVINA}<br />
+gejt<br />
+און ער גייט</p>
+</div>
+
+</main>
+<footer>
+  Yiddish Dialect Dictionary &nbsp;·&nbsp; 10,034 entries
+</footer>
+<script>const BASE_URL = '/Yiddish-Dialect-Dictionary';</script>
+<script>
+(function() {
+  let index = null;
+  const input = document.getElementById('search-input');
+  const results = document.getElementById('search-results');
+  if (!input) return;
+
+  async function loadIndex() {
+    if (index) return;
+    try {
+      const r = await fetch(BASE_URL + '/search-index.json');
+      index = await r.json();
+    } catch(e) { console.error('Could not load search index', e); }
+  }
+
+  function search(q) {
+    q = q.trim().toLowerCase();
+    if (!q || !index) return [];
+    return index
+      .filter(e =>
+        e.hw.toLowerCase().includes(q) ||
+        (e.gl && e.gl.toLowerCase().includes(q))
+      )
+      .slice(0, 20);
+  }
+
+  function renderResults(items, q) {
+    if (!items.length) {
+      results.innerHTML = '<div class="search-no-results">No results found.</div>';
+      results.classList.add('show');
+      return;
+    }
+    results.innerHTML = items.map(e => `
+      <a class="search-result-item" href="${e.url}">
+        <span class="search-result-hw">${e.hw}</span>
+        ${e.gl ? `<span class="search-result-gloss">'${e.gl}'</span>` : ''}
+      </a>`).join('');
+    results.classList.add('show');
+  }
+
+  let timer;
+  input.addEventListener('input', async () => {
+    clearTimeout(timer);
+    const q = input.value;
+    if (!q.trim()) { results.classList.remove('show'); return; }
+    await loadIndex();
+    timer = setTimeout(() => renderResults(search(q), q), 120);
+  });
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.header-search')) results.classList.remove('show');
+  });
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { results.classList.remove('show'); input.blur(); }
+  });
+})();
+</script>
+</body>
+</html>

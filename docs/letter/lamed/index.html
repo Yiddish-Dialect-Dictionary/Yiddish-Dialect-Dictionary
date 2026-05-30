@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="yi" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lamed (ל) – Yiddish Dialect Dictionary</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #faf9f6;
+  --surface: #ffffff;
+  --border: #e0ddd5;
+  --text: #1c1b18;
+  --muted: #6b6860;
+  --accent: #1a4480;
+  --accent-light: #e8eef7;
+  --link: #1a4480;
+  --link-hover: #0d2a52;
+  --hebrew-font: 'Ezra SIL', 'SBL Hebrew', 'David', 'Frank Ruehl CLM', serif;
+  --body-font: Georgia, 'Times New Roman', serif;
+  --ui-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+body {
+  font-family: var(--body-font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  font-size: 16px;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--link-hover); text-decoration: underline; }
+
+/* ── Header ── */
+.site-header {
+  background: var(--accent);
+  color: white;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0,0,0,.25);
+}
+.site-header a { color: white; font-family: var(--ui-font); font-size: .9rem; }
+.site-header a.home { font-weight: 700; font-size: 1rem; white-space: nowrap; }
+.site-header a:hover { text-decoration: underline; }
+
+/* search in header */
+.header-search {
+  flex: 1;
+  max-width: 480px;
+  position: relative;
+}
+.header-search input {
+  width: 100%;
+  padding: .45rem .9rem .45rem 2.2rem;
+  border: none;
+  border-radius: 4px;
+  font-family: var(--ui-font);
+  font-size: .95rem;
+  background: rgba(255,255,255,.15);
+  color: white;
+  outline: none;
+}
+.header-search input::placeholder { color: rgba(255,255,255,.65); }
+.header-search input:focus { background: rgba(255,255,255,.25); }
+.header-search .icon {
+  position: absolute;
+  left: .6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: .7;
+  pointer-events: none;
+}
+.search-results {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.15);
+  max-height: 360px;
+  overflow-y: auto;
+  z-index: 200;
+}
+.search-results.show { display: block; }
+.search-result-item {
+  display: block;
+  padding: .6rem 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.search-result-item:last-child { border-bottom: none; }
+.search-result-item:hover { background: var(--accent-light); }
+.search-result-hw {
+  font-size: 1.1rem;
+  font-family: var(--hebrew-font);
+  direction: rtl;
+  display: inline-block;
+  margin-right: .5rem;
+}
+.search-result-gloss { color: var(--muted); font-style: italic; }
+.search-no-results { padding: .8rem 1rem; color: var(--muted); font-family: var(--ui-font); }
+
+/* ── Layout ── */
+.page-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+/* ── Alphabet nav (homepage + letter pages) ── */
+.alphabet-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin: 1.5rem 0;
+}
+.alphabet-nav a {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: .5rem .75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  text-decoration: none;
+  min-width: 52px;
+  transition: background .15s, border-color .15s;
+}
+.alphabet-nav a:hover, .alphabet-nav a.active {
+  background: var(--accent-light);
+  border-color: var(--accent);
+}
+.alphabet-nav a .heb {
+  font-family: var(--hebrew-font);
+  font-size: 1.4rem;
+  line-height: 1;
+  direction: rtl;
+}
+.alphabet-nav a .translit {
+  font-family: var(--ui-font);
+  font-size: .65rem;
+  color: var(--muted);
+  margin-top: .2rem;
+}
+
+/* ── Homepage ── */
+.hero {
+  text-align: center;
+  padding: 2.5rem 0 1.5rem;
+}
+.hero h1 {
+  font-size: 2.2rem;
+  color: var(--accent);
+  margin-bottom: .5rem;
+}
+.hero p {
+  color: var(--muted);
+  font-family: var(--ui-font);
+  font-size: 1rem;
+}
+.section-label {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 2rem 0 .75rem;
+}
+
+/* ── Letter page ── */
+.letter-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: .75rem;
+}
+.letter-header .heb-big {
+  font-family: var(--hebrew-font);
+  font-size: 3rem;
+  direction: rtl;
+  line-height: 1;
+  color: var(--accent);
+}
+.letter-header .info {
+  font-family: var(--ui-font);
+}
+.letter-header .translit-big { font-size: 1.4rem; font-weight: 600; }
+.letter-header .count { color: var(--muted); font-size: .9rem; }
+
+.entry-list {
+  list-style: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface);
+}
+.entry-list li {
+  border-bottom: 1px solid var(--border);
+}
+.entry-list li:last-child { border-bottom: none; }
+.entry-list a {
+  display: flex;
+  align-items: baseline;
+  gap: .75rem;
+  padding: .65rem 1rem;
+  color: var(--text);
+  text-decoration: none;
+}
+.entry-list a:hover { background: var(--accent-light); }
+.entry-list .hw {
+  font-family: var(--hebrew-font);
+  font-size: 1.15rem;
+  direction: rtl;
+  flex-shrink: 0;
+}
+.entry-list .gl {
+  font-style: italic;
+  color: var(--muted);
+  font-size: .9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Entry page ── */
+.entry-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--accent);
+}
+.entry-headword {
+  font-family: var(--hebrew-font);
+  font-size: 2.6rem;
+  direction: rtl;
+  line-height: 1.2;
+  color: var(--text);
+}
+.entry-gloss {
+  font-style: italic;
+  color: var(--muted);
+  font-size: 1.05rem;
+  margin-top: .3rem;
+}
+
+.entry-body h2 {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 1.8rem 0 .6rem;
+  padding-bottom: .3rem;
+  border-bottom: 1px solid var(--border);
+}
+.entry-body h3 {
+  font-family: var(--ui-font);
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin: 1rem 0 .4rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.entry-body p {
+  margin-bottom: .8rem;
+  line-height: 1.7;
+}
+.entry-body ul, .entry-body ol {
+  margin: .5rem 0 .8rem 1.5rem;
+}
+.entry-body li { margin-bottom: .3rem; }
+.entry-body audio {
+  display: block;
+  margin: .75rem 0;
+  max-width: 100%;
+}
+.entry-body img {
+  max-width: 100%;
+  height: auto;
+  margin: .75rem 0;
+  border-radius: 4px;
+}
+.entry-body blockquote {
+  border-left: 3px solid var(--border);
+  padding-left: 1rem;
+  color: var(--muted);
+  margin: .5rem 0;
+}
+
+/* back/nav bar above entry */
+.entry-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.entry-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .3rem .7rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--text);
+}
+.entry-nav a:hover {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  text-decoration: none;
+}
+
+/* ── Footer ── */
+footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  margin-top: 3rem;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .hero h1 { font-size: 1.6rem; }
+  .alphabet-nav a { min-width: 44px; padding: .4rem .55rem; }
+  .alphabet-nav a .heb { font-size: 1.2rem; }
+  .entry-headword { font-size: 2rem; }
+  .header-search { max-width: none; }
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <a href="/Yiddish-Dialect-Dictionary/" class="home">Yiddish Dialect Dictionary</a>
+  <div class="header-search">
+    <svg class="icon" width="16" height="16" fill="white" viewBox="0 0 16 16">
+      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.868-3.834zm-5.242 1.406a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+    </svg>
+    <input type="search" id="search-input" placeholder="Search entries…" autocomplete="off">
+    <div id="search-results" class="search-results"></div>
+  </div>
+</header>
+<main class="page-wrap">
+
+<div class="letter-header">
+  <span class="heb-big">ל</span>
+  <div class="info">
+    <div class="translit-big">Lamed</div>
+    <div class="count">333 entries</div>
+  </div>
+</div>
+<ul class="entry-list">
+<li><a href="/Yiddish-Dialect-Dictionary/entry/Lamed%20%D7%9C%D7%9E%D7%93/"><span class="hw">Lamed למד</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%22%D7%92%D6%BE%D7%91%D7%A2%D7%95%D7%9E%D7%A8/"><span class="hw">ל"ג־בעומר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%22%D7%95%D7%95/"><span class="hw">ל"וו</span><span class="gl">‘thirty-six (righteous men)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90/"><span class="hw">לא</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%20%D7%94%D7%91%D7%99%D7%99%D7%A9%D7%9F%20%D7%9C%D7%9E%D7%93/"><span class="hw">לא הביישן למד</span><span class="gl">‘the bashful person does not learn’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%20%D7%9C%D7%A0%D7%95/"><span class="hw">לא לנו</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B7%D7%91%D7%9F/"><span class="hw">לאַבן</span><span class="gl">‘loaf’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B7%D7%91%D7%A2%D7%A8%D7%A2%D7%A8/"><span class="hw">לאַבערער</span><span class="gl">‘chatterbox, blabbermouth’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B7%D7%92%D7%A2%D7%A8/"><span class="hw">לאַגער</span><span class="gl">‘camp; concentration camp’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B7%D7%93%D7%9F/"><span class="hw">לאַדן</span><span class="gl">‘to invite’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B7%D7%95%D7%95/"><span class="hw">לאַוו</span><span class="gl">‘prohibition’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B7%D7%95%D7%95%D7%A2/"><span class="hw">לאַווע</span><span class="gl">‘sidewalk, pavement’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B7%D7%97%D7%93%D7%99%D7%9D%D6%BE%D7%A7%D7%A8%D7%A2%D7%9E%D7%A2%D7%A8/"><span class="hw">לאַחדים־קרעמער</span><span class="gl">‘retailer’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B7%D7%98%D7%A2/"><span class="hw">לאַטע</span><span class="gl">‘patch’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B7%D7%98%D7%A2%D7%9F/"><span class="hw">לאַטען</span><span class="gl">‘to patch, mend’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B7%D7%98%D7%A7%D7%A2/"><span class="hw">לאַטקע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B7%D7%98%D7%A9/"><span class="hw">לאַטש</span><span class="gl">‘slipper’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B7%D7%9B%D7%9F/"><span class="hw">לאַכן</span><span class="gl">‘to laugh’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B7%D7%9B%D7%A2/"><span class="hw">לאַכע</span><span class="gl">‘rag’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B7%D7%9B%D7%A2%D7%93%D7%99%D7%A7/"><span class="hw">לאַכעדיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B7%D7%9D/"><span class="hw">לאַם</span><span class="gl">‘lamb’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B7%D7%9E%D7%98%D7%A2%D7%A8%D7%9F/"><span class="hw">לאַמטערן</span><span class="gl">‘lantern’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B7%D7%9E%D7%A4%D6%BC%D7%99%D7%90%D6%B8%D7%9F/"><span class="hw">לאַמפּיאָן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B7%D7%A0%D7%92/"><span class="hw">לאַנג</span><span class="gl">‘long’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B7%D7%A0%D7%92%D7%92%D7%A2%20%D7%A4%D6%BF%D7%90/"><span class="hw">לאַנגגע פֿא</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B7%D7%A0%D7%92%D7%96%D7%90%D6%B7%D7%9D/"><span class="hw">לאַנגזאַם</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B7%D7%A0%D7%92%D7%A2%20%D7%9B%D7%95%D7%A3/"><span class="hw">לאַנגע כוף</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B7%D7%A0%D7%92%D7%A2%20%D7%A0%D7%95%D7%9F/"><span class="hw">לאַנגע נון</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B7%D7%A0%D7%92%D7%A2%20%D7%A6%D7%93%D7%99%D7%A7/"><span class="hw">לאַנגע צדיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B7%D7%A0%D7%93/"><span class="hw">לאַנד</span><span class="gl">‘land, country’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B7%D7%A0%D7%93%D7%A1%D7%9E%D7%90%D6%B7%D7%9F/"><span class="hw">לאַנדסמאַן</span><span class="gl">‘countryman’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B7%D7%A0%D7%93%D7%A9%D7%98%D7%A8%D7%90%D6%B8%D7%96/"><span class="hw">לאַנדשטראָז</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B7%D7%A0%D7%98%D7%A2%D7%9A/"><span class="hw">לאַנטעך</span><span class="gl">‘goblin, sprite’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B7%D7%A1%D7%98/"><span class="hw">לאַסט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B7%D7%A1%D7%98%D7%99%D7%A7%20%28unattested%20editorial%20spelling%29/"><span class="hw">לאַסטיק (unattested editorial spelling)</span><span class="gl">‘elastic’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B7%D7%A1%D7%98%D7%A4%D6%BC%D7%A2%D7%A7%D7%9C/"><span class="hw">לאַסטפּעקל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B7%D7%A1%D7%98%D7%A4%D6%BF%D7%A2%D7%A8%D7%93/"><span class="hw">לאַסטפֿערד</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B7%D7%A1%D7%A7%D7%90%D6%B7%D7%A8%D7%A2%D7%95%D7%95/"><span class="hw">לאַסקאַרעוו</span><span class="gl">‘Łaskarzew (town in east-central Poland)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B7%D7%A1%D7%A7%D7%90%D6%B7%D7%A8%D7%A2%D7%95%D7%95%D7%A2%D7%A8/"><span class="hw">לאַסקאַרעווער</span><span class="gl">‘inhabitants of Łaskarzew’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B7%D7%A4%D6%BC%D7%90%D6%B7%D7%A0%D7%A7%D7%A2/"><span class="hw">לאַפּאַנקע</span><span class="gl">‘raid’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B7%D7%A4%D6%BC%D7%A2/"><span class="hw">לאַפּע</span><span class="gl">‘paw’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B7%D7%A4%D6%BF%D7%95%D7%A7%D7%99/"><span class="hw">לאַפֿוקי</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B7%D7%A7%D7%A1/"><span class="hw">לאַקס</span><span class="gl">‘salmon’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B8%D7%91%D7%95%D7%96%D7%A9%D7%90%D6%B7%D7%A7/"><span class="hw">לאָבוזשאַק</span><span class="gl">‘urchin’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B8%D7%92%D7%9C/"><span class="hw">לאָגל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B8%D7%93%20%3E%20%D7%9C%D7%90%D6%B8%D7%93%D7%9F/"><span class="hw">לאָד > לאָדן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B8%D7%93%D7%96%D7%A9/"><span class="hw">לאָדזש</span><span class="gl">‘Łódź, the third-largest city in Poland’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B8%D7%93%D7%9F%201/"><span class="hw">לאָדן 1</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B8%D7%93%D7%9F%202/"><span class="hw">לאָדן 2</span><span class="gl">‘shutter’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B8%D7%96%D7%95%D7%A0%D7%92/"><span class="hw">לאָזונג</span><span class="gl">‘slogan’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B8%D7%96%D7%9F/"><span class="hw">לאָזן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B8%D7%96%D7%A2/"><span class="hw">לאָזע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B8%D7%96%D7%A2%D7%A8/"><span class="hw">לאָזער</span><span class="gl">‘Elazar (man's name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B8%D7%96%D7%A9%D7%A2/"><span class="hw">לאָזשע</span><span class="gl">‘loge, box in theater’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B8%D7%98%D7%A2%D7%A8%D7%99%D7%A2/"><span class="hw">לאָטעריע</span><span class="gl">‘lottery’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B8%D7%99%D7%A2%D7%A8/"><span class="hw">לאָיער</span><span class="gl">‘lawyer’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B8%D7%9A/"><span class="hw">לאָך</span><span class="gl">‘hole’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B8%D7%9D/"><span class="hw">לאָם</span><span class="gl">‘lame’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B8%D7%9E%D7%99%D7%9A/"><span class="hw">לאָמיך</span><span class="gl">‘let me (singular)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B8%D7%9E%D7%99%D7%A8/"><span class="hw">לאָמיר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B8%D7%9E%D7%A2%D7%9F/"><span class="hw">לאָמען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B8%D7%9E%D7%A4%D6%BC/"><span class="hw">לאָמפּ</span><span class="gl">‘lamp’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B8%D7%A0%D7%92%D6%BE%D7%90%D7%B2%D6%B7%D7%9C%D7%90%D6%B7%D7%A0%D7%93/"><span class="hw">לאָנג־אײַלאַנד</span><span class="gl">‘Long Island (New York)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B8%D7%A0%D7%93%D7%90%D6%B8%D7%9F/"><span class="hw">לאָנדאָן</span><span class="gl">‘London (capital of the UK)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B8%D7%A0%D7%A7%D7%A2/"><span class="hw">לאָנקע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B8%D7%A1%D7%A7/"><span class="hw">לאָסק</span><span class="gl">‘Łask (town in central Poland)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B8%D7%A4%D6%BC%D7%A2%D7%98%D7%A2/"><span class="hw">לאָפּעטע</span><span class="gl">‘shovel’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B8%D7%A7%D7%A2%D7%A8%D7%9F/"><span class="hw">לאָקערן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B8%D7%A7%D7%A9/"><span class="hw">לאָקש</span><span class="gl">‘noodle’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B8%D7%A7%D7%A9%D7%9F%D6%BE%D7%A7%D7%95%D7%92%D7%9C/"><span class="hw">לאָקשן־קוגל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B8%D7%A7%D7%A9%D7%A0%D7%91%D7%A8%D7%A2%D7%98/"><span class="hw">לאָקשנברעט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B8%D7%A8%D7%91%D7%A2%D7%A8/"><span class="hw">לאָרבער</span><span class="gl">‘laurel’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%B8%D7%A9%D7%99%D7%A7/"><span class="hw">לאָשיק</span><span class="gl">‘colt, young horse’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%BE%D7%97%D7%A4%D6%BF%D7%A5/"><span class="hw">לא־חפֿץ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%BE%D7%A2%D7%9C%D7%99%D7%9B%D7%9D/"><span class="hw">לא־עליכם</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%BE%D7%A2%D7%9C%D7%99%D7%A0%D7%95/"><span class="hw">לא־עלינו</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D6%BE%D7%AA%D7%A2%D7%A9%D7%82%D7%94/"><span class="hw">לא־תעשׂה</span><span class="gl">‘negative commandment’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D7%94/"><span class="hw">לאה</span><span class="gl">‘Leah (woman's name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%90%D7%99%D7%91%D7%95%D7%93/"><span class="hw">לאיבוד</span><span class="gl">‘lost’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%91%D6%BF/"><span class="hw">לבֿ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%91%D6%BF%D7%93/"><span class="hw">לבֿד</span><span class="gl">‘alone’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%91%D6%BF%D7%95%D7%A9/"><span class="hw">לבֿוש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%91%D6%BF%D7%9F%201/"><span class="hw">לבֿן 1</span><span class="gl">‘Laban’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%91%D6%BF%D7%9F%202/"><span class="hw">לבֿן 2</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%91%D6%BF%D7%A0%D7%94/"><span class="hw">לבֿנה</span><span class="gl">‘moon’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%94%D7%91%D6%BF%D7%93%D7%99%D7%9C/"><span class="hw">להבֿדיל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%94%D7%91%D6%BF%D7%93%D7%99%D7%9C%20%D7%90%D6%B7%D7%9C%D7%A4%D6%BF%D7%99%20%D7%94%D7%91%D6%BF%D7%93%D7%9C%D7%95%D7%AA/"><span class="hw">להבֿדיל אַלפֿי הבֿדלות</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%94%D7%9B%D7%A2%D7%99%D7%A1/"><span class="hw">להכעיס</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%91%D7%9C%D7%99%D7%9F/"><span class="hw">לובלין</span><span class="gl">‘Lublin’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%91%D7%A2%D7%A1/"><span class="hw">לובעס</span><span class="gl">‘ceiling; ceiling beams’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%92%D7%9F/"><span class="hw">לוגן</span><span class="gl">‘to look’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%92%D7%A2%D7%A8/"><span class="hw">לוגער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%95%D7%99%D7%94%201/"><span class="hw">לוויה 1</span><span class="gl">‘funeral’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%95%D7%99%D7%94%202/"><span class="hw">לוויה 2</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%95%D7%99%D7%95%D7%AA%D7%9F/"><span class="hw">לוויותן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%96%D7%A9%D7%A2/"><span class="hw">לוזשע</span><span class="gl">‘puddle’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%97/"><span class="hw">לוח</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%97%D7%95%D7%AA/"><span class="hw">לוחות</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%98/"><span class="hw">לוט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%98%D7%A2/"><span class="hw">לוטע</span><span class="gl">‘February’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%98%D7%A2%D7%A8%D7%90%D6%B7%D7%A0%D7%A2%D7%A8/"><span class="hw">לוטעראַנער</span><span class="gl">‘Lutheran’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%99/"><span class="hw">לוי</span><span class="gl">‘Levi (man's name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%99%D7%91%201/"><span class="hw">לויב 1</span><span class="gl">‘praise’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%99%D7%91%202/"><span class="hw">לויב 2</span><span class="gl">‘bower, arbor’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%99%D7%91%D7%92%D7%A2%D7%96%D7%90%D6%B7%D7%A0%D7%92/"><span class="hw">לויבגעזאַנג</span><span class="gl">‘song of praise, hymn’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%99%D7%91%D7%9F/"><span class="hw">לויבן</span><span class="gl">‘to praise’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%99%D7%92/"><span class="hw">לויג</span><span class="gl">‘lye’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%99%D7%95%D7%95%D7%99%D7%98%D7%A9/"><span class="hw">לויוויטש</span><span class="gl">‘Łowicz (town in central Poland)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%99%D7%96%201/"><span class="hw">לויז 1</span><span class="gl">‘louse’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%99%D7%96%202/"><span class="hw">לויז 2</span><span class="gl">‘loose’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%99%D7%96%D7%9F/"><span class="hw">לויזן</span><span class="gl">‘to delouse’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%99%D7%98/"><span class="hw">לויט</span><span class="gl">‘according to’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%99%D7%98%D7%A2%D7%A8/"><span class="hw">לויטער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%99%D7%9F/"><span class="hw">לוין</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%99%D7%A3/"><span class="hw">לויף</span><span class="gl">‘run’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%99%D7%A4%D6%BF%D7%9F/"><span class="hw">לויפֿן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%99%D7%A4%D6%BF%D7%A2%D7%A8/"><span class="hw">לויפֿער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%99%D7%A6%D7%A7/"><span class="hw">לויצק</span><span class="gl">‘Lutsk (town in northwestern Ukraine)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%9C%D7%91%D6%BF/"><span class="hw">לולבֿ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%9E%D7%93%D6%BE%D7%AA%D6%BC%D7%95%D7%A8%D7%94/"><span class="hw">לומד־תּורה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%9E%D7%93%D7%99%D7%9D/"><span class="hw">לומדים</span><span class="gl">‘scholars’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%9E%D7%93%D7%99%D7%A9/"><span class="hw">לומדיש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%A0%D7%92/"><span class="hw">לונג</span><span class="gl">‘lung’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%A0%D7%92%D7%A2%D7%9F%D6%BE%D7%A4%D6%BF%D7%A2%D7%9C%D7%A2%D7%A8/"><span class="hw">לונגען־פֿעלער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%A0%D7%92%D7%A2%D7%A0%D7%A7%D7%A8%D7%90%D6%B7%D7%A0%D7%A7/"><span class="hw">לונגענקראַנק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%A1%D7%98/"><span class="hw">לוסט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%A1%D7%98%D7%99%D7%A7/"><span class="hw">לוסטיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%A1%D7%98%D7%99%D7%A7%D7%99%D7%99%D7%98/"><span class="hw">לוסטיקייט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%A4%D6%BF%D7%98/"><span class="hw">לופֿט</span><span class="gl">‘air’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%A4%D6%BF%D7%98%D7%99%D7%A7/"><span class="hw">לופֿטיק</span><span class="gl">‘airy’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%A4%D6%BF%D7%98%D7%A9%D7%99%D7%A7/"><span class="hw">לופֿטשיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%A7%D7%97%D7%9F/"><span class="hw">לוקחן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%A8%D7%91%D7%A2/"><span class="hw">לורבע</span><span class="gl">‘person dressed in tatters, rags’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%A9%D7%98%D7%A9%D7%A2%D7%9F/"><span class="hw">לושטשען</span><span class="gl">‘to shell’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%A9%D7%A7%D7%A2/"><span class="hw">לושקע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%95%D7%AA%D6%BC%D7%99%D7%A8/"><span class="hw">לותּיר</span><span class="gl">‘Loter, Lotharingia; earliest area of Jewish settlement in German lands along the Rhine river’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%97%D7%95%D7%A5/"><span class="hw">לחוץ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%97%D7%99%D7%99%D7%9D/"><span class="hw">לחיים</span><span class="gl">‘toast: to life!’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%97%D7%9D/"><span class="hw">לחם</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%97%D7%9E%D7%90/"><span class="hw">לחמא</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%97%D7%A9/"><span class="hw">לחש</span><span class="gl">‘whisper; incantation’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%98%D7%95%D7%91%D6%BF%D7%AA/"><span class="hw">לטובֿת</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%90%D6%B7%D7%92/"><span class="hw">ליאַג</span><span class="gl">‘brine’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%90%D6%B7%D7%9C%D7%A7%D7%A2/"><span class="hw">ליאַלקע</span><span class="gl">‘doll’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%90%D6%B8%D7%93%D7%A2%D7%A1/"><span class="hw">ליאָדעס</span><span class="gl">‘ice cream, sorbet’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%91/"><span class="hw">ליב</span><span class="gl">‘dear’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%91%D7%9F/"><span class="hw">ליבן</span><span class="gl">‘to love’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%91%D7%A2/"><span class="hw">ליבע</span><span class="gl">‘love’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%91%D7%A2%D7%98%D7%A9%D7%95%D7%99%D7%95%D7%95/"><span class="hw">ליבעטשויוו</span><span class="gl">‘Lubaczów (town in southestern Poland)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%91%D7%A2%D7%A8%D7%90%D6%B7%D7%9C/"><span class="hw">ליבעראַל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%91%D7%A2%D7%A8%D7%9E%D7%90%D6%B7%D7%9F/"><span class="hw">ליבערמאַן</span><span class="gl">‘Liberman (name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%91%D7%A2%D7%A8%D7%A2%D7%A8/"><span class="hw">ליבערער</span><span class="gl">‘society beadle’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%91%D7%A2%D7%A8%D7%A9%D7%98/"><span class="hw">ליבערשט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%91%D7%A9%D7%90%D6%B7%D7%A4%D6%BF%D7%98/"><span class="hw">ליבשאַפֿט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%92%D7%99%D7%9F%20%3F/"><span class="hw">ליגין ?</span><span class="gl">‘bowl’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%92%D7%9F%201/"><span class="hw">ליגן 1</span><span class="gl">‘to lie’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%92%D7%9F%202/"><span class="hw">ליגן 2</span><span class="gl">‘lie’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%92%D7%A0%D7%A2%D7%A8/"><span class="hw">ליגנער</span><span class="gl">‘lier’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%93/"><span class="hw">ליד</span><span class="gl">‘song’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%94%D7%95%D7%93%D7%99%D7%9D/"><span class="hw">ליהודים</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%95%D7%91%D7%90%D6%B7%D7%95%D7%95%D7%99%D7%98%D7%A9/"><span class="hw">ליובאַוויטש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%95%D7%91%D7%90%D6%B8%D7%95%D7%95%D7%A0%D7%99%D7%A7/"><span class="hw">ליובאָווניק</span><span class="gl">‘lover’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%95%D7%95%D7%A2%D7%A8%D7%9F/"><span class="hw">ליווערן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%95%D7%9B%D7%98%D7%A2/"><span class="hw">ליוכטע</span><span class="gl">‘stovepipe, chimney’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%95%D7%9C%D7%A7%D7%A2/"><span class="hw">ליולקע</span><span class="gl">‘pipe’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%96%D7%A9%D7%95%D7%95%D7%A2%D7%A1/"><span class="hw">ליזשוועס</span><span class="gl">‘ice-skates’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%98%D7%95%D7%90%D6%B7%D7%A0%D7%99%D7%96%D7%9D/"><span class="hw">ליטואַניזם</span><span class="gl">‘Lithuanianism, loanword from Lithuanian’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%98%D7%95%D7%95%D7%90%D6%B7%D7%A7/"><span class="hw">ליטוואַק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%98%D7%95%D7%95%D7%99%D7%A0%D7%99%D7%96%D7%9D/"><span class="hw">ליטוויניזם</span><span class="gl">‘Lithuanianism, loanword from Lithuanian’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%98%D7%95%D7%95%D7%99%D7%A9/"><span class="hw">ליטוויש</span><span class="gl">‘Lithuanian’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%98%D7%A2/"><span class="hw">ליטע</span><span class="gl">‘(Jewish) Lithuania’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%98%D7%A7%D7%A2/"><span class="hw">ליטקע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%99%D7%91/"><span class="hw">לייב</span><span class="gl">‘lion; Leib (name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%99%D7%91%D7%A2/"><span class="hw">לייבע</span><span class="gl">‘Leib (male name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%99%D7%92%D7%9F/"><span class="hw">לייגן</span><span class="gl">‘to lay’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%99%D7%92%D7%A2%D7%A1%20%5B%3F%5D/"><span class="hw">לייגעס [?]</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%99%D7%93/"><span class="hw">לייד</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%99%D7%93%D7%99%D7%A7/"><span class="hw">ליידיק</span><span class="gl">‘empty’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%99%D7%93%D7%99%D7%A7%D6%BE%D7%92%D7%99%D7%99%D7%A2%D7%A8/"><span class="hw">ליידיק־גייער</span><span class="gl">‘idler’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%99%D7%93%D7%A2%D7%A8/"><span class="hw">ליידער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%99%D7%96%D7%95%D7%A0%D7%92/"><span class="hw">לייזונג</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%99%D7%96%D7%9F/"><span class="hw">לייזן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%99%D7%96%D7%A2%D7%A8/"><span class="hw">לייזער</span><span class="gl">‘Leyzer (man's name), short for Eliezer אליעזר’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%99%D7%98%D7%A2%D7%A0%D7%90%D6%B7%D7%A0%D7%98/"><span class="hw">לייטענאַנט</span><span class="gl">‘lieutenant’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%99%D7%98%D7%A2%D7%A8/"><span class="hw">לייטער</span><span class="gl">‘ladder’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%99%D7%9D/"><span class="hw">ליים</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%99%D7%9E%D7%99%D7%A7/"><span class="hw">ליימיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%99%D7%9E%D7%A2%D7%9F%201/"><span class="hw">ליימען 1</span><span class="gl">‘earthen’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%99%D7%A2%D7%A0%D7%A2%D7%9F/"><span class="hw">לייענען</span><span class="gl">‘to read’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%99%D7%A2%D7%A0%D7%A2%D7%A8/"><span class="hw">לייענער</span><span class="gl">‘reader’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%99%D7%A6%D7%A2/"><span class="hw">לייצע</span><span class="gl">‘rein’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%99%D7%A7%D7%95%D7%95%D7%95%D6%BC%D7%93/"><span class="hw">לייקוווּד</span><span class="gl">‘Lakewood (city in New Jersey with large ultra-Orthodox community)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%99%D7%A7%D7%A2/"><span class="hw">לייקע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%99%D7%A7%D7%A2%D7%A0%D7%A2%D7%9F/"><span class="hw">לייקענען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%9B%D7%98/"><span class="hw">ליכט</span><span class="gl">‘light; candle’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%9B%D7%98%D7%99%D7%A7/"><span class="hw">ליכטיק</span><span class="gl">‘bright’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%9B%D7%98%D7%99%D7%A7%D7%99%D7%99%D7%98/"><span class="hw">ליכטיקייט</span><span class="gl">‘brightness’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%9B%D7%98%D7%A6%D7%99%D6%B4%D7%A2%D7%A8/"><span class="hw">ליכטציִער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%9B%D7%98%D7%A9%D7%A4%D6%BC%D7%90%D6%B8%D7%A8%D7%A2%D7%A8/"><span class="hw">ליכטשפּאָרער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%9C%D7%90%D6%B7/"><span class="hw">לילאַ</span><span class="gl">‘lilac, violet’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%9C%D7%94/"><span class="hw">לילה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%9C%D7%99%D7%A2/"><span class="hw">ליליע</span><span class="gl">‘lily’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%9C%D7%99%D7%A4%D6%BC%D7%95%D7%98/"><span class="hw">ליליפּוט</span><span class="gl">‘dwarf, little person’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%9E%D7%95%D7%93/"><span class="hw">לימוד</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%9E%D7%95%D7%93%20%D7%96%D7%9B%D7%95%D7%AA/"><span class="hw">לימוד זכות</span><span class="gl">‘the benefit of the doubt’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%9E%D7%A2%D7%A0%D7%A2/"><span class="hw">לימענע</span><span class="gl">‘lemon’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%A0%D7%93%D7%96/"><span class="hw">לינדז</span><span class="gl">‘lentil’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%A0%D7%99%D7%A2/"><span class="hw">ליניע</span><span class="gl">‘line’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%A0%D7%99%D7%A8%D7%9F/"><span class="hw">לינירן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%A0%D7%A7/"><span class="hw">לינק</span><span class="gl">‘left’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%A1%D7%98/"><span class="hw">ליסט</span><span class="gl">‘list’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%A1%D7%99%D7%A0%D7%A2/"><span class="hw">ליסינע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%A1%D7%A2/"><span class="hw">ליסע</span><span class="gl">‘bald’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%A1%D7%A2%D7%A7%D7%90%D6%B8%D7%A4%D6%BC/"><span class="hw">ליסעקאָפּ</span><span class="gl">‘bald pate’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%A4%D6%BC/"><span class="hw">ליפּ</span><span class="gl">‘lip’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%A4%D6%BC%D7%9E%D7%90%D6%B7%D7%9F/"><span class="hw">ליפּמאַן</span><span class="gl">‘Limpan (name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%A4%D6%BC%D7%A2%201/"><span class="hw">ליפּע 1</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%A4%D6%BC%D7%A2%202/"><span class="hw">ליפּע 2</span><span class="gl">‘Lipa (men's name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%A4%D6%BC%D7%A2%D7%91%D7%95%D7%99%D7%9D/"><span class="hw">ליפּעבוים</span><span class="gl">‘linden, basswood’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%A4%D6%BF%D7%98%D7%A9%D7%99%D7%A7/"><span class="hw">ליפֿטשיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%A4%D6%BF%D7%A9%D7%A2/"><span class="hw">ליפֿשע</span><span class="gl">‘Lifshe (name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%A7/"><span class="hw">ליק</span><span class="gl">‘alley’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%A7%D7%95%D7%95%D7%99%D7%93%D7%90%D6%B7%D7%A6%D7%99%D7%A2/"><span class="hw">ליקווידאַציע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%99%D7%A7%D7%95%D7%95%D7%99%D7%93%D7%99%D7%A8%D7%9F/"><span class="hw">ליקווידירן</span><span class="gl">‘to liquidate’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%9B%D6%BC%D7%91%D6%BF%D7%95%D7%93/"><span class="hw">לכּבֿוד</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%9B%D6%BC%D7%9C/"><span class="hw">לכּל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%9B%D7%90%D7%95%D7%A8%D7%94/"><span class="hw">לכאורה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%9B%D7%9C%20%D7%9C%D7%A8%D7%90%D7%A9/"><span class="hw">לכל לראש</span><span class="gl">‘first of all’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%9B%D7%9C%D6%BE%D7%94%D7%A4%D6%BC%D7%97%D7%95%D7%AA/"><span class="hw">לכל־הפּחות</span><span class="gl">‘at least’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%9B%D7%9F/"><span class="hw">לכן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%9B%D7%AA%D6%BC%D7%97%D7%99%D7%9C%D7%94/"><span class="hw">לכתּחילה</span><span class="gl">‘at first, originally’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%9E%D7%90%D6%B7%D7%99/"><span class="hw">למאַי</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%9E%D7%93%D6%BE%D7%99%D7%95%D7%93/"><span class="hw">למד־יוד</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%9E%D7%93%D7%9F/"><span class="hw">למדן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%9E%D7%93%D7%A0%D7%95%D7%AA/"><span class="hw">למדנות</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%9E%D7%93%D7%A0%D7%99%D7%AA/"><span class="hw">למדנית</span><span class="gl">‘learned woman’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%9E%D7%9A/"><span class="hw">למך</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%9E%D7%A2%D7%9F%D6%BE%D7%94%D7%A9%D7%9D/"><span class="hw">למען־השם</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%9E%D7%A9%D7%9C/"><span class="hw">למשל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A0%D7%95/"><span class="hw">לנו</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A1%D7%95%D7%A3/"><span class="hw">לסוף</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%91%D7%9F%201/"><span class="hw">לעבן 1</span><span class="gl">‘to live’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%91%D7%9F%202/"><span class="hw">לעבן 2</span><span class="gl">‘life; living’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%91%D7%9F%203/"><span class="hw">לעבן 3</span><span class="gl">‘beside, next to’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%91%D7%9F%20%D7%90%D6%B7%D7%A0%D7%90%D6%B7%D7%A0%D7%93/"><span class="hw">לעבן אַנאַנד</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%91%D7%A0%D7%A1%D7%98%D7%A2%D7%92/"><span class="hw">לעבנסטעג</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%91%D7%A2%D7%93%D7%99%D7%A7/"><span class="hw">לעבעדיק</span><span class="gl">‘lively’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%91%D7%A2%D7%93%D7%99%D7%A7%D7%A2%D7%A8%D7%94%D7%99%D7%99%D7%98/"><span class="hw">לעבעדיקערהייט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%91%D7%A2%D7%A8/"><span class="hw">לעבער</span><span class="gl">‘liver’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%92%D7%A2%D7%A8%D6%BE%D7%A1%D7%97%D7%95%D7%A8%D7%94/"><span class="hw">לעגער־סחורה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%93%D7%A2%D7%A8/"><span class="hw">לעדער</span><span class="gl">‘leather’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%95%D7%9C%D7%9D/"><span class="hw">לעולם</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%95%D7%9C%D7%9D%20%D7%94%D7%91%D7%90/"><span class="hw">לעולם הבא</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%95%D7%9C%D7%9D%20%D7%AA%D6%BC%D7%99%D7%A7%D7%97/"><span class="hw">לעולם תּיקח</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%96/"><span class="hw">לעז</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%96%D7%9F/"><span class="hw">לעזן</span><span class="gl">‘to read’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%96%D7%A2%D7%A8/"><span class="hw">לעזער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%98%D7%A9/"><span class="hw">לעטש</span><span class="gl">‘bow’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%9B%D7%A2%D7%A8%D7%93%D7%99%D7%A7/"><span class="hw">לעכערדיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%9B%D7%A2%D7%A8%D7%9F/"><span class="hw">לעכערן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%9E%D7%91%D7%A2%D7%A8%D7%99%D7%A7/"><span class="hw">לעמבעריק</span><span class="gl">‘Lviv—city in western Ukraine (Polish Lwów, German Lemberg)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%9E%D7%9C%202/"><span class="hw">לעמל 2</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%9E%D7%A2%D7%A9%D7%A7%D7%A2/"><span class="hw">לעמעשקע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%9E%D7%A4%D6%BC%D7%9C/"><span class="hw">לעמפּל</span><span class="gl">‘lamp, light, lightbulb’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%9E%D7%A4%D6%BC%D7%A2%D7%A8%D7%98/"><span class="hw">לעמפּערט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%9F/"><span class="hw">לען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%A0%D7%92/"><span class="hw">לענג</span><span class="gl">‘length’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%A0%D7%92%D6%BE%D7%90%D7%95%D7%99%D7%A1/"><span class="hw">לענג־אויס</span><span class="gl">‘along (preposition)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%A0%D7%92%D7%A0%D7%90%D6%B7%D7%95/"><span class="hw">לענגנאַו</span><span class="gl">‘Lengnau (town in Switzerland where Jews were restricted to living in the 18th and 19th c.)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%A0%D7%93%D7%9C%D7%A2%D7%A8/"><span class="hw">לענדלער</span><span class="gl">‘landlord’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%A0%D7%A2%D7%9F/"><span class="hw">לענען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%A4%D6%BC%D7%9C/"><span class="hw">לעפּל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%A4%D6%BC%D7%A7%D7%A2/"><span class="hw">לעפּקע</span><span class="gl">‘sticky’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%A4%D6%BF%D7%9C/"><span class="hw">לעפֿל</span><span class="gl">‘spoon’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%A4%D6%BF%D7%A2%D7%9C%D7%A2/"><span class="hw">לעפֿעלע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%A4%D6%BF%D7%A6%D7%95%D7%A0%D7%92/"><span class="hw">לעפֿצונג</span><span class="gl">‘mouth of a river’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%A6%D7%92%D7%A2%D7%9C%D7%98/"><span class="hw">לעצגעלט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%A6%D7%98/"><span class="hw">לעצט</span><span class="gl">‘last’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%A6%D7%9C/"><span class="hw">לעצל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%A6%D7%9C%D7%A2%D7%9A/"><span class="hw">לעצלעך</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%A7%D7%95%D7%95%D7%90%D6%B7%D7%A8/"><span class="hw">לעקוואַר</span><span class="gl">‘jam’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%A7%D7%98%D7%A2%D7%A8/"><span class="hw">לעקטער</span><span class="gl">‘electricity; electric light’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%A7%D7%9F/"><span class="hw">לעקן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%A7%D7%A2%D7%9A/"><span class="hw">לעקעך</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%A7%D7%A6%D7%99%D7%A2/"><span class="hw">לעקציע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%A8/"><span class="hw">לער</span><span class="gl">‘empty’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%A8%D7%A0%D7%91%D7%90%D6%B7%D7%A8/"><span class="hw">לערנבאַר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%A8%D7%A0%D7%A2%D7%9F/"><span class="hw">לערנען</span><span class="gl">‘to teach; to learn, study’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%A8%D7%A2%D7%A8/"><span class="hw">לערער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%A9%D7%98%D7%A9/"><span class="hw">לעשטש</span><span class="gl">‘bream (fish)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%A9%D7%9F/"><span class="hw">לעשן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%A9%D7%A2%D7%A8/"><span class="hw">לעשער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A2%D7%A9%D7%A4%D6%BC%D7%90%D6%B7%D7%A4%D6%BC%D7%99%D7%A8/"><span class="hw">לעשפּאַפּיר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A4%D6%BC%22%D7%A7/"><span class="hw">לפּ"ק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A4%D6%BC%D7%97%D7%95%D7%AA/"><span class="hw">לפּחות</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A4%D6%BF%D7%99%D6%BE%D7%A9%D7%A2%D7%94/"><span class="hw">לפֿי־שעה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A5/"><span class="hw">לץ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A6%D7%A0%D7%95%D7%AA/"><span class="hw">לצנות</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A6%D7%A2%D7%95%D7%95%D7%A2%D7%9F/"><span class="hw">לצעווען</span><span class="gl">‘to clown, be zany’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A7%D7%97%D6%BE%D7%98%D7%95%D7%91%D6%BF/"><span class="hw">לקח־טובֿ</span><span class="gl">‘good lesson’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A7%D7%97%D7%A2%D7%A0%D7%A2%D7%9F/"><span class="hw">לקחענען</span><span class="gl">‘to take, steal’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A8%D7%A2%D7%94/"><span class="hw">לרעה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A9%D7%95%D7%9F/"><span class="hw">לשון</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A9%D7%95%D7%9F%20%D7%97%D7%99%D7%91%D7%94/"><span class="hw">לשון חיבה</span><span class="gl">‘expression of love affection’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A9%D7%95%D7%9F-%D7%94%D7%A8%D7%A2/"><span class="hw">לשון-הרע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A9%D7%95%D7%9F%D6%BE%D7%99%D7%97%D7%99%D7%93/"><span class="hw">לשון־יחיד</span><span class="gl">‘singular’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A9%D7%95%D7%9F%D6%BE%D7%A7%D7%95%D7%93%D7%A9/"><span class="hw">לשון־קודש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A9%D7%95%D7%9F%D6%BE%D7%A8%D7%91%D7%99%D7%9D/"><span class="hw">לשון־רבים</span><span class="gl">‘plural’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A9%D7%9D%20%D7%A9%D7%9E%D7%99%D7%9D/"><span class="hw">לשם שמים</span><span class="gl">‘for the sake of Heaven (i.e., without material reward)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A9%D7%9E%D7%94/"><span class="hw">לשמה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A9%D7%A0%D7%94%20%D7%98%D7%95%D7%91%D6%BF%D7%94%20%D7%AA%D6%BC%D7%9B%D6%BC%D7%AA%D7%91%D6%BF%D7%95/"><span class="hw">לשנה טובֿה תּכּתבֿו</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A9%D7%A0%D7%94%D6%BE%D7%98%D7%95%D7%91%D6%BF%D7%94%20%3E%20%D7%A9%D7%A0%D7%94%D6%BE%D7%98%D7%95%D7%91%D6%BF%D7%94/"><span class="hw">לשנה־טובֿה > שנה־טובֿה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%A9%D7%A0%D7%99%D7%AA/"><span class="hw">לשנית</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%B2%D6%B7%D7%91/"><span class="hw">לײַב</span><span class="gl">‘body’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%B2%D6%B7%D7%91%D6%BE%D7%A6%D7%95%D7%93%D7%A2%D7%A7%D7%9C/"><span class="hw">לײַב־צודעקל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%B2%D6%B7%D7%91%D7%99%D7%A7/"><span class="hw">לײַביק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%B2%D6%B7%D7%91%D7%9C/"><span class="hw">לײַבל</span><span class="gl">‘T-shirt, undershirt’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%B2%D6%B7%D7%92%D7%9F/"><span class="hw">לײַגן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%B2%D6%B7%D7%93%D7%9F/"><span class="hw">לײַדן</span><span class="gl">‘to suffer’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%B2%D6%B7%D7%96%D7%99%D7%A7/"><span class="hw">לײַזיק</span><span class="gl">‘lousy (with lice)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%B2%D6%B7%D7%98/"><span class="hw">לײַט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%B2%D6%B7%D7%98%D7%96%D7%A2%D7%9C%D7%99%D7%A7%D7%9F/"><span class="hw">לײַטזעליקן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%B2%D6%B7%D7%98%D7%99%D7%A9/"><span class="hw">לײַטיש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%B2%D6%B7%D7%98%D7%9F/"><span class="hw">לײַטן</span><span class="gl">‘to ring, peal (of bells)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%B2%D6%B7%D7%9B%D7%98/"><span class="hw">לײַכט</span><span class="gl">‘easy, light’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%B2%D6%B7%D7%9B%D7%98%D7%9F/"><span class="hw">לײַכטן</span><span class="gl">‘to shine’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%B2%D6%B7%D7%9B%D7%98%D7%A2%D7%A8/"><span class="hw">לײַכטער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%B2%D6%B7%D7%9C%D7%A2%D7%9A/"><span class="hw">לײַלעך</span><span class="gl">‘sheet’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%B2%D6%B7%D7%9F/"><span class="hw">לײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%B2%D6%B7%D7%A1%D7%98/"><span class="hw">לײַסט</span><span class="gl">‘(shoemaker's) last’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%B2%D6%B7%D7%A2%D7%9F/"><span class="hw">לײַען</span><span class="gl">‘to loan; borrow’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%B2%D6%B7%D7%A4%D6%BC%D7%A1%D7%A7/"><span class="hw">לײַפּסק</span><span class="gl">‘Leipzig (city in eastern Germany)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%9C%D7%B2%D6%B7%D7%A4%D6%BC%D7%A1%D7%A7%D7%A2%D7%A8/"><span class="hw">לײַפּסקער</span><span class="gl">‘of Leipzig’</span></a></li>
+
+</ul>
+
+</main>
+<footer>
+  Yiddish Dialect Dictionary &nbsp;·&nbsp; 10,034 entries
+</footer>
+<script>const BASE_URL = '/Yiddish-Dialect-Dictionary';</script>
+<script>
+(function() {
+  let index = null;
+  const input = document.getElementById('search-input');
+  const results = document.getElementById('search-results');
+  if (!input) return;
+
+  async function loadIndex() {
+    if (index) return;
+    try {
+      const r = await fetch(BASE_URL + '/search-index.json');
+      index = await r.json();
+    } catch(e) { console.error('Could not load search index', e); }
+  }
+
+  function search(q) {
+    q = q.trim().toLowerCase();
+    if (!q || !index) return [];
+    return index
+      .filter(e =>
+        e.hw.toLowerCase().includes(q) ||
+        (e.gl && e.gl.toLowerCase().includes(q))
+      )
+      .slice(0, 20);
+  }
+
+  function renderResults(items, q) {
+    if (!items.length) {
+      results.innerHTML = '<div class="search-no-results">No results found.</div>';
+      results.classList.add('show');
+      return;
+    }
+    results.innerHTML = items.map(e => `
+      <a class="search-result-item" href="${e.url}">
+        <span class="search-result-hw">${e.hw}</span>
+        ${e.gl ? `<span class="search-result-gloss">'${e.gl}'</span>` : ''}
+      </a>`).join('');
+    results.classList.add('show');
+  }
+
+  let timer;
+  input.addEventListener('input', async () => {
+    clearTimeout(timer);
+    const q = input.value;
+    if (!q.trim()) { results.classList.remove('show'); return; }
+    await loadIndex();
+    timer = setTimeout(() => renderResults(search(q), q), 120);
+  });
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.header-search')) results.classList.remove('show');
+  });
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { results.classList.remove('show'); input.blur(); }
+  });
+})();
+</script>
+</body>
+</html>

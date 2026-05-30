@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="yi" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>וואַנט – Yiddish Dialect Dictionary</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #faf9f6;
+  --surface: #ffffff;
+  --border: #e0ddd5;
+  --text: #1c1b18;
+  --muted: #6b6860;
+  --accent: #1a4480;
+  --accent-light: #e8eef7;
+  --link: #1a4480;
+  --link-hover: #0d2a52;
+  --hebrew-font: 'Ezra SIL', 'SBL Hebrew', 'David', 'Frank Ruehl CLM', serif;
+  --body-font: Georgia, 'Times New Roman', serif;
+  --ui-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+body {
+  font-family: var(--body-font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  font-size: 16px;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--link-hover); text-decoration: underline; }
+
+/* ── Header ── */
+.site-header {
+  background: var(--accent);
+  color: white;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0,0,0,.25);
+}
+.site-header a { color: white; font-family: var(--ui-font); font-size: .9rem; }
+.site-header a.home { font-weight: 700; font-size: 1rem; white-space: nowrap; }
+.site-header a:hover { text-decoration: underline; }
+
+/* search in header */
+.header-search {
+  flex: 1;
+  max-width: 480px;
+  position: relative;
+}
+.header-search input {
+  width: 100%;
+  padding: .45rem .9rem .45rem 2.2rem;
+  border: none;
+  border-radius: 4px;
+  font-family: var(--ui-font);
+  font-size: .95rem;
+  background: rgba(255,255,255,.15);
+  color: white;
+  outline: none;
+}
+.header-search input::placeholder { color: rgba(255,255,255,.65); }
+.header-search input:focus { background: rgba(255,255,255,.25); }
+.header-search .icon {
+  position: absolute;
+  left: .6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: .7;
+  pointer-events: none;
+}
+.search-results {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.15);
+  max-height: 360px;
+  overflow-y: auto;
+  z-index: 200;
+}
+.search-results.show { display: block; }
+.search-result-item {
+  display: block;
+  padding: .6rem 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.search-result-item:last-child { border-bottom: none; }
+.search-result-item:hover { background: var(--accent-light); }
+.search-result-hw {
+  font-size: 1.1rem;
+  font-family: var(--hebrew-font);
+  direction: rtl;
+  display: inline-block;
+  margin-right: .5rem;
+}
+.search-result-gloss { color: var(--muted); font-style: italic; }
+.search-no-results { padding: .8rem 1rem; color: var(--muted); font-family: var(--ui-font); }
+
+/* ── Layout ── */
+.page-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+/* ── Alphabet nav (homepage + letter pages) ── */
+.alphabet-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin: 1.5rem 0;
+}
+.alphabet-nav a {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: .5rem .75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  text-decoration: none;
+  min-width: 52px;
+  transition: background .15s, border-color .15s;
+}
+.alphabet-nav a:hover, .alphabet-nav a.active {
+  background: var(--accent-light);
+  border-color: var(--accent);
+}
+.alphabet-nav a .heb {
+  font-family: var(--hebrew-font);
+  font-size: 1.4rem;
+  line-height: 1;
+  direction: rtl;
+}
+.alphabet-nav a .translit {
+  font-family: var(--ui-font);
+  font-size: .65rem;
+  color: var(--muted);
+  margin-top: .2rem;
+}
+
+/* ── Homepage ── */
+.hero {
+  text-align: center;
+  padding: 2.5rem 0 1.5rem;
+}
+.hero h1 {
+  font-size: 2.2rem;
+  color: var(--accent);
+  margin-bottom: .5rem;
+}
+.hero p {
+  color: var(--muted);
+  font-family: var(--ui-font);
+  font-size: 1rem;
+}
+.section-label {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 2rem 0 .75rem;
+}
+
+/* ── Letter page ── */
+.letter-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: .75rem;
+}
+.letter-header .heb-big {
+  font-family: var(--hebrew-font);
+  font-size: 3rem;
+  direction: rtl;
+  line-height: 1;
+  color: var(--accent);
+}
+.letter-header .info {
+  font-family: var(--ui-font);
+}
+.letter-header .translit-big { font-size: 1.4rem; font-weight: 600; }
+.letter-header .count { color: var(--muted); font-size: .9rem; }
+
+.entry-list {
+  list-style: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface);
+}
+.entry-list li {
+  border-bottom: 1px solid var(--border);
+}
+.entry-list li:last-child { border-bottom: none; }
+.entry-list a {
+  display: flex;
+  align-items: baseline;
+  gap: .75rem;
+  padding: .65rem 1rem;
+  color: var(--text);
+  text-decoration: none;
+}
+.entry-list a:hover { background: var(--accent-light); }
+.entry-list .hw {
+  font-family: var(--hebrew-font);
+  font-size: 1.15rem;
+  direction: rtl;
+  flex-shrink: 0;
+}
+.entry-list .gl {
+  font-style: italic;
+  color: var(--muted);
+  font-size: .9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Entry page ── */
+.entry-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--accent);
+}
+.entry-headword {
+  font-family: var(--hebrew-font);
+  font-size: 2.6rem;
+  direction: rtl;
+  line-height: 1.2;
+  color: var(--text);
+}
+.entry-gloss {
+  font-style: italic;
+  color: var(--muted);
+  font-size: 1.05rem;
+  margin-top: .3rem;
+}
+
+.entry-body h2 {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 1.8rem 0 .6rem;
+  padding-bottom: .3rem;
+  border-bottom: 1px solid var(--border);
+}
+.entry-body h3 {
+  font-family: var(--ui-font);
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin: 1rem 0 .4rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.entry-body p {
+  margin-bottom: .8rem;
+  line-height: 1.7;
+}
+.entry-body ul, .entry-body ol {
+  margin: .5rem 0 .8rem 1.5rem;
+}
+.entry-body li { margin-bottom: .3rem; }
+.entry-body audio {
+  display: block;
+  margin: .75rem 0;
+  max-width: 100%;
+}
+.entry-body img {
+  max-width: 100%;
+  height: auto;
+  margin: .75rem 0;
+  border-radius: 4px;
+}
+.entry-body blockquote {
+  border-left: 3px solid var(--border);
+  padding-left: 1rem;
+  color: var(--muted);
+  margin: .5rem 0;
+}
+
+/* back/nav bar above entry */
+.entry-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.entry-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .3rem .7rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--text);
+}
+.entry-nav a:hover {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  text-decoration: none;
+}
+
+/* ── Footer ── */
+footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  margin-top: 3rem;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .hero h1 { font-size: 1.6rem; }
+  .alphabet-nav a { min-width: 44px; padding: .4rem .55rem; }
+  .alphabet-nav a .heb { font-size: 1.2rem; }
+  .entry-headword { font-size: 2rem; }
+  .header-search { max-width: none; }
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <a href="/Yiddish-Dialect-Dictionary/" class="home">Yiddish Dialect Dictionary</a>
+  <div class="header-search">
+    <svg class="icon" width="16" height="16" fill="white" viewBox="0 0 16 16">
+      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.868-3.834zm-5.242 1.406a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+    </svg>
+    <input type="search" id="search-input" placeholder="Search entries…" autocomplete="off">
+    <div id="search-results" class="search-results"></div>
+  </div>
+</header>
+<main class="page-wrap">
+
+<div class="entry-nav">
+  <a href="/Yiddish-Dialect-Dictionary/letter/vov/">← Vov</a>
+  <a href="/Yiddish-Dialect-Dictionary/">Home</a>
+</div>
+<div class="entry-header">
+  <div class="entry-headword" dir="rtl">וואַנט</div>
+  <div class="entry-gloss">‘wall’</div>
+</div>
+<div class="entry-body" dir="auto">
+<p>וואַנט<br />
+ווענט<br />
+די<br />
+'wall'</p>
+<h2>ETYMOLOGY</h2>
+<p 335="335" Fliciński="Fliciński">The phrase שלאָגן זיך קאָפּ אין וואַנט 'bang your head against the wall (i.e., to try to do something without success)' appears to be a calque of Polish bić głową w mur (or variants walić głową o mur, bić głową w ścianę etc). <br />
+{Fliciński 21, 444}<br />
+The idiom רעדן צו דער וואַנט 'to talk to a brick wall (i.e., in vain)' appears to be a calque of Polish gadać / mówić jak do ściany. <br />
+{Fliciński 107}<br />
+The idiom צודריקן צו דער וואַנט 'to push to the wall (i.e., compel to do something)' appears to be a calque of Polish pryzcisnąć / przyciskać kogoś do muru.<br /></p>
+<p 1982:="1982:" 58="58" Katz="Katz">A11<br />
+MHG a<br />
+ווענט<br />
+Vowel 21, Proto-Yiddish ✱ɛ<br /></p>
+<p><img alt="" src="https://archive.org/download/shprakhatlas/ShprakhatlasKarte2-Optimized.jpg" /><br />
+{Yiddish Language Atlas of the Soviet Union 1931, map 2} <br />
+<img alt="" src="https://archive.org/download/Yiddish-Dialect-Maps/map%20-%20FoY3-122%20-%20oyfn%20vant.jpg" /><br />
+<img alt="" src="https://archive.org/download/Yiddish-Dialect-Maps/map%20-%20FoY3-125%20-%20in%20der%20vant%20-%20in%20der%20suke.jpg" /><br />
+<img alt="" src="https://archive.org/download/Yiddish-Dialect-Maps/Herzog4-43-46-VantShtotTsung-133.jpg" /><br />
+<img alt="" src="https://archive.org/download/Yiddish-Dialect-Maps/Herzog4-47-50-VantSukeTirFlash-134.jpg" /><br />
+<img alt="" src="https://archive.org/download/Yiddish-Dialect-Maps/Herzog4-59-61-IntoTheWall-IntoTheField-139.jpg" /></p>
+<h2>WESTERN</h2>
+<h3>Old Literary Yiddish (ca. 1100-1800)</h3>
+<p 1696_="1696," 309_="309," 311="311" מעשׂה="מעשׂה" ניקלסבורג="ניקלסבורג">ער האט איין קינד גשלאגין ווידר דיא וואנד<br />
+'he struck a child against a wall'<br />
+האט ער אים דען קאפף ווידר די וואנט גישלאגין י' או י"ב פעמי'<br />
+'he knocked his head against the wall ten or twelve times'<br /></p>
+<p>Wer horcht unter die Wand, hört seine eigene Schand. <br />
+{Maißim un Schnokes vun e Handelewos, LEIPZIG 1845: 46}<br />
+-   Bist משוגע schlog dr 'n Kop an die Wand. {48}</p>
+<p FRANKFURT_="FRANKFURT," Tendlau="Tendlau" №124="№124">Man kann Wänd mit 'm einlege'! 'He's so stupid you can knock down walls with him'<br /></p>
+<h3>Oyberland (West Transcarpathian)</h3>
+<p>wånd {WTCP, Budapest, Hutterer 1965: 122}</p>
+<p>vand {WTCP, NORTH-CENTRAL HUNGARIAN, Garvin 1965: 105}</p>
+<p>ə špɩ̆glʲ ɔuv də vand אַ שפּיגל אויף די וואַנט {WTCP, Dunajská Streda, 47179}<br />
+kɔp in vand ərⲁý {?} קאָפּ אין וואַנט אַרײַן</p>
+<ul>
+<li>ə noːgl in vant gəšloːg͡ŋ אַ נאָגל אין וואַנט געשלאָגן</li>
+</ul>
+<p>ə noːgl arájŋgəšlùgŋ ɩn dər vant אַ נאָגל אַרײַנגעשלאָגן אין דער וואַנט {WTCP, Vác, 47197}<br />
+-   ə špɩ̆gʲlʲ heŋ əx of dər vant אַ שפּיגל הענג איך אויף דער וואַנט<br />
+-   kɔp in də vant קאָפּ אין די וואַנט</p>
+<p>hɔt ərajŋgəklapt ə nʊglʲ ɩn də vant arájn האָט אַרײַנגעקלאַפּט אַ נאָגל אין די וואַנט אַרײַן {WTCP, Berettyó-Újfalu, 47212}<br />
+-   ə špɩ̆gʎ hɔt ər gʲəhɔŋgʲən ɔf dər vant אַ שפּיגל האָט ער געהאָנגען אויף דער וואַנט <br />
+-   ɛr lɔt cy zəx rɛdn vi cy dər vant ער לאָזט צו זיך רעדן ווי צו דער וואַנט</p>
+<h2>CENTRAL</h2>
+<h3>Unterland (East Transcarpathian)</h3>
+<p>vant 'Wand, Mauer' {ETCP, Beranek 1941}</p>
+<p>ert gəklapt a nuglʲ ɩn dər vant ער האָט געקלאַפּט אַ נאָגל אין דער וואַנט {ETCP, Teiuș, 46233}</p>
+<p>a nugl aráŋgəšlugŋ ɩn dɩ vant אַ נאָגל אַרײַנגעשלאָגן אין די וואַנט {ETCP, Sîg Felső Szek, 47223}<br />
+-   ə špigʎ hèŋgix óuf of dər vant אַ שפּיגל הענג איך אויף אויף דער וואַנט</p>
+<p>ert gəklapt a nuglʲ ɩn dər vant ער האָט געקלאַפּט אַ נאָגל אין דער וואַנט {ETCP, Bistriţa, 47241}<br />
+-   fɛrɔ́stətər núglʲ פֿאַרראָסטעטער נאָגל</p>
+<p>ert araˑngəklɔpt a nuˑgl ɩn dər vant ער האָט אַרײַנגעקלאַפּט אַ נאָגל אין דער וואַנט {ETCP, Nyzhnya Apsha, 48233}<br />
+-   oufgəhoŋgən a špɪglʲ of dər vant אויפֿגעהאָנגען אַ שפּיגל אויף דער וואַנט</p>
+<p>ʀɔt aʀajŋgɩhakt a nugʎ ɩn dɛ vant ער האָט אַרײַנגעהאַקט אַ נאָגל אין דער וואַנט {POLAND, Wolbrom, 50196}<br />
+-   ʀɔt oufgɩhɔngɩn a špiˑgʎ ɔf dɛ vant ער האָט אויפֿגעהאָנגען אַ שפּיגל אויף דער וואַנט</p>
+<p>ɩn də vant אין די וואַנט {POLAND, Warsaw, 52211}<br />
+-   ert araˑ̃ gɩkʎapt a čvok ɩn dɩ vant ער האָט געקלאַפּט אַ טשוואָק אין די וואַנט<br />
+-   ot ofgɩoŋgɩn a špɩgl of də vant האָט אויפֿגעהאָנגען אַ שפּיגל אויף די וואַנט<br />
+-   kop͡m̩ vant ער מעג זיך שלאָגן קאָפּ אין וואַנט</p>
+<p><audio controls src="https://archive.org/download/BashevisLexicon/AMentshVosKrikhtAfDiGlaykheVent-IsaacBashevisSinger1978.mp3"></audio><br />
+AUDIO Isaac Bashevis Singer {Leoncin, Radzymin, Warsaw, POLAND}, 1978<br />
+אַ מענטש וואָס קריכט אויף די גלײַכע ווענט 'lunatic'</p>
+<h2>NORTHEASTERN</h2>
+<p>(intermediate gender) די וואַנט, אויפֿן וואַנט<br />
+{מאַרק, "אונדזער ליטווישער ייִדיש" (1951): 453}<br />
+שפּריכווערטער מיט ווייטאָגדיקן סאַרקאַזם אָדער מיט אַ מער גוטמוטיקן הומאָר, ווי: "אמרו לאלהים {אִמְר֣וּ לֵ֭אלֹהִים} — רייד צו די וואַנט" {ז' 465}</p>
+<h2>SOUTHEASTERN</h2>
+<p>arot araːŋgʲɩkʎopt a cvok ɩn der vɔnt ער האָט אַרײַנגעקלאַפּט אַ צוואָק אין דער וואַנט {ROMANIA, Brăila, 45273}<br />
+-   anačɩkᵏ ɩn dᵊr vɔnt אַן האַטשיק אין דער וואַנט<br />
+-   ar ot ovgʲɩhɔŋgʲən a špɩ̆gʎ ov der vant &gt; vɔnt ער האָט אויפֿגעהאַנגען אַ שפּיגל אויף דער וואַנט</p>
+</div>
+
+</main>
+<footer>
+  Yiddish Dialect Dictionary &nbsp;·&nbsp; 10,034 entries
+</footer>
+<script>const BASE_URL = '/Yiddish-Dialect-Dictionary';</script>
+<script>
+(function() {
+  let index = null;
+  const input = document.getElementById('search-input');
+  const results = document.getElementById('search-results');
+  if (!input) return;
+
+  async function loadIndex() {
+    if (index) return;
+    try {
+      const r = await fetch(BASE_URL + '/search-index.json');
+      index = await r.json();
+    } catch(e) { console.error('Could not load search index', e); }
+  }
+
+  function search(q) {
+    q = q.trim().toLowerCase();
+    if (!q || !index) return [];
+    return index
+      .filter(e =>
+        e.hw.toLowerCase().includes(q) ||
+        (e.gl && e.gl.toLowerCase().includes(q))
+      )
+      .slice(0, 20);
+  }
+
+  function renderResults(items, q) {
+    if (!items.length) {
+      results.innerHTML = '<div class="search-no-results">No results found.</div>';
+      results.classList.add('show');
+      return;
+    }
+    results.innerHTML = items.map(e => `
+      <a class="search-result-item" href="${e.url}">
+        <span class="search-result-hw">${e.hw}</span>
+        ${e.gl ? `<span class="search-result-gloss">'${e.gl}'</span>` : ''}
+      </a>`).join('');
+    results.classList.add('show');
+  }
+
+  let timer;
+  input.addEventListener('input', async () => {
+    clearTimeout(timer);
+    const q = input.value;
+    if (!q.trim()) { results.classList.remove('show'); return; }
+    await loadIndex();
+    timer = setTimeout(() => renderResults(search(q), q), 120);
+  });
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.header-search')) results.classList.remove('show');
+  });
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { results.classList.remove('show'); input.blur(); }
+  });
+})();
+</script>
+</body>
+</html>

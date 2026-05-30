@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="yi" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shin (ש) – Yiddish Dialect Dictionary</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #faf9f6;
+  --surface: #ffffff;
+  --border: #e0ddd5;
+  --text: #1c1b18;
+  --muted: #6b6860;
+  --accent: #1a4480;
+  --accent-light: #e8eef7;
+  --link: #1a4480;
+  --link-hover: #0d2a52;
+  --hebrew-font: 'Ezra SIL', 'SBL Hebrew', 'David', 'Frank Ruehl CLM', serif;
+  --body-font: Georgia, 'Times New Roman', serif;
+  --ui-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+body {
+  font-family: var(--body-font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  font-size: 16px;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--link-hover); text-decoration: underline; }
+
+/* ── Header ── */
+.site-header {
+  background: var(--accent);
+  color: white;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0,0,0,.25);
+}
+.site-header a { color: white; font-family: var(--ui-font); font-size: .9rem; }
+.site-header a.home { font-weight: 700; font-size: 1rem; white-space: nowrap; }
+.site-header a:hover { text-decoration: underline; }
+
+/* search in header */
+.header-search {
+  flex: 1;
+  max-width: 480px;
+  position: relative;
+}
+.header-search input {
+  width: 100%;
+  padding: .45rem .9rem .45rem 2.2rem;
+  border: none;
+  border-radius: 4px;
+  font-family: var(--ui-font);
+  font-size: .95rem;
+  background: rgba(255,255,255,.15);
+  color: white;
+  outline: none;
+}
+.header-search input::placeholder { color: rgba(255,255,255,.65); }
+.header-search input:focus { background: rgba(255,255,255,.25); }
+.header-search .icon {
+  position: absolute;
+  left: .6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: .7;
+  pointer-events: none;
+}
+.search-results {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.15);
+  max-height: 360px;
+  overflow-y: auto;
+  z-index: 200;
+}
+.search-results.show { display: block; }
+.search-result-item {
+  display: block;
+  padding: .6rem 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.search-result-item:last-child { border-bottom: none; }
+.search-result-item:hover { background: var(--accent-light); }
+.search-result-hw {
+  font-size: 1.1rem;
+  font-family: var(--hebrew-font);
+  direction: rtl;
+  display: inline-block;
+  margin-right: .5rem;
+}
+.search-result-gloss { color: var(--muted); font-style: italic; }
+.search-no-results { padding: .8rem 1rem; color: var(--muted); font-family: var(--ui-font); }
+
+/* ── Layout ── */
+.page-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+/* ── Alphabet nav (homepage + letter pages) ── */
+.alphabet-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin: 1.5rem 0;
+}
+.alphabet-nav a {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: .5rem .75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  text-decoration: none;
+  min-width: 52px;
+  transition: background .15s, border-color .15s;
+}
+.alphabet-nav a:hover, .alphabet-nav a.active {
+  background: var(--accent-light);
+  border-color: var(--accent);
+}
+.alphabet-nav a .heb {
+  font-family: var(--hebrew-font);
+  font-size: 1.4rem;
+  line-height: 1;
+  direction: rtl;
+}
+.alphabet-nav a .translit {
+  font-family: var(--ui-font);
+  font-size: .65rem;
+  color: var(--muted);
+  margin-top: .2rem;
+}
+
+/* ── Homepage ── */
+.hero {
+  text-align: center;
+  padding: 2.5rem 0 1.5rem;
+}
+.hero h1 {
+  font-size: 2.2rem;
+  color: var(--accent);
+  margin-bottom: .5rem;
+}
+.hero p {
+  color: var(--muted);
+  font-family: var(--ui-font);
+  font-size: 1rem;
+}
+.section-label {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 2rem 0 .75rem;
+}
+
+/* ── Letter page ── */
+.letter-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: .75rem;
+}
+.letter-header .heb-big {
+  font-family: var(--hebrew-font);
+  font-size: 3rem;
+  direction: rtl;
+  line-height: 1;
+  color: var(--accent);
+}
+.letter-header .info {
+  font-family: var(--ui-font);
+}
+.letter-header .translit-big { font-size: 1.4rem; font-weight: 600; }
+.letter-header .count { color: var(--muted); font-size: .9rem; }
+
+.entry-list {
+  list-style: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface);
+}
+.entry-list li {
+  border-bottom: 1px solid var(--border);
+}
+.entry-list li:last-child { border-bottom: none; }
+.entry-list a {
+  display: flex;
+  align-items: baseline;
+  gap: .75rem;
+  padding: .65rem 1rem;
+  color: var(--text);
+  text-decoration: none;
+}
+.entry-list a:hover { background: var(--accent-light); }
+.entry-list .hw {
+  font-family: var(--hebrew-font);
+  font-size: 1.15rem;
+  direction: rtl;
+  flex-shrink: 0;
+}
+.entry-list .gl {
+  font-style: italic;
+  color: var(--muted);
+  font-size: .9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Entry page ── */
+.entry-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--accent);
+}
+.entry-headword {
+  font-family: var(--hebrew-font);
+  font-size: 2.6rem;
+  direction: rtl;
+  line-height: 1.2;
+  color: var(--text);
+}
+.entry-gloss {
+  font-style: italic;
+  color: var(--muted);
+  font-size: 1.05rem;
+  margin-top: .3rem;
+}
+
+.entry-body h2 {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 1.8rem 0 .6rem;
+  padding-bottom: .3rem;
+  border-bottom: 1px solid var(--border);
+}
+.entry-body h3 {
+  font-family: var(--ui-font);
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin: 1rem 0 .4rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.entry-body p {
+  margin-bottom: .8rem;
+  line-height: 1.7;
+}
+.entry-body ul, .entry-body ol {
+  margin: .5rem 0 .8rem 1.5rem;
+}
+.entry-body li { margin-bottom: .3rem; }
+.entry-body audio {
+  display: block;
+  margin: .75rem 0;
+  max-width: 100%;
+}
+.entry-body img {
+  max-width: 100%;
+  height: auto;
+  margin: .75rem 0;
+  border-radius: 4px;
+}
+.entry-body blockquote {
+  border-left: 3px solid var(--border);
+  padding-left: 1rem;
+  color: var(--muted);
+  margin: .5rem 0;
+}
+
+/* back/nav bar above entry */
+.entry-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.entry-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .3rem .7rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--text);
+}
+.entry-nav a:hover {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  text-decoration: none;
+}
+
+/* ── Footer ── */
+footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  margin-top: 3rem;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .hero h1 { font-size: 1.6rem; }
+  .alphabet-nav a { min-width: 44px; padding: .4rem .55rem; }
+  .alphabet-nav a .heb { font-size: 1.2rem; }
+  .entry-headword { font-size: 2rem; }
+  .header-search { max-width: none; }
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <a href="/Yiddish-Dialect-Dictionary/" class="home">Yiddish Dialect Dictionary</a>
+  <div class="header-search">
+    <svg class="icon" width="16" height="16" fill="white" viewBox="0 0 16 16">
+      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.868-3.834zm-5.242 1.406a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+    </svg>
+    <input type="search" id="search-input" placeholder="Search entries…" autocomplete="off">
+    <div id="search-results" class="search-results"></div>
+  </div>
+</header>
+<main class="page-wrap">
+
+<div class="letter-header">
+  <span class="heb-big">ש</span>
+  <div class="info">
+    <div class="translit-big">Shin</div>
+    <div class="count">771 entries</div>
+  </div>
+</div>
+<ul class="entry-list">
+<li><a href="/Yiddish-Dialect-Dictionary/entry/Shin%20%D7%A9%D7%99%D7%9F/"><span class="hw">Shin שין</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/Sin%20%D7%A9%D7%82%D7%99%D7%9F/"><span class="hw">Sin שׂין</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%22%D7%9A/"><span class="hw">ש"ך</span><span class="gl">‘rabbi ... ’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%22%D7%A1/"><span class="hw">ש"ס</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%22%D7%A1%D6%BE%D7%99%D7%99%D6%B4%D7%93/"><span class="hw">ש"ס־ייִד</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%82%D7%95%D7%A0%D7%90/"><span class="hw">שׂונא</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%82%D7%95%D7%A0%D7%90%D6%BE%D7%99%D7%A9%D7%82%D7%A8%D7%90%D7%9C/"><span class="hw">שׂונא־ישׂראל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%82%D7%98%D7%9F/"><span class="hw">שׂטן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%82%D7%99%D7%9E%D7%97%D7%94/"><span class="hw">שׂימחה</span><span class="gl">‘joy; party; name’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%82%D7%99%D7%9E%D7%97%D7%AA%D6%BE%D7%AA%D6%BC%D7%95%D7%A8%D7%94/"><span class="hw">שׂימחת־תּורה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%82%D7%99%D7%A0%D7%90%D7%94/"><span class="hw">שׂינאה</span><span class="gl">‘hatred’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%82%D7%99%D7%A0%D7%90%D7%AA%D6%BE%D7%97%D7%99%D7%A0%D7%9D/"><span class="hw">שׂינאת־חינם</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%82%D7%9B%D7%9C/"><span class="hw">שׂכל</span><span class="gl">‘common sense’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%82%D7%9B%D7%9C%D6%BE%D7%A2%D7%A6%D7%9E%D7%95/"><span class="hw">שׂכל־עצמו</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%82%D7%9B%D7%A8/"><span class="hw">שׂכר</span><span class="gl">‘reward’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%82%D7%9E%D7%95%D7%9C/"><span class="hw">שׂמול</span><span class="gl">‘left’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%82%D7%A2%D7%A8/"><span class="hw">שׂער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%82%D7%A8/"><span class="hw">שׂר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%82%D7%A8%D7%94/"><span class="hw">שׂרה</span><span class="gl">‘Sarah (woman's name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%82%D7%A8%D7%99%D7%93/"><span class="hw">שׂריד</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%82%D7%A8%D7%99%D7%93%D6%BE%D7%95%D7%A4%D6%BC%D7%9C%D7%99%D7%98/"><span class="hw">שׂריד־ופּליט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%82%D7%A8%D7%A4%D6%BF%D7%A2%D7%9F/"><span class="hw">שׂרפֿען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%82%D7%A8%D7%A8%D7%94/"><span class="hw">שׂררה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B7/"><span class="hw">שאַ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B7%D7%91%D7%90%D6%B7%D7%A9/"><span class="hw">שאַבאַש</span><span class="gl">‘tip given to musicians at a wedding’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B7%D7%98%D7%9F/"><span class="hw">שאַטן</span><span class="gl">‘to damage’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B7%D7%98%D7%A2%D7%A8/"><span class="hw">שאַטער</span><span class="gl">‘hut’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B7%D7%9B%D7%98%D7%9C/"><span class="hw">שאַכטל</span><span class="gl">‘box’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B7%D7%9C/"><span class="hw">שאַל</span><span class="gl">‘shawl’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B7%D7%9C%D7%90%D6%B7%D7%98%D7%9F/"><span class="hw">שאַלאַטן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B7%D7%9C%D7%90%D6%B7%D7%98%D7%9F%D6%BE%D7%A9%D7%9E%D7%A9%D7%82/"><span class="hw">שאַלאַטן־שמשׂ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B7%D7%9C%D7%98%D7%A2%D7%A0%D7%90%D6%B8%D7%A1%D7%A2/"><span class="hw">שאַלטענאָסע</span><span class="gl">‘cheese blintz’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B7%D7%9C%D7%A7%D7%94%D7%90%D6%B7%D7%A4%D6%BF%D7%98%D7%99%D7%A7/"><span class="hw">שאַלקהאַפֿטיק</span><span class="gl">‘wicked’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B7%D7%9E%D7%A2%D7%A8%D7%9C/"><span class="hw">שאַמערל</span><span class="gl">‘footstool’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B7%D7%A0%D7%93/"><span class="hw">שאַנד</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B7%D7%A0%D7%93%D7%A4%D6%BF%D7%95%D7%9C/"><span class="hw">שאַנדפֿול</span><span class="gl">‘discraceful’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B7%D7%A0%D7%93%D7%A8%D7%A2%20%D7%91%D7%90%D6%B7%D7%A0%D7%93%D7%A8%D7%A2/"><span class="hw">שאַנדרע באַנדרע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B7%D7%A0%D7%96%D7%A9%D7%99%D7%A8%D7%9F/"><span class="hw">שאַנזשירן</span><span class="gl">‘to change’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B7%D7%A0%D7%A1/"><span class="hw">שאַנס</span><span class="gl">‘chance’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B7%D7%A0%D7%A2%D7%95%D7%95%D7%A2%D7%9F/"><span class="hw">שאַנעווען</span><span class="gl">‘to spare, go easy on; respect’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B7%D7%A0%D7%A5/"><span class="hw">שאַנץ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B7%D7%A0%D7%A7/"><span class="hw">שאַנק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B7%D7%A3/"><span class="hw">שאַף</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B7%D7%A4%D6%BC%D7%A7%D7%A2/"><span class="hw">שאַפּקע</span><span class="gl">‘hat’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B7%D7%A4%D6%BF%D7%9F/"><span class="hw">שאַפֿן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B7%D7%A4%D6%BF%D7%A2/"><span class="hw">שאַפֿע</span><span class="gl">‘closet, cupboard, armoire’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B7%D7%A5/"><span class="hw">שאַץ</span><span class="gl">‘treasure’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B7%D7%A6%D7%9F/"><span class="hw">שאַצן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B7%D7%A8%D7%90%D7%B2%D6%B7%D7%96%D7%9F/"><span class="hw">שאַראײַזן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B7%D7%A8%D7%91%D7%9F%201/"><span class="hw">שאַרבן 1</span><span class="gl">‘skull’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B7%D7%A8%D7%91%D7%9F%202/"><span class="hw">שאַרבן 2</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B7%D7%A8%D7%9C%D7%A2%D7%9A/"><span class="hw">שאַרלעך</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B7%D7%A8%D7%9F/"><span class="hw">שאַרן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B7%D7%A8%D7%A3%201/"><span class="hw">שאַרף 1</span><span class="gl">‘sharp’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B7%D7%A8%D7%A3%202/"><span class="hw">שאַרף 2</span><span class="gl">‘the edge, blade’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B8%D7%93/"><span class="hw">שאָד</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B8%D7%93%D7%9F/"><span class="hw">שאָדן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B8%D7%98%D7%9F/"><span class="hw">שאָטן</span><span class="gl">‘shadow’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B8%D7%9A/"><span class="hw">שאָך</span><span class="gl">‘chess’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B8%D7%9C/"><span class="hw">שאָל</span><span class="gl">‘bowl’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B8%D7%9C%D7%A2%D7%9B%D7%A5/"><span class="hw">שאָלעכץ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B8%D7%A1%201/"><span class="hw">שאָס 1</span><span class="gl">‘shot’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B8%D7%A1%202/"><span class="hw">שאָס 2</span><span class="gl">‘skirt’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B8%D7%A1%D7%99%D7%99/"><span class="hw">שאָסיי</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B8%D7%A3/"><span class="hw">שאָף</span><span class="gl">‘sheep’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B8%D7%A7%202/"><span class="hw">שאָק 2</span><span class="gl">‘sixty, five dozen’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B8%D7%A7%D7%90%D6%B8%D7%9C%D7%90%D6%B7%D7%93/"><span class="hw">שאָקאָלאַד</span><span class="gl">‘chocolate’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B8%D7%A7%D7%9C%D7%A2%D7%9F/"><span class="hw">שאָקלען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B8%D7%A8%D7%9A/"><span class="hw">שאָרך</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D6%B8%D7%A8%D7%A1%D7%98%D7%99%D7%A7/"><span class="hw">שאָרסטיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D7%92%D7%AA%20%D7%90%D7%A8%D7%99%D7%94/"><span class="hw">שאגת אריה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D7%95%D7%9C%201/"><span class="hw">שאול 1</span><span class="gl">‘Saul’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D7%95%D7%9C%202/"><span class="hw">שאול 2</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D7%95%D7%9C-%D7%AA%D6%BC%D7%97%D7%AA%D6%BC%D7%99%D7%94%0A%D7%A9%D7%90%D7%95%D7%9C-%D7%AA%D6%BC%D7%97%D7%AA%D6%BC%D7%99%D7%94%D7%A9/"><span class="hw">שאול-תּחתּיה
+שאול-תּחתּיהש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D7%99%D7%A0%D7%95%D6%BE%D7%99%D7%95%D7%93%D7%A2%D6%BE%D7%9C%D7%A9%D7%90%D7%95%D7%9C/"><span class="hw">שאינו־יודע־לשאול</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D7%9C%D7%94/"><span class="hw">שאלה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D7%A8/"><span class="hw">שאר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D7%A8%D6%BE%D7%99%D7%A8%D7%A7%D7%95%D7%AA/"><span class="hw">שאר־ירקות</span><span class="gl">‘other vegetables’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%90%D7%A8%D7%99%D7%AA%D6%BE%D7%94%D7%A4%D6%BC%D7%9C%D7%99%D7%98%D7%94/"><span class="hw">שארית־הפּליטה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%91%D6%BF%D7%95%D7%A2%D7%94%201/"><span class="hw">שבֿועה 1</span><span class="gl">‘oath’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%91%D6%BF%D7%95%D7%A2%D7%94%202/"><span class="hw">שבֿועה 2</span><span class="gl">‘week’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%91%D6%BF%D7%95%D7%A2%D7%95%D7%AA/"><span class="hw">שבֿועות</span><span class="gl">‘Shavuoth holiday’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%91%D6%BF%D7%97%201/"><span class="hw">שבֿח 1</span><span class="gl">‘praise’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%91%D6%BF%D7%97%202/"><span class="hw">שבֿח 2</span><span class="gl">‘(man's name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%91%D6%BF%D7%98%201/"><span class="hw">שבֿט 1</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%91%D6%BF%D7%98%202/"><span class="hw">שבֿט 2</span><span class="gl">‘Shvat (fifth month in Hebrew calendar)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%91%D6%BF%D7%A2%201/"><span class="hw">שבֿע 1</span><span class="gl">‘seven’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%91%D6%BF%D7%A2%202/"><span class="hw">שבֿע 2</span><span class="gl">‘Sheva (woman's name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%91%D6%BF%D7%A2%D6%BE%D7%91%D7%A8%D7%9B%D7%95%D7%AA/"><span class="hw">שבֿע־ברכות</span><span class="gl">‘Sheva Brachot’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%91%D6%BF%D7%A8/"><span class="hw">שבֿר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%91%D6%BF%D7%A8%D7%99%D6%BE%D7%9C%D7%91%D6%BF/"><span class="hw">שבֿרי־לבֿ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%91%D7%AA/"><span class="hw">שבת</span><span class="gl">‘Sabbath’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%91%D7%AA%D6%BE%D7%92%D7%95%D7%99/"><span class="hw">שבת־גוי</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%91%D7%AA%D6%BE%D7%94%D7%92%D7%93%D7%95%D7%9C/"><span class="hw">שבת־הגדול</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%91%D7%AA%D6%BE%D7%9C%D7%90%D6%B8%D7%9E%D7%A4%D6%BC/"><span class="hw">שבת־לאָמפּ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%91%D7%AA%D6%BE%D7%A6%D7%95%D6%BE%D7%A0%D7%90%D6%B7%D7%9B%D7%98/"><span class="hw">שבת־צו־נאַכט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%91%D7%AA%D6%BE%D7%A9%D7%99%D7%A8%D7%94/"><span class="hw">שבת־שירה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%91%D7%AA%D6%BE%D7%A9%D7%9C%D7%90%D6%B8%D7%A3/"><span class="hw">שבת־שלאָף</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%91%D7%AA%D7%93%D7%99%D7%A7/"><span class="hw">שבתדיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%91%D7%AA%D7%99/"><span class="hw">שבתי</span><span class="gl">‘Shabbatai’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%92%D7%A2%D7%95%D7%9F/"><span class="hw">שגעון</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%93/"><span class="hw">שד</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%93%D7%99/"><span class="hw">שדי</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%93%D7%9B%D7%9F/"><span class="hw">שדכן</span><span class="gl">‘matchmaker’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%93%D7%9B%D7%A0%D7%A2%D7%9F/"><span class="hw">שדכנען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%94%D7%9B%D6%BC%D7%9C/"><span class="hw">שהכּל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%94%D7%9B%D6%BC%D7%9C%D7%A2%D7%9F/"><span class="hw">שהכּלען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%22%D7%9D/"><span class="hw">שו"ם</span><span class="gl">‘Speyer - Worms - Mainz: three important early Jewish communities in German lands during the High Middle Ages’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D6%BC%D7%95%D7%95%D7%90%D6%B7%D7%A7%D7%A1/"><span class="hw">שוּוואַקס</span><span class="gl">‘shoe polish’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%90%D6%B7%D7%93%D7%99%D7%98/"><span class="hw">שואַדיט</span><span class="gl">‘Judeo-Provençal, Chuadit, Shuadit’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%90%D7%94/"><span class="hw">שואה</span><span class="gl">‘Shoah, Holocaust’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%90%D7%9C%D6%BE%D7%A2%D7%A6%D7%94%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">שואל־עצה זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%92%D7%92/"><span class="hw">שוגג</span><span class="gl">‘person who committed a crime by mistake’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%90%D6%B7%D7%91/"><span class="hw">שוואַב</span><span class="gl">‘Swabian; cockroach’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%90%D6%B7%D7%91%D7%9F%20%5B%3F%5D/"><span class="hw">שוואַבן [?]</span><span class="gl">‘to rinse’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%90%D6%B7%D7%9A/"><span class="hw">שוואַך</span><span class="gl">‘weak’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%90%D6%B7%D7%9C%D7%91/"><span class="hw">שוואַלב</span><span class="gl">‘swallow (bird)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%90%D6%B7%D7%9F/"><span class="hw">שוואַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%90%D6%B7%D7%A0%D7%92%D7%A2%D7%A8%D7%93%D7%99%D7%A7/"><span class="hw">שוואַנגערדיק</span><span class="gl">‘pregnant’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%90%D6%B7%D7%A0%D7%92%D7%A2%D7%A8%D7%9F/"><span class="hw">שוואַנגערן</span><span class="gl">‘to be pregnant’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%90%D6%B7%D7%A0%D7%A5/"><span class="hw">שוואַנץ</span><span class="gl">‘tail’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%90%D6%B7%D7%A8%D7%A5/"><span class="hw">שוואַרץ</span><span class="gl">‘black’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%90%D6%B7%D7%A8%D7%A5%D6%BE%D7%99%D7%90%D6%B8%D7%A8/"><span class="hw">שוואַרץ־יאָר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%90%D6%B7%D7%A8%D7%A6%D7%90%D6%B7%D7%A4%D6%BC%D7%9C/"><span class="hw">שוואַרצאַפּל</span><span class="gl">‘pupil (of eye)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%90%D6%B7%D7%A8%D7%A6%D7%9C/"><span class="hw">שוואַרצל</span><span class="gl">‘pupil’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%90%D6%B8/"><span class="hw">שוואָ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%90%D6%B8%D7%9D/"><span class="hw">שוואָם</span><span class="gl">‘sponge; mushroom’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%90%D6%BE%D7%95%D7%A9%D7%A7%D7%A8/"><span class="hw">שווא־ושקר</span><span class="gl">‘falsehood’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%95%D6%BC%D7%A0%D7%92/"><span class="hw">שוווּנג</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%99%D7%92%D7%A2%D7%A8/"><span class="hw">שוויגער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%99%D7%99%D7%A1/"><span class="hw">שווייס</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%99%D7%99%D7%A3/"><span class="hw">שווייף</span><span class="gl">‘tail’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%99%D7%99%D7%A5/"><span class="hw">שווייץ</span><span class="gl">‘Switzerland’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%99%D7%9C%D7%A2/"><span class="hw">שווילע</span><span class="gl">‘callus’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%99%D7%9E%D7%A2%D7%9F/"><span class="hw">שווימען</span><span class="gl">‘to swim’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%99%D7%A0%D7%93%D7%96%D7%95%D7%9B%D7%98/"><span class="hw">שווינדזוכט</span><span class="gl">‘tuberculosis’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%99%D7%A0%D7%93%D7%9C%D7%A2%D7%A8/"><span class="hw">שווינדלער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%99%D7%A2%D7%A0%D7%98%D7%A2/"><span class="hw">שוויענטע</span><span class="gl">‘Christian holiday; Christian saint’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%99%D7%A5/"><span class="hw">שוויץ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%99%D7%A6%D7%9F/"><span class="hw">שוויצן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%A2%D7%91%D7%9C/"><span class="hw">שוועבל</span><span class="gl">‘sulfer’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%A2%D7%91%D7%A2%D7%9C%D7%A2/"><span class="hw">שוועבעלע</span><span class="gl">‘match’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%A2%D7%9C/"><span class="hw">שוועל</span><span class="gl">‘threshold, doorstep’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%A2%D7%9C%D7%9F/"><span class="hw">שוועלן</span><span class="gl">‘to swell’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%A2%D7%9E%D7%A2%D7%A0%D7%99%D7%A9/"><span class="hw">שוועמעניש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%A2%D7%A0%D7%A6%D7%9C%D7%A2%D7%9F/"><span class="hw">שווענצלען</span><span class="gl">‘to bless (non-Jewish)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%A2%D7%A0%D7%A7%D7%A2%D7%9F/"><span class="hw">שווענקען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%A2%D7%A1%D7%98%D7%A2%D7%A8/"><span class="hw">שוועסטער</span><span class="gl">‘sister’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%A2%D7%A1%D7%98%D7%A2%D7%A8%D7%9F%D6%BE%D7%96%D7%95%D7%9F/"><span class="hw">שוועסטערן־זון</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%A2%D7%A1%D7%98%D7%A2%D7%A8%D7%A7%D7%99%D7%A0%D7%93/"><span class="hw">שוועסטערקינד</span><span class="gl">‘cousin’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%A2%D7%A6%D7%9F/"><span class="hw">שוועצן</span><span class="gl">‘to talk, chat’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%A2%D7%A8%201/"><span class="hw">שווער 1</span><span class="gl">‘heavy; difficult’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%A2%D7%A8%202/"><span class="hw">שווער 2</span><span class="gl">‘father-in-law’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%A2%D7%A8%D7%93/"><span class="hw">שווערד</span><span class="gl">‘sword’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%A2%D7%A8%D7%99%D7%A7%D7%99%D7%99%D7%98/"><span class="hw">שוועריקייט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%A2%D7%A8%D7%9F/"><span class="hw">שווערן</span><span class="gl">‘to swear’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%95%D7%B2%D6%B7%D7%92%D7%9F/"><span class="hw">שווײַגן</span><span class="gl">‘be still, silent, keep quiet’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%97%D7%98/"><span class="hw">שוחט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%98%D7%94/"><span class="hw">שוטה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%98%D7%A8/"><span class="hw">שוטר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%99%D7%91/"><span class="hw">שויב</span><span class="gl">‘(window)pane’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%99%D7%93%D7%A2%D7%A8%D7%92%D7%A2%D7%9C%D7%98/"><span class="hw">שוידערגעלט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%99%D7%95%D7%95%D7%9C/"><span class="hw">שויוול</span><span class="gl">‘shovel’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%99%D7%95%D7%95%D7%9C%D7%A2%D7%9F/"><span class="hw">שויוולען</span><span class="gl">‘to shovel’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%99%D7%98/"><span class="hw">שויט</span><span class="gl">‘pod’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%99%D7%9D/"><span class="hw">שוים</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%99%D7%9E%D7%99%D7%A7/"><span class="hw">שוימיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%99%D7%9E%D7%9C%D7%A2%D7%A4%D6%BF%D7%9C/"><span class="hw">שוימלעפֿל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%99%D7%9E%D7%A2%D7%9F/"><span class="hw">שוימען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%99%D7%9F/"><span class="hw">שוין</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%99%D7%A0%D7%A2%D7%9F/"><span class="hw">שוינען</span><span class="gl">‘to spare’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%99%D7%A1/"><span class="hw">שויס</span><span class="gl">‘lap’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%9A/"><span class="hw">שוך</span><span class="gl">‘shoe’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%9B%D7%91%D7%A2%D7%A0%D7%93%D7%9C/"><span class="hw">שוכבענדל</span><span class="gl">‘shoelace’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%9B%D7%A4%D6%BC%D7%90%D6%B7%D7%A1%D7%98%D7%A2/"><span class="hw">שוכפּאַסטע</span><span class="gl">‘shoe polish’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%9C%201/"><span class="hw">שול 1</span><span class="gl">‘synagogue’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%9C%202/"><span class="hw">שול 2</span><span class="gl">‘school’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%9C%28%D7%A2%29%D7%9B%D7%9C/"><span class="hw">שול(ע)כל</span><span class="gl">‘small synagogue’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%9C%D7%93/"><span class="hw">שולד</span><span class="gl">‘guilt’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%9C%D7%93%D7%99%D7%A7/"><span class="hw">שולדיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%9C%D7%94%D7%95%D7%99%D7%A3/"><span class="hw">שולהויף</span><span class="gl">‘synagogue courtyard’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%9C%D7%94%D7%95%D7%99%D7%A3%D6%BE%D7%9C%D7%A9%D7%95%D7%9F/"><span class="hw">שולהויף־לשון</span><span class="gl">‘synagoge courtyard language (i.e. Yiddish)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%9C%D7%97%D7%9F/"><span class="hw">שולחן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%9C%D7%97%D7%9F%20%D7%A2%D7%A8%D7%95%D7%9A/"><span class="hw">שולחן ערוך</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%9C%D7%98%D7%A2%D7%A8/"><span class="hw">שולטער</span><span class="gl">‘shoulder’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%9C%D7%9E%D7%99%D7%AA/"><span class="hw">שולמית</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%9C%D7%A4%D6%BF%D7%99%D7%A8%D7%9F/"><span class="hw">שולפֿירן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%9D/"><span class="hw">שום</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%9E%D7%A2%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">שומע זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%9E%D7%A8/"><span class="hw">שומר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%9E%D7%A8%20%D7%AA%D6%BC%D7%95%D7%A8%D7%94%20%D7%95%D7%9E%D7%A6%D7%95%D7%95%D7%AA/"><span class="hw">שומר תּורה ומצוות</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%9E%D7%A8%D6%BE%D7%95%D7%9E%D7%A6%D7%99%D7%9C%20%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">שומר־ומציל זײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%A1%D7%98%D7%A2%D7%A8/"><span class="hw">שוסטער</span><span class="gl">‘shoemaker, cobbler’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%A4%D6%BC/"><span class="hw">שופּ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%A4%D6%BF%D7%98/"><span class="hw">שופֿט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%A4%D6%BF%D7%9C/"><span class="hw">שופֿל</span><span class="gl">‘shovel’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%A4%D6%BF%D7%9C%D7%90%D6%B8%D7%93/"><span class="hw">שופֿלאָד</span><span class="gl">‘drawer’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%A4%D6%BF%D7%A8/"><span class="hw">שופֿר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%A7/"><span class="hw">שוק</span><span class="gl">‘marekt’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%A7%D7%9F/"><span class="hw">שוקן</span><span class="gl">‘kosten’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%A8/"><span class="hw">שור</span><span class="gl">‘sure’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%A8%D6%BE%D7%94%D7%91%D7%A8/"><span class="hw">שור־הבר</span><span class="gl">‘aurochs’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%A8%D7%94/"><span class="hw">שורה</span><span class="gl">‘line’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%A8%D7%9E%D7%A2%D7%9F/"><span class="hw">שורמען</span><span class="gl">‘to heal magically’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%A8%D7%A7/"><span class="hw">שורק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%A8%D7%A9/"><span class="hw">שורש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%A9%D7%9F/"><span class="hw">שושן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%95%D7%AA%D6%BC%D7%A3/"><span class="hw">שותּף</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%97%D7%95%D7%A8%D7%99%D7%9D/"><span class="hw">שחורים</span><span class="gl">‘black people’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%97%D7%99%D7%98%D7%94/"><span class="hw">שחיטה</span><span class="gl">‘slaughter’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%97%D7%A8/"><span class="hw">שחר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%97%D7%A8%D7%99%D7%AA/"><span class="hw">שחרית</span><span class="gl">‘morning prayers’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%90%D6%B7%D7%98/"><span class="hw">שטאַט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%90%D6%B7%D7%98%D7%A0%D7%A1%D7%9E%D7%90%D6%B7%D7%9F/"><span class="hw">שטאַטנסמאַן</span><span class="gl">‘statesman’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%90%D6%B7%D7%9B%D7%9C%D7%A9%D7%95%D7%95%D7%B2%D6%B7%D7%9F/"><span class="hw">שטאַכלשווײַן</span><span class="gl">‘porcupine’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%90%D6%B7%D7%9C/"><span class="hw">שטאַל</span><span class="gl">‘stall’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%90%D6%B7%D7%9D/"><span class="hw">שטאַם</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%90%D6%B7%D7%9E%D7%9C%D7%A2%D7%9F/"><span class="hw">שטאַמלען</span><span class="gl">‘to stammer, stutter’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%90%D6%B7%D7%9E%D7%A2%D7%9F/"><span class="hw">שטאַמען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%90%D6%B7%D7%A0%D7%92/"><span class="hw">שטאַנג</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%90%D6%B7%D7%A0%D7%93%D7%94%D7%90%D6%B7%D7%A4%D6%BF%D7%98%D7%99%D7%A7%D7%99%D7%99%D7%98/"><span class="hw">שטאַנדהאַפֿטיקייט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%90%D6%B7%D7%A0%D7%93%D7%A4%D6%BC%D7%95%D7%A0%D7%A7%D7%98/"><span class="hw">שטאַנדפּונקט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%90%D6%B7%D7%A0%D7%99%D7%A6%D7%9C/"><span class="hw">שטאַניצל</span><span class="gl">‘paper bag’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%90%D6%B7%D7%A0%D7%A5/"><span class="hw">שטאַנץ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%90%D6%B7%D7%A4%D6%BC%D7%9C/"><span class="hw">שטאַפּל</span><span class="gl">‘stage, level’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%90%D6%B7%D7%A4%D6%BC%D7%9C%D7%95%D7%95%D7%B2%D6%B7%D7%96/"><span class="hw">שטאַפּלווײַז</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%90%D6%B7%D7%A6%D7%99%D7%A7/"><span class="hw">שטאַציק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%90%D6%B7%D7%A8%D7%91%D7%9F/"><span class="hw">שטאַרבן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%90%D6%B7%D7%A8%D7%A6%D7%9F/"><span class="hw">שטאַרצן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%90%D6%B7%D7%A8%D7%A7%201/"><span class="hw">שטאַרק 1</span><span class="gl">‘strong’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%90%D6%B7%D7%A8%D7%A7%202/"><span class="hw">שטאַרק 2</span><span class="gl">‘starch’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%90%D6%B7%D7%A8%D7%A7%D7%99%D7%99%D7%98/"><span class="hw">שטאַרקייט</span><span class="gl">‘strength’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%90%D6%B7%D7%A8%D7%A7%D7%9F/"><span class="hw">שטאַרקן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%90%D6%B8%D7%98/"><span class="hw">שטאָט</span><span class="gl">‘city, town’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%90%D6%B8%D7%98%D7%9E%D7%A2%D7%A0%D7%98%D7%A9/"><span class="hw">שטאָטמענטש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%90%D6%B8%D7%98%D7%A2%D7%A8%D7%9F/"><span class="hw">שטאָטערן</span><span class="gl">‘to stutter’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%90%D6%B8%D7%9A/"><span class="hw">שטאָך</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%90%D6%B8%D7%9C/"><span class="hw">שטאָל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%90%D6%B8%D7%9C%D7%94%D7%A2%D7%9C%D7%9D/"><span class="hw">שטאָלהעלם</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%90%D6%B8%D7%9C%D7%A4%D6%BC%D7%A2%D7%A8%D7%9F/"><span class="hw">שטאָלפּערן</span><span class="gl">‘to stumble’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%90%D6%B8%D7%9C%D7%A5%202/"><span class="hw">שטאָלץ 2</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%90%D6%B8%D7%9C%D7%A6%D7%A7%D7%99%D7%99%D7%98/"><span class="hw">שטאָלצקייט</span><span class="gl">‘pride’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%90%D6%B8%D7%9C%D7%A7%D7%A2/"><span class="hw">שטאָלקע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%90%D6%B8%D7%A3/"><span class="hw">שטאָף</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%90%D6%B8%D7%A4%D6%BC%D7%9F/"><span class="hw">שטאָפּן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%90%D6%B8%D7%A4%D6%BC%D7%A2%D7%A8/"><span class="hw">שטאָפּער</span><span class="gl">‘stopper’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%90%D6%B8%D7%A4%D6%BC%D7%A7%D7%A2/"><span class="hw">שטאָפּקע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%90%D6%B8%D7%A7%201/"><span class="hw">שטאָק 1</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%90%D6%B8%D7%A7%202/"><span class="hw">שטאָק 2</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%90%D6%B8%D7%A8%D7%9A/"><span class="hw">שטאָרך</span><span class="gl">‘stork’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%90%D6%B8%D7%A8%D7%A2%D7%9D/"><span class="hw">שטאָרעם</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%95%D7%91/"><span class="hw">שטוב</span><span class="gl">‘house; room’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%95%D7%91%D7%9C%D7%90%D6%B7%D7%98%D7%A9/"><span class="hw">שטובלאַטש</span><span class="gl">‘slipper’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%95%D7%98%D7%A2/"><span class="hw">שטוטע</span><span class="gl">‘mare’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%95%D7%99%D7%91/"><span class="hw">שטויב</span><span class="gl">‘dust; pollen; a pinch, little bit (of)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%95%D7%99%D7%91%D7%A6%D7%95%D7%A7%D7%A2%D7%A8/"><span class="hw">שטויבצוקער</span><span class="gl">‘granulted sugar’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%95%D7%99%D7%A1%D6%BE%D7%95%D7%95%D7%A2%D7%92%D7%A2%D7%9C%D7%A2/"><span class="hw">שטויס־וועגעלע</span><span class="gl">‘wheelbarrow’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%95%D7%99%D7%A1%D7%9F/"><span class="hw">שטויסן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%95%D7%9C/"><span class="hw">שטול</span><span class="gl">‘chair’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%95%D7%9D/"><span class="hw">שטום</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%95%D7%9E%D7%A4%D6%BC/"><span class="hw">שטומפּ</span><span class="gl">‘stub’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%95%D7%9E%D7%A4%D6%BC%D7%99%D7%A7/"><span class="hw">שטומפּיק</span><span class="gl">‘(knife) blunt; (mind) obtuse (adjective/adverb)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%95%D7%A0%D7%93%D7%A2/"><span class="hw">שטונדע</span><span class="gl">‘hour’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%95%D7%A0%D7%A7/"><span class="hw">שטונק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%95%D7%A4%D6%BC/"><span class="hw">שטופּ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%95%D7%A4%D6%BC%D7%9C%D7%A2%D7%9F/"><span class="hw">שטופּלען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%95%D7%A4%D6%BC%D7%9F/"><span class="hw">שטופּן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%95%D7%A4%D6%BC%D7%A2%D7%A0%D7%99%D7%A9/"><span class="hw">שטופּעניש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%95%D7%A4%D7%94%20%3F/"><span class="hw">שטופה ?</span><span class="gl">‘pole to which criminal was tied before whipping’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%95%D7%A8%D7%9B%D7%A2%D7%9F/"><span class="hw">שטורכען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%95%D7%A8%D7%A2%D7%9D/"><span class="hw">שטורעם</span><span class="gl">‘storm’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%95%D7%A8%D7%A2%D7%9E%D7%95%D7%95%D7%99%D7%A0%D7%98/"><span class="hw">שטורעמווינט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%95%D7%A8%D7%A5/"><span class="hw">שטורץ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%95%D7%A8%D7%A7%D7%90%D6%B7%D7%A5/"><span class="hw">שטורקאַץ</span><span class="gl">‘torch’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%95%D7%AA/"><span class="hw">שטות</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%99%D7%91%D7%9C/"><span class="hw">שטיבל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%99%D7%92%D7%9F/"><span class="hw">שטיגן</span><span class="gl">‘stairs’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%99%D7%95%D7%95%D7%9C/"><span class="hw">שטיוול</span><span class="gl">‘boot’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%99%D7%99%D7%92%D7%A2%D7%A8/"><span class="hw">שטייגער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%99%D7%99%D7%95%D7%95%D7%90%D6%B7%D7%A1%D7%A2%D7%A8/"><span class="hw">שטייוואַסער</span><span class="gl">‘standing water, puddle’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%99%D7%99%D7%9F%201/"><span class="hw">שטיין 1</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%99%D7%99%D7%9F%202/"><span class="hw">שטיין 2</span><span class="gl">‘stone, rock’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%99%D7%99%D7%A1%D7%9C/"><span class="hw">שטייסל</span><span class="gl">‘morter’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%99%D7%9A/"><span class="hw">שטיך</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%99%D7%9C%201/"><span class="hw">שטיל 1</span><span class="gl">‘still, quiet’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%99%D7%9C%202/"><span class="hw">שטיל 2</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%99%D7%9C%D7%9F/"><span class="hw">שטילן</span><span class="gl">‘to still’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%99%D7%9C%D7%A0%D7%A2/"><span class="hw">שטילנע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%99%D7%9C%D7%A2%D7%A8%D7%94%D7%99%D7%99%D7%98/"><span class="hw">שטילערהייט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%99%D7%9D/"><span class="hw">שטים</span><span class="gl">‘voice’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%99%D7%9E%D7%A2%D7%9F/"><span class="hw">שטימען</span><span class="gl">‘to vote; to be true’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%99%D7%A0%D7%A7%D7%A2/"><span class="hw">שטינקע</span><span class="gl">‘smelt’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%99%D7%A0%D7%A7%D7%A2%D7%9F/"><span class="hw">שטינקען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%99%D7%A4%D6%BF%D7%98/"><span class="hw">שטיפֿט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%99%D7%A4%D6%BF%D7%9E%D7%90%D6%B7%D7%9E%D7%A2/"><span class="hw">שטיפֿמאַמע</span><span class="gl">‘stepmother’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%99%D7%A4%D6%BF%D7%9E%D7%95%D7%98%D7%A2%D7%A8/"><span class="hw">שטיפֿמוטער</span><span class="gl">‘stepmother’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%99%D7%A7/"><span class="hw">שטיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%99%D7%A7%D7%9F/"><span class="hw">שטיקן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%99%D7%A7%D7%A2%D7%A8%D7%B2%D6%B7/"><span class="hw">שטיקערײַ</span><span class="gl">‘embroidery (object)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%99%D7%A8/"><span class="hw">שטיר</span><span class="gl">‘bull’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A2%D7%92/"><span class="hw">שטעג</span><span class="gl">‘path’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A2%D7%98%D7%9C/"><span class="hw">שטעטל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A2%D7%98%D7%A1/"><span class="hw">שטעטס</span><span class="gl">‘always (ᴀᴅᴠᴇʀʙ)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A2%D7%9B%D7%95%D6%BC%D7%95%D7%95%D7%A7%D7%A2/"><span class="hw">שטעכוּווקע</span><span class="gl">‘burr’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A2%D7%9B%D7%99%D7%A7/"><span class="hw">שטעכיק</span><span class="gl">‘pointny (adjective/adverb)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A2%D7%9B%D7%9C/"><span class="hw">שטעכל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A2%D7%9B%D7%9F/"><span class="hw">שטעכן</span><span class="gl">‘to prick’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A2%D7%9C%D7%95%D7%A0%D7%92/"><span class="hw">שטעלונג</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A2%D7%9C%D7%9F/"><span class="hw">שטעלן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A2%D7%9C%D7%A4%D6%BF%D7%90%D6%B7%D7%A8%D7%98%D7%A8%D7%A2%D7%98%D7%A2%D7%A8/"><span class="hw">שטעלפֿאַרטרעטער</span><span class="gl">‘deputy’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A2%D7%9E%D7%A4%D6%BC%D7%9C/"><span class="hw">שטעמפּל</span><span class="gl">‘stamp’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A2%D7%A0%D7%93%D7%99%D7%A7/"><span class="hw">שטענדיק</span><span class="gl">‘constant(ly) (adjective/adverb)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A2%D7%A0%D7%93%D7%A2%D7%A8/"><span class="hw">שטענדער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A2%D7%A4%D6%BC%D7%9F/"><span class="hw">שטעפּן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A2%D7%A7%D7%9C%D7%90%D6%B7%D7%98%D7%A9/"><span class="hw">שטעקלאַטש</span><span class="gl">‘slipper’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A2%D7%A7%D7%9F%201/"><span class="hw">שטעקן 1</span><span class="gl">‘stick’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A2%D7%A7%D7%9F%202/"><span class="hw">שטעקן 2</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A2%D7%A7%D7%A0%D7%90%D6%B8%D7%93%D7%9C/"><span class="hw">שטעקנאָדל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A2%D7%A8/"><span class="hw">שטער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A2%D7%A8%D7%91%D7%9C%D7%A2%D7%9A/"><span class="hw">שטערבלעך</span><span class="gl">‘fatal; fatally’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A2%D7%A8%D7%9F%201/"><span class="hw">שטערן 1</span><span class="gl">‘to bother’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A2%D7%A8%D7%9F%202/"><span class="hw">שטערן 2</span><span class="gl">‘star’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A2%D7%A8%D7%9F%203/"><span class="hw">שטערן 3</span><span class="gl">‘forehead’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A2%D7%A8%D7%9F%D6%BE%D7%98%D7%99%D7%9B%D7%9C/"><span class="hw">שטערן־טיכל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A2%D7%A8%D7%A6%D7%9C/"><span class="hw">שטערצל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A2%D7%A8%D7%A7/"><span class="hw">שטערק</span><span class="gl">‘strength’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A8/"><span class="hw">שטר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A8%D6%BE%D7%9B%D6%BC%D7%A1%D7%A3/"><span class="hw">שטר־כּסף</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A8%D7%90%D6%B7%D7%9C/"><span class="hw">שטראַל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A8%D7%90%D6%B7%D7%9D/"><span class="hw">שטראַם</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A8%D7%90%D6%B8%D7%96/"><span class="hw">שטראָז</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A8%D7%90%D6%B8%D7%9D%201/"><span class="hw">שטראָם 1</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A8%D7%90%D6%B8%D7%A3/"><span class="hw">שטראָף</span><span class="gl">‘punishment’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A8%D7%90%D6%B8%D7%A4%D6%BF%D7%9F/"><span class="hw">שטראָפֿן</span><span class="gl">‘to punish’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A8%D7%95%D7%93%D7%9C/"><span class="hw">שטרודל</span><span class="gl">‘strudel’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A8%D7%95%D7%99/"><span class="hw">שטרוי</span><span class="gl">‘straw’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A8%D7%95%D7%99%D7%96%D7%90%D6%B7%D7%A7/"><span class="hw">שטרויזאַק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A8%D7%95%D7%99%D7%9A/"><span class="hw">שטרויך</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A8%D7%95%D7%99%D7%9B%D7%9C/"><span class="hw">שטרויכל</span><span class="gl">‘nose cold’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A8%D7%95%D7%99%D7%9B%D7%9C%D7%93%D7%99%D7%A7/"><span class="hw">שטרויכלדיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A8%D7%95%D7%99%D7%9B%D7%9C%D7%A2%D7%9F/"><span class="hw">שטרויכלען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A8%D7%95%D7%99%D7%A1%201/"><span class="hw">שטרויס 1</span><span class="gl">‘ostrich’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A8%D7%95%D7%99%D7%A1%202/"><span class="hw">שטרויס 2</span><span class="gl">‘bouquet, bunch of flowers’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A8%D7%95%D7%99%D7%A2%D7%9F/"><span class="hw">שטרויען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A8%D7%99%D7%99%D7%9C/"><span class="hw">שטרייל</span><span class="gl">‘comb’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A8%D7%99%D7%99%D7%9C%D7%9F/"><span class="hw">שטריילן</span><span class="gl">‘to comb (hair)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A8%D7%99%D7%99%D7%A2%D7%9F/"><span class="hw">שטרייען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A8%D7%99%D7%9A/"><span class="hw">שטריך</span><span class="gl">‘characteristic’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A8%D7%99%D7%9E%D7%A4%D6%BC/"><span class="hw">שטרימפּ</span><span class="gl">‘stockings’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A8%D7%99%D7%A6%D7%9C/"><span class="hw">שטריצל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A8%D7%99%D7%A7/"><span class="hw">שטריק</span><span class="gl">‘string’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A8%D7%99%D7%A7%D7%9F/"><span class="hw">שטריקן</span><span class="gl">‘to knit’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A8%D7%99%D7%A7%D7%A0%D7%90%D6%B8%D7%93%D7%9C/"><span class="hw">שטריקנאָדל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A8%D7%99%D7%A7%D7%A9%D7%A4%D6%BC%D7%99%D7%96/"><span class="hw">שטריקשפּיז</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A8%D7%A2%D7%A0%D7%92%D7%9C/"><span class="hw">שטרענגל</span><span class="gl">‘that which connects an apple to a branch’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A8%D7%A2%D7%A7%D7%9F/"><span class="hw">שטרעקן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A8%D7%B2%D6%B7%D7%9A/"><span class="hw">שטרײַך</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A8%D7%B2%D6%B7%D7%9E%D7%9C/"><span class="hw">שטרײַמל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A9%D7%90%D6%B7%D7%95%D7%95%28%D7%99%D7%99%29/"><span class="hw">שטשאַוו(יי)</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A9%D7%90%D6%B7%D7%A4%D6%BC%D7%A2/"><span class="hw">שטשאַפּע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A9%D7%95%D7%A8/"><span class="hw">שטשור</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A9%D7%99%D7%A4%D6%BC%D7%99%D7%90%D6%B8%D7%A8/"><span class="hw">שטשיפּיאָר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A9%D7%99%D7%A8%D7%A2%D7%9F/"><span class="hw">שטשירען</span><span class="gl">‘to bare (one's teeth)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%A9%D7%A2%D7%A8%D7%A7%D7%A2/"><span class="hw">שטשערקע</span><span class="gl">‘kitchen towel; mop’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%B2%D6%B7%D7%92/"><span class="hw">שטײַג</span><span class="gl">‘cage’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%B2%D6%B7%D7%92%D7%9F/"><span class="hw">שטײַגן</span><span class="gl">‘to ascend’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%98%D7%B2%D6%B7%D7%A2%D7%A8/"><span class="hw">שטײַער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D6%B4%D7%A2%D7%A8/"><span class="hw">שיִער</span><span class="gl">‘almost’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%91%D6%BF%D7%A2%D7%94/"><span class="hw">שיבֿעה</span><span class="gl">‘Shiva, mourning period of seven days’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%91%D6%BF%D7%A8%D7%95%D7%AA%D6%BE%D7%9C%D7%91%D6%BF/"><span class="hw">שיבֿרות־לבֿ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%91%D7%9F%202/"><span class="hw">שיבן 2</span><span class="gl">‘dandruff’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%91%D7%A2%D7%A8%E2%80%8F%201/"><span class="hw">שיבער‏ 1</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%93%D7%95%D7%9A/"><span class="hw">שידוך</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%95%D7%95%D7%A2/"><span class="hw">שיווע</span><span class="gl">‘gray’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%98%D7%94/"><span class="hw">שיטה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%98%D7%9C%D7%A2%D7%9F%20%5B%3F%5D/"><span class="hw">שיטלען [?]</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%98%D7%9F/"><span class="hw">שיטן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%98%D7%A2%D7%95%D7%95%D7%93%D7%99%D7%A7/"><span class="hw">שיטעוודיק</span><span class="gl">‘pourable’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%98%D7%A2%D7%A8/"><span class="hw">שיטער</span><span class="gl">‘sparse(ly) (adjective/adverb)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%99%D7%92%D7%90%D6%B7%D7%A5/"><span class="hw">שייגאַץ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%99%D7%92%D7%A2%D7%A5/"><span class="hw">שייגעץ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%99%D7%92%D7%A2%D7%A5%D6%BE%D7%A9%D7%98%D7%99%D7%A7/"><span class="hw">שייגעץ־שטיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%99%D7%93/"><span class="hw">שייד</span><span class="gl">‘sheath’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%99%D7%93%D7%95%D7%95%D7%A2%D7%92/"><span class="hw">שיידוועג</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%99%D7%93%D7%9C/"><span class="hw">שיידל</span><span class="gl">‘skull’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%99%D7%93%D7%9F/"><span class="hw">שיידן</span><span class="gl">‘to separate’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%99%D7%98%D7%9C/"><span class="hw">שייטל</span><span class="gl">‘wig’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%99%D7%9A/"><span class="hw">שייך</span><span class="gl">‘relevant’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%99%D7%9C%D7%9F%201/"><span class="hw">שיילן 1</span><span class="gl">‘to peal’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%99%D7%9C%D7%9F%202/"><span class="hw">שיילן 2</span><span class="gl">‘to squint’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%99%D7%9E%D7%A2/"><span class="hw">שיימע</span><span class="gl">‘piece of writing with the name of God’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%99%D7%9F/"><span class="hw">שיין</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%99%D7%A0%D7%93%D7%9C/"><span class="hw">שיינדל</span><span class="gl">‘Sheindl (woman's name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%99%D7%A0%D7%94%D7%99%D7%99%D7%98/"><span class="hw">שיינהייט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%9B%D6%BC%D7%95%D7%A8/"><span class="hw">שיכּור</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%9B%D6%BC%D7%A8%D7%95%D7%AA/"><span class="hw">שיכּרות</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%9B%D7%91%D7%A2%D7%A0%D7%93%D7%9C%D7%A2%D7%9A/"><span class="hw">שיכבענדלעך</span><span class="gl">‘shoelaces’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%9B%D7%A4%D6%BC%D7%95%D7%A5/"><span class="hw">שיכפּוץ</span><span class="gl">‘shoe wax’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%9C%D7%92%D7%A2%D7%A8%D7%9C%D7%A2%D7%9A/"><span class="hw">שילגערלעך</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%9C%D7%93/"><span class="hw">שילד</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%9C%D7%94/"><span class="hw">שילה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%9C%D7%99%D7%A0%D7%92%D7%A2%D7%A8/"><span class="hw">שילינגער</span><span class="gl">‘a shilling’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%9C%D7%A9%D7%95%D7%9C/"><span class="hw">שילשול</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%9E%D7%9C%E2%80%8F%202/"><span class="hw">שימל‏ 2</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%9E%D7%A4%D6%BF%D7%9F/"><span class="hw">שימפֿן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%A0%D7%91%D7%99%D7%99%D7%9F/"><span class="hw">שינביין</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%A0%D7%93%D7%9C/"><span class="hw">שינדל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%A0%D7%93%D7%9C%D7%93%D7%90%D6%B7%D7%9A/"><span class="hw">שינדלדאַך</span><span class="gl">‘shingle roof’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%A0%D7%95%D7%99/"><span class="hw">שינוי</span><span class="gl">‘change’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%A0%D7%A2/"><span class="hw">שינע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%A0%D7%A7%D7%A2/"><span class="hw">שינקע</span><span class="gl">‘ham’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%A1/"><span class="hw">שיס</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%A1%D7%9C/"><span class="hw">שיסל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%A1%D7%9F/"><span class="hw">שיסן</span><span class="gl">‘to shoot’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%A2%D7%95%D7%A8/"><span class="hw">שיעור</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%A3%201/"><span class="hw">שיף 1</span><span class="gl">‘ship, boat’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%A3%202/"><span class="hw">שיף 2</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%A4%D6%BF%D7%90%D6%B8%D7%A0%D7%99%D7%A8/"><span class="hw">שיפֿאָניר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%A4%D6%BF%D7%97%D7%94/"><span class="hw">שיפֿחה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%A4%D6%BF%D7%9C%D7%95%D7%AA/"><span class="hw">שיפֿלות</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%A4%D6%BF%D7%9F/"><span class="hw">שיפֿן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%A4%D6%BF%D7%A1%D6%BE%D7%A7%D7%90%D6%B7%D7%A4%D6%BC%D7%99%D7%98%D7%90%D6%B7%D7%9F/"><span class="hw">שיפֿס־קאַפּיטאַן</span><span class="gl">‘ship captain’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%A7%D7%95%D7%9C%D6%BE%D7%94%D7%93%D7%A2%D7%AA/"><span class="hw">שיקול־הדעת</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%A7%D7%9C%D7%93%D7%99%D7%A7/"><span class="hw">שיקלדיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%A7%D7%9C%D7%A2%D7%9F/"><span class="hw">שיקלען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%A7%D7%9F/"><span class="hw">שיקן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%A7%D7%A1%D7%A2/"><span class="hw">שיקסע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%A7%D7%A2%D7%95%D7%95%D7%A2%D7%9F%20%D7%96%D7%99%D7%9A/"><span class="hw">שיקעווען זיך</span><span class="gl">‘make preparations’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%A8/"><span class="hw">שיר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%A8%D6%BE%D7%94%D7%9E%D7%A2%D7%9C%D7%95%D7%AA/"><span class="hw">שיר־המעלות</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%A8%D6%BE%D7%94%D7%A9%D7%99%D7%A8%D7%99%D7%9D/"><span class="hw">שיר־השירים</span><span class="gl">‘the Song of Songs’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%A8%D7%94/"><span class="hw">שירה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%A8%D7%A2%D7%9D/"><span class="hw">שירעם</span><span class="gl">‘umbrella’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%A8%D7%A5/"><span class="hw">שירץ</span><span class="gl">‘skirt’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%A9%D7%99/"><span class="hw">שישי</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%99%D7%A9%D7%A7%D7%A2/"><span class="hw">שישקע</span><span class="gl">‘pine cone; excrescence; burr’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9B%D7%91%D7%AA%D6%BE%D7%96%D7%A8%D7%A2/"><span class="hw">שכבת־זרע</span><span class="gl">‘ejaculation of sperm’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9B%D7%99%D7%A0%D7%94/"><span class="hw">שכינה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9B%D7%9F/"><span class="hw">שכן</span><span class="gl">‘neighbor’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9B%D7%A0%D7%95%D7%AA/"><span class="hw">שכנות</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9B%D7%A0%D7%98%D7%A2/"><span class="hw">שכנטע</span><span class="gl">‘neighbor (f.)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9B%D7%A0%D7%99%D7%A9/"><span class="hw">שכניש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%90%D6%B7%D7%92%D7%A2%D7%A8/"><span class="hw">שלאַגער</span><span class="gl">‘hit’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%90%D6%B7%D7%9B%D7%98/"><span class="hw">שלאַכט</span><span class="gl">‘battle’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%90%D6%B7%D7%9D/"><span class="hw">שלאַם</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%90%D6%B7%D7%A0%D7%92/"><span class="hw">שלאַנג</span><span class="gl">‘snake’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%90%D6%B7%D7%A3/"><span class="hw">שלאַף</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%90%D6%B7%D7%A7/"><span class="hw">שלאַק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%90%D6%B7%D7%A7%D7%A1/"><span class="hw">שלאַקס</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%90%D6%B8%D7%92/"><span class="hw">שלאָג</span><span class="gl">‘blow, hit’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%90%D6%B8%D7%92%D7%91%D7%A8%D7%99%D7%A7/"><span class="hw">שלאָגבריק</span><span class="gl">‘slaughterhouse’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%90%D6%B8%D7%92%D7%9F/"><span class="hw">שלאָגן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%90%D6%B8%D7%A1/"><span class="hw">שלאָס</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%90%D6%B8%D7%A1%D6%BE%D7%9E%D7%9D/"><span class="hw">שלאָס־מם</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%90%D6%B8%D7%A1%D7%91%D7%90%D6%B7%D7%A8%D7%92/"><span class="hw">שלאָסבאַרג</span><span class="gl">‘Castle Hill—central hill in Vilna with ruins of the old castle’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%90%D6%B8%D7%A3/"><span class="hw">שלאָף</span><span class="gl">‘sleep’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%90%D6%B8%D7%A4%D6%BF%D7%92%D7%A2%D7%98%D7%A8%D7%90%D6%B7%D7%A0%D7%A7/"><span class="hw">שלאָפֿגעטראַנק</span><span class="gl">‘nightcap (drink)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%90%D6%B8%D7%A4%D6%BF%D7%94%D7%B2%D6%B7%D7%91%D7%9C/"><span class="hw">שלאָפֿהײַבל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%90%D6%B8%D7%A4%D6%BF%D7%9F/"><span class="hw">שלאָפֿן</span><span class="gl">‘to sleep’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%90%D6%B8%D7%A4%D6%BF%D7%A6%D7%99%D7%9E%D7%A2%D7%A8/"><span class="hw">שלאָפֿצימער</span><span class="gl">‘bedroom’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%90%D6%B8%D7%A4%D6%BF%D7%A9%D7%98%D7%95%D7%91/"><span class="hw">שלאָפֿשטוב</span><span class="gl">‘bedroom’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%95%D7%95%D7%94/"><span class="hw">שלווה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%95%D7%99%D7%9A/"><span class="hw">שלויך</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%95%D7%9D/"><span class="hw">שלום</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%95%D7%9D%20%D7%95%D7%91%D7%A8%D7%9B%D7%94/"><span class="hw">שלום וברכה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%95%D7%9D%D6%BE%D7%91%D7%99%D7%AA/"><span class="hw">שלום־בית</span><span class="gl">‘domestic harmony’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%95%D7%9D%D6%BE%D7%96%D7%9B%D7%A8/"><span class="hw">שלום־זכר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%95%D7%9D%D6%BE%D7%98%D7%A8%D7%90%D6%B7%D7%A7%D7%98%D7%90%D6%B7%D7%98/"><span class="hw">שלום־טראַקטאַט</span><span class="gl">‘peace treaty’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%95%D7%9D%D6%BE%D7%A2%D7%9C%D7%99%D7%9B%D7%9D/"><span class="hw">שלום־עליכם</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%95%D7%9E%D7%99%D7%90%D7%9C/"><span class="hw">שלומיאל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%95%D7%9E%D7%99%D7%90%D7%9C%D7%98%D7%A2/"><span class="hw">שלומיאלטע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%95%D7%9E%D7%A4%D6%BC%D7%A2%D7%A8/"><span class="hw">שלומפּער</span><span class="gl">‘scruff’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%95%D7%A0%D7%92/"><span class="hw">שלונג</span><span class="gl">‘gullet’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%95%D7%A7%D7%9F/"><span class="hw">שלוקן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%95%D7%A7%D7%A2%D7%A8%D7%A5/"><span class="hw">שלוקערץ</span><span class="gl">‘hiccup’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%95%D7%A7%D7%A2%D7%A8%D7%A6%D7%9F/"><span class="hw">שלוקערצן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%95%D7%A9%D7%99%D7%9D/"><span class="hw">שלושים</span><span class="gl">‘mourning thirty days after the death’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%97/"><span class="hw">שלח</span><span class="gl">‘fourth parsha in the Book of Numbers (Bemidbar)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%97%D6%BE%D7%9E%D7%A0%D7%95%D7%AA/"><span class="hw">שלח־מנות</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%98%D7%95%D7%9F/"><span class="hw">שלטון</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%99%D7%90%D6%B7%D7%9A/"><span class="hw">שליאַך</span><span class="gl">‘path, way, dirt road’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%99%D7%90%D6%B7%D7%9B%D7%98%D7%A2/"><span class="hw">שליאַכטע</span><span class="gl">‘Polish nobility’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%99%D7%97/"><span class="hw">שליח</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%99%D7%97%D6%BE%D7%A6%D7%99%D7%91%D7%95%D7%A8/"><span class="hw">שליח־ציבור</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%99%D7%97%D7%95%D7%AA/"><span class="hw">שליחות</span><span class="gl">‘mission’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%99%D7%97%D7%A2%D7%A6%D7%9F%20%5B%3F%5D/"><span class="hw">שליחעצן [?]</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%99%D7%99%D7%A2%D7%A8%D7%9F/"><span class="hw">שלייערן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%99%D7%99%D7%A3%201/"><span class="hw">שלייף 1</span><span class="gl">‘temple’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%99%D7%99%D7%A3%202/"><span class="hw">שלייף 2</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%99%D7%99%D7%A7%D7%A2%D7%A1/"><span class="hw">שלייקעס</span><span class="gl">‘suspenders’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%99%D7%9D%D6%BE%D7%A9%D7%9C%D7%99%D7%9E%D7%96%D7%9C/"><span class="hw">שלים־שלימזל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%99%D7%9E%D7%90%D6%B7%D7%A7/"><span class="hw">שלימאַק</span><span class="gl">‘snail’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%99%D7%9E%D7%96%D7%9C/"><span class="hw">שלימזל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%99%D7%A0%D7%92/"><span class="hw">שלינג</span><span class="gl">‘sip’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%99%D7%A0%D7%92%D7%9C%201/"><span class="hw">שלינגל 1</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%99%D7%A0%D7%92%D7%9C%202/"><span class="hw">שלינגל 2</span><span class="gl">‘rascal’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%99%D7%A0%D7%92%D7%A2%D7%9F/"><span class="hw">שלינגען</span><span class="gl">‘to swallow’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%99%D7%A4%D6%BC%D7%99%D7%A2%D7%A1/"><span class="hw">שליפּיעס</span><span class="gl">‘eyes’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%99%D7%A9%D7%99%D7%AA/"><span class="hw">שלישית</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%99%D7%A9%D7%A7%D7%A2%D7%A1%20%5B%3F%5D/"><span class="hw">שלישקעס [?]</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%9A/"><span class="hw">שלך</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%9C/"><span class="hw">שלל</span><span class="gl">‘abundance’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%9E%D7%94/"><span class="hw">שלמה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%9E%D7%94%20%D7%94%D7%9E%D7%9C%D7%9A/"><span class="hw">שלמה המלך</span><span class="gl">‘King Solomon’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%A2%D7%9B%D7%98/"><span class="hw">שלעכט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%A2%D7%9B%D7%98%D7%A1/"><span class="hw">שלעכטס</span><span class="gl">‘evil, badness’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%A2%D7%9B%D7%98%D7%A7%D7%99%D7%99%D7%98/"><span class="hw">שלעכטקייט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%A2%D7%9E%D7%99%D7%9C/"><span class="hw">שלעמיל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%A2%D7%A1%D7%A2%D7%A8/"><span class="hw">שלעסער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%A2%D7%A4%D6%BC%D7%9F/"><span class="hw">שלעפּן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%A2%D7%A4%D6%BC%D7%A2%D7%93%D7%99%D7%A7/"><span class="hw">שלעפּעדיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%A2%D7%A4%D6%BC%D7%A2%D7%A8/"><span class="hw">שלעפּער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%A9-%D7%A1%D7%A2%D7%95%D7%93%D7%95%D7%AA/"><span class="hw">שלש-סעודות</span><span class="gl">‘the third meal on the Sabbath’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%B2%D6%B7%D7%9D/"><span class="hw">שלײַם</span><span class="gl">‘goo’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%B2%D6%B7%D7%A1%D7%9F/"><span class="hw">שלײַסן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9C%D7%B2%D6%B7%D7%A4%D6%BF%D7%9F/"><span class="hw">שלײַפֿן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9D%201/"><span class="hw">שם 1</span><span class="gl">‘name (of God)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9D%202/"><span class="hw">שם 2</span><span class="gl">‘Shem, son of Noah’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9D%20%D7%95%D7%A2%D7%91%D7%A8/"><span class="hw">שם ועבר</span><span class="gl">‘Shem and Eber (Biblical figures, ancestors of Semitic peoples)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9D%D6%BE%D7%93%D7%91%D6%BF%D7%A8/"><span class="hw">שם־דבֿר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9D%D6%BE%D7%94%D7%95%D7%95%D7%99%D7%94/"><span class="hw">שם־הוויה</span><span class="gl">‘the ineffable name of God’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9D%D6%BE%D7%94%D7%9E%D7%A4%D6%BF%D7%95%D7%A8%D7%A9/"><span class="hw">שם־המפֿורש</span><span class="gl">‘the ineffable name of God’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%90%D6%B7%D7%98%D7%A2/"><span class="hw">שמאַטע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%90%D6%B7%D7%9C%D7%A5/"><span class="hw">שמאַלץ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%90%D6%B7%D7%9C%D7%A6%D7%90%D6%B8%D7%95%D7%95%D7%A0%D7%99%D7%A7/"><span class="hw">שמאַלצאָווניק</span><span class="gl">‘blackmailer who threatens to expose hidden Jews to the Nazis’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%90%D6%B7%D7%9C%D7%A6%D7%91%D7%A8%D7%95%D7%99%D7%98/"><span class="hw">שמאַלצברויט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%90%D6%B7%D7%A0%D7%98/"><span class="hw">שמאַנט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%90%D6%B7%D7%A8%D7%99%D7%A2/"><span class="hw">שמאַריע</span><span class="gl">‘the Virgin Mary’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%90%D6%B7%D7%A8%D7%A5/"><span class="hw">שמאַרץ</span><span class="gl">‘pain, ache’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%90%D6%B7%D7%A8%D7%A6%D7%9F/"><span class="hw">שמאַרצן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%90%D6%B8%D7%9C/"><span class="hw">שמאָל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%90%D6%B8%D7%A0%D7%93%D7%A2/"><span class="hw">שמאָנדע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%90%D7%99/"><span class="hw">שמאי</span><span class="gl">‘(man's name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%93/"><span class="hw">שמד</span><span class="gl">‘conversion from Judaism’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%93%D6%BE%D7%95%D7%95%D7%90%D6%B7%D7%A1%D7%A2%D7%A8/"><span class="hw">שמד־וואַסער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%93%D7%99%D7%95%D7%AA/"><span class="hw">שמדיות</span><span class="gl">‘conversion’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%93%D7%9F/"><span class="hw">שמדן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%95%D7%90%D7%9C/"><span class="hw">שמואל</span><span class="gl">‘Samuel (name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%95%D7%A0%D7%94%D6%BE%D7%A2%D7%A9%D7%82%D7%A8%D7%94/"><span class="hw">שמונה־עשׂרה</span><span class="gl">‘the eighteen benedictions (part of Jewish prayer, said silently)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%95%D7%A2%D7%94/"><span class="hw">שמועה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%95%D7%A2%D7%A1/"><span class="hw">שמועס</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%95%D7%A2%D7%A1%D7%9F/"><span class="hw">שמועסן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%95%D7%A5/"><span class="hw">שמוץ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%95%D7%A6%D7%99%D7%A7/"><span class="hw">שמוציק</span><span class="gl">‘dirty (adjective/adverb)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%95%D7%A7/"><span class="hw">שמוק</span><span class="gl">‘jewelry’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%95%D7%A8%D7%94%D6%BE%D7%9E%D7%A6%D7%94/"><span class="hw">שמורה־מצה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%95%D7%AA/"><span class="hw">שמות</span><span class="gl">‘Exodus (second book of the Bible)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%99%D7%93%20/"><span class="hw">שמיד </span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%99%D7%93%D7%9F/"><span class="hw">שמידן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%99%D7%93%D7%A2%D7%A8%D7%B2%D6%B7/"><span class="hw">שמידערײַ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%99%D7%98%D7%94/"><span class="hw">שמיטה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%99%D7%98%D7%94%D6%BE%D7%99%D7%90%D6%B8%D7%A8/"><span class="hw">שמיטה־יאָר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%99%D7%99%D7%9B%D7%9C/"><span class="hw">שמייכל</span><span class="gl">‘smile’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%99%D7%99%D7%9B%D7%9C%D7%93%D7%99%D7%A7/"><span class="hw">שמייכלדיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%99%D7%99%D7%9B%D7%9C%D7%A2%D7%9F/"><span class="hw">שמייכלען</span><span class="gl">‘to smile’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%99%D7%99%D7%9C%D7%99%D7%A7/"><span class="hw">שמייליק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%99%D7%9D/"><span class="hw">שמים</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%99%D7%A0%D7%99%D6%BE%D7%A2%D7%A6%D7%A8%D7%AA/"><span class="hw">שמיני־עצרת</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%99%D7%A5/"><span class="hw">שמיץ</span><span class="gl">‘lashes, whipping’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%99%D7%A8/"><span class="hw">שמיר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%99%D7%A8%D7%94/"><span class="hw">שמירה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%99%D7%A8%D7%9F/"><span class="hw">שמירן</span><span class="gl">‘smear’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%99%D7%A8%D7%AA%D6%BE%D7%94%D7%9C%D7%A9%D7%95%D7%9F/"><span class="hw">שמירת־הלשון</span><span class="gl">‘guarding the tongue’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%9F/"><span class="hw">שמן</span><span class="gl">‘fat’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%9F%D6%BE%D7%96%D7%99%D7%AA/"><span class="hw">שמן־זית</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%A2%20%20%D7%91%D7%A0%D7%99/"><span class="hw">שמע  בני</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%A2%20jiske%CB%90z/"><span class="hw">שמע jiskeːz</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%A2%D6%BE%D7%99%D7%A9%D7%82%D7%A8%D7%90%D7%9C/"><span class="hw">שמע־ישׂראל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%A2%D7%95%D7%9F/"><span class="hw">שמעון</span><span class="gl">‘Simon (man's name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%A2%D7%95%D7%9F%20%D7%91%D7%A8%20%D7%99%D7%95%D7%97%D7%90%D7%99/"><span class="hw">שמעון בר יוחאי</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%A2%D7%98%D7%A2%D7%A8%D7%9C%D7%99%D7%A0%D7%92/"><span class="hw">שמעטערלינג</span><span class="gl">‘butterfly’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%A2%D7%9C%D7%A6%D7%9F/"><span class="hw">שמעלצן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%A2%D7%A7/"><span class="hw">שמעק</span><span class="gl">‘scent, smell’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%A2%D7%A7%D7%9F/"><span class="hw">שמעקן</span><span class="gl">‘to smell’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%A2%D7%A8%D7%92%D7%9C/"><span class="hw">שמערגל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%A2%D7%A8%D7%9C/"><span class="hw">שמערל</span><span class="gl">‘Shmerl (old-fashioned man's name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%A9/"><span class="hw">שמש</span><span class="gl">‘sun’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%A9%D7%82/"><span class="hw">שמשׂ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9E%D7%A9%D7%95%D7%9F/"><span class="hw">שמשון</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%9F/"><span class="hw">שן</span><span class="gl">‘tooth’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A0%D7%90%D6%B7%D7%A4%D6%BC%D7%9F/"><span class="hw">שנאַפּן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A0%D7%90%D6%B7%D7%A7%D7%9F/"><span class="hw">שנאַקן</span><span class="gl">‘to hiccough’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A0%D7%90%D6%B8%D7%91%D7%9C/"><span class="hw">שנאָבל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A0%D7%90%D6%B8%D7%9C/"><span class="hw">שנאָל</span><span class="gl">‘buckle’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A0%D7%90%D6%B8%D7%A8%D7%9B%D7%9F/"><span class="hw">שנאָרכן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A0%D7%90%D6%B8%D7%A8%D7%9F%D7%A9%D7%A0%D7%90%D6%B8%D7%A8%D7%A2%D7%9F/"><span class="hw">שנאָרןשנאָרען</span><span class="gl">‘to beg’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A0%D7%93%D7%A8%D7%9F/"><span class="hw">שנדרן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A0%D7%94/"><span class="hw">שנה</span><span class="gl">‘year’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A0%D7%94%20%D7%98%D7%95%D7%91%D6%BF%D7%94%20%D7%95%D7%9E%D7%AA%D7%95%D7%A7%D7%94/"><span class="hw">שנה טובֿה ומתוקה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A0%D7%94%D6%BE%D7%98%D7%95%D7%91%D6%BF%D7%94/"><span class="hw">שנה־טובֿה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A0%D7%95%D7%99%D7%A4%D6%BF%D7%9C%D7%93%D7%99%D7%A7/"><span class="hw">שנויפֿלדיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A0%D7%95%D7%99%D7%A4%D6%BF%D7%9C%D7%A2%D7%9F/"><span class="hw">שנויפֿלען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A0%D7%95%D7%99%D7%A4%D6%BF%D7%9C%D7%A2%D7%A8/"><span class="hw">שנויפֿלער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A0%D7%95%D7%99%D7%A4%D6%BF%D7%9F/"><span class="hw">שנויפֿן</span><span class="gl">‘to pant, gasp for air’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A0%D7%95%D7%99%D7%A5/"><span class="hw">שנויץ</span><span class="gl">‘mustache’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A0%D7%95%D7%A4%D6%BC%D7%98%D7%90%D6%B7%D7%91%D7%A2%D7%A7/"><span class="hw">שנופּטאַבעק</span><span class="gl">‘snuff’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A0%D7%95%D7%A4%D6%BC%D7%9F/"><span class="hw">שנופּן</span><span class="gl">‘head cold, runny nose’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A0%D7%95%D7%A4%D6%BC%D7%A2%D7%A6%D7%9F%20%5B%3F%5D/"><span class="hw">שנופּעצן [?]</span><span class="gl">‘to smell’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A0%D7%95%D7%A8%201/"><span class="hw">שנור 1</span><span class="gl">‘daughter-in-law’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A0%D7%95%D7%A8%202/"><span class="hw">שנור 2</span><span class="gl">‘cord’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A0%D7%95%D7%A8%D7%A2%D7%95%D7%95%D7%90%D6%B7%D7%93%D7%9C%D7%A2/"><span class="hw">שנורעוואַדלע</span><span class="gl">‘shoelace’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A0%D7%95%D7%A8%D7%A2%D7%95%D7%95%D7%A2%D7%9F/"><span class="hw">שנורעווען</span><span class="gl">‘to lace’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A0%D7%99%D7%90%D7%95%D7%A8/"><span class="hw">שניאור</span><span class="gl">‘Shneour (man's name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A0%D7%99%D7%98/"><span class="hw">שניט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A0%D7%99%D7%98%D6%BE%D7%A1%D7%95%D7%97%D7%A8/"><span class="hw">שניט־סוחר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A0%D7%99%D7%98%D7%9C%D7%A2%D7%9A/"><span class="hw">שניטלעך</span><span class="gl">‘dill’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A0%D7%99%D7%99/"><span class="hw">שניי</span><span class="gl">‘snow’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A0%D7%99%D7%99%D7%A2%D7%9F/"><span class="hw">שנייען</span><span class="gl">‘to snow’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A0%D7%99%D7%A4%D6%BC%D7%A1/"><span class="hw">שניפּס</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A0%D7%99%D7%A6%D7%9C%D7%A2%D7%9F/"><span class="hw">שניצלען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A0%D7%99%D7%A8%D7%9F/"><span class="hw">שנירן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A0%D7%A2%D7%9C%201/"><span class="hw">שנעל 1</span><span class="gl">‘fast’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A0%D7%A2%D7%9C%202/"><span class="hw">שנעל 2</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A0%D7%A2%D7%9C%D7%9F/"><span class="hw">שנעלן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A0%D7%A2%D7%A7/"><span class="hw">שנעק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A0%D7%B2%D6%B7%D7%93%D7%9F/"><span class="hw">שנײַדן</span><span class="gl">‘to cut’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A0%D7%B2%D6%B7%D7%93%D7%A2%D7%A8/"><span class="hw">שנײַדער</span><span class="gl">‘tailor’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A0%D7%B2%D6%B7%D7%93%D7%A2%D7%A8%D6%BE%D7%92%D7%A2%D7%96%D7%A2%D7%9C%D7%9F/"><span class="hw">שנײַדער־געזעלן</span><span class="gl">‘tailor's apprentice’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A0%D7%B2%D6%B7%D7%A6%D7%9F/"><span class="hw">שנײַצן</span><span class="gl">‘to blow one's nose’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A2%D7%93%D7%99%D7%A7%D7%9F/"><span class="hw">שעדיקן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A2%D7%94/"><span class="hw">שעה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A2%D7%98%D7%A0%D7%96/"><span class="hw">שעטנז</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A2%D7%9B%D7%98%D7%94%D7%95%D7%99%D7%96/"><span class="hw">שעכטהויז</span><span class="gl">‘slaughterhouse’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A2%D7%9B%D7%98%D7%9F/"><span class="hw">שעכטן</span><span class="gl">‘to slaughter ritually’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A2%D7%9C/"><span class="hw">שעל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A2%D7%9C%D7%98%D7%9F/"><span class="hw">שעלטן</span><span class="gl">‘to curse, swear’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A2%D7%9C%D7%98%D7%A2%D7%A8/"><span class="hw">שעלטער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A2%D7%9E%D7%9C/"><span class="hw">שעמל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A2%D7%9E%D7%A2%D7%95%D7%95%D7%93%D7%99%D7%A7/"><span class="hw">שעמעוודיק</span><span class="gl">‘bashful, timid (adjective/adverb)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A2%D7%9E%D7%A2%D7%9F%20%D7%96%D7%99%D7%9A/"><span class="hw">שעמען זיך</span><span class="gl">‘to be ashamed’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A2%D7%A0%D7%93%D7%9F/"><span class="hw">שענדן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A2%D7%A0%D7%99%D7%A7/"><span class="hw">שעניק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A2%D7%A0%D7%A7/"><span class="hw">שענק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A2%D7%A0%D7%A7%D7%9C/"><span class="hw">שענקל</span><span class="gl">‘thigh, shank’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A2%D7%A0%D7%A7%D7%A2%D7%9F/"><span class="hw">שענקען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A2%D7%A0%D7%A7%D7%A2%D7%A8/"><span class="hw">שענקער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A2%D7%A4%D6%BC/"><span class="hw">שעפּ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A2%D7%A4%D6%BC%D7%98%D7%A9%D7%A2%D7%9F/"><span class="hw">שעפּטשען</span><span class="gl">‘whisper’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A2%D7%A4%D6%BC%D7%9C%D7%A2%D7%A4%D6%BF%D7%9C/"><span class="hw">שעפּלעפֿל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A2%D7%A4%D6%BC%D7%9F/"><span class="hw">שעפּן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A2%D7%A4%D6%BC%D7%A1/"><span class="hw">שעפּס</span><span class="gl">‘sheep; ewe’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A2%D7%A4%D6%BC%D7%A1%D7%9C/"><span class="hw">שעפּסל</span><span class="gl">‘Shepsl (male name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A2%D7%A4%D6%BC%D7%A2%D7%A8/"><span class="hw">שעפּער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A2%D7%A4%D6%BF%D7%98%D7%9C/"><span class="hw">שעפֿטל</span><span class="gl">‘Sheftl (man's name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A2%D7%A4%D6%BF%D7%A2%D7%A8/"><span class="hw">שעפֿער</span><span class="gl">‘shepherd’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A2%D7%A7%D7%A1%D7%A4%D6%BC%D7%99%D7%A8/"><span class="hw">שעקספּיר</span><span class="gl">‘Shakespeare’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A2%D7%A8%201/"><span class="hw">שער 1</span><span class="gl">‘scissors’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A2%D7%A8%202/"><span class="hw">שער 2</span><span class="gl">‘sher (Jewish dance)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A2%D7%A8%203/"><span class="hw">שער 3</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A2%D7%A8%D7%9F/"><span class="hw">שערן</span><span class="gl">‘to cut, shear’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A2%D7%A8%D7%A2%D7%A8/"><span class="hw">שערער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A2%D7%A8%D7%A6%D7%9C/"><span class="hw">שערצל</span><span class="gl">‘apron’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%90%D6%B7%D7%92%D7%90%D6%B7%D7%98/"><span class="hw">שפּאַגאַט</span><span class="gl">‘(packing) string, twine’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%90%D6%B7%D7%9C%D7%98/"><span class="hw">שפּאַלט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%90%D6%B7%D7%9C%D7%98%D7%9F/"><span class="hw">שפּאַלטן</span><span class="gl">‘to split’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%90%D6%B7%D7%9C%D7%A2%D7%98%D7%9F%20%5B%3F%5D/"><span class="hw">שפּאַלעטן [?]</span><span class="gl">‘shutters’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%90%D6%B7%D7%A0%D7%92/"><span class="hw">שפּאַנג</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%90%D6%B7%D7%A0%D7%99%D7%A2/"><span class="hw">שפּאַניע</span><span class="gl">‘Spain’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%90%D6%B7%D7%A0%D7%A2%D7%9F/"><span class="hw">שפּאַנען</span><span class="gl">‘hitch (an animal)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%90%D6%B7%D7%A0%D7%A6%D7%A2%D7%A8/"><span class="hw">שפּאַנצער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%90%D6%B7%D7%A1/"><span class="hw">שפּאַס</span><span class="gl">‘fun’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%90%D6%B7%D7%A6%D7%99%D7%A8/"><span class="hw">שפּאַציר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%90%D6%B7%D7%A6%D7%99%D7%A8%D7%9F/"><span class="hw">שפּאַצירן</span><span class="gl">‘to stroll’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%90%D6%B7%D7%A7%D7%95%D7%9C%D7%9F/"><span class="hw">שפּאַקולן</span><span class="gl">‘spectacles, glasses’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%90%D6%B7%D7%A8%D7%9F/"><span class="hw">שפּאַרן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%90%D6%B7%D7%A8%D7%A2%D7%A0%D7%98%D7%A9%D7%A2%20%3F/"><span class="hw">שפּאַרענטשע ?</span><span class="gl">‘back of chair’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%90%D6%B8%D7%93%D7%9C/"><span class="hw">שפּאָדל</span><span class="gl">‘spade, shovel’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%90%D6%B8%D7%98%D7%99%D7%90%D6%B8%D7%A8/"><span class="hw">שפּאָטיאָר</span><span class="gl">‘autumn, fall’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%90%D6%B8%D7%9F/"><span class="hw">שפּאָן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%90%D6%B8%D7%A0%D7%A7%D7%A2/"><span class="hw">שפּאָנקע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%90%D6%B8%D7%A8%201/"><span class="hw">שפּאָר 1</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%90%D6%B8%D7%A8%202/"><span class="hw">שפּאָר 2</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%90%D6%B8%D7%A8%D7%9F/"><span class="hw">שפּאָרן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%95%D7%A0%D7%98/"><span class="hw">שפּונט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%95%D7%A8/"><span class="hw">שפּור</span><span class="gl">‘trace’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%99%D7%92%D7%9C/"><span class="hw">שפּיגל</span><span class="gl">‘mirror’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%99%D7%92%D7%9C%D7%90%D7%99%D7%99/"><span class="hw">שפּיגלאיי</span><span class="gl">‘sunny side up eggs’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%99%D7%96/"><span class="hw">שפּיז</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%99%D7%98%D7%90%D6%B8%D7%9C/"><span class="hw">שפּיטאָל</span><span class="gl">‘hospital’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%99%D7%98%D7%90%D6%B8%D7%9C%D7%99%D7%96%D7%99%D7%A8%D7%9F/"><span class="hw">שפּיטאָליזירן</span><span class="gl">‘to hospitalize’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%99%D7%9C/"><span class="hw">שפּיל</span><span class="gl">‘game’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%99%D7%9C%D7%9F/"><span class="hw">שפּילן</span><span class="gl">‘to play’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%99%D7%9C%D7%A2%D7%A8/"><span class="hw">שפּילער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%99%D7%9C%D7%A2%D7%A8%D7%B2%D6%B7/"><span class="hw">שפּילערײַ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%99%D7%9C%D7%A6%D7%B2%D6%B7%D7%92/"><span class="hw">שפּילצײַג</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%99%D7%9C%D7%A7%D7%A2/"><span class="hw">שפּילקע</span><span class="gl">‘pin’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%99%D7%9F/"><span class="hw">שפּין</span><span class="gl">‘spider’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%99%D7%A0%D7%90%D6%B7%D7%98/"><span class="hw">שפּינאַט</span><span class="gl">‘spinach’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%99%D7%A0%D7%93%D7%9C/"><span class="hw">שפּינדל</span><span class="gl">‘spindle’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%99%D7%A0%D7%94%D7%90%D6%B8%D7%9C%D7%A5/"><span class="hw">שפּינהאָלץ</span><span class="gl">‘pre-wedding celebration’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%99%D7%A0%D7%95%D7%95%D7%A2%D7%91%D7%A1/"><span class="hw">שפּינוועבס</span><span class="gl">‘spider's web’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%99%D7%A0%D7%A2%D7%9F/"><span class="hw">שפּינען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%99%D7%A5/"><span class="hw">שפּיץ</span><span class="gl">‘point’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%99%D7%A6%D7%9C/"><span class="hw">שפּיצל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%99%D7%A6%D7%A0%D7%A7%D7%90%D6%B7%D7%A4%D6%BC/"><span class="hw">שפּיצנקאַפּ</span><span class="gl">‘women's head-covering on the sabbath’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%99%D7%A7%D7%A2%D7%95%D7%95%D7%A2%D7%9F/"><span class="hw">שפּיקעווען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%99%D7%A8/"><span class="hw">שפּיר</span><span class="gl">‘feeling’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%99%D7%A8%D7%9F/"><span class="hw">שפּירן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%A2%D7%98/"><span class="hw">שפּעט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%A2%D7%98%D7%9F/"><span class="hw">שפּעטן</span><span class="gl">‘to mock’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%A2%D7%A0%D7%92%D7%9C%D7%A2%D7%A8/"><span class="hw">שפּענגלער</span><span class="gl">‘plumber’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%A2%D7%A0%D7%A0%D7%90%D6%B8%D7%93%D7%9C/"><span class="hw">שפּעננאָדל</span><span class="gl">‘straight pin’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%A2%D7%A7%D7%95%D7%9C%D7%99%D7%A8%D7%9F/"><span class="hw">שפּעקולירן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%A8%D7%90%D6%B7%D7%9A/"><span class="hw">שפּראַך</span><span class="gl">‘language’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%A8%D7%90%D6%B7%D7%9A%D6%BE%D7%91%D7%90%D6%B7%D7%92%D7%A2%D7%92%D7%A2%D7%A0%D7%99%D7%A9/"><span class="hw">שפּראַך־באַגעגעניש</span><span class="gl">‘language contact’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%A8%D7%90%D6%B8%D7%9A/"><span class="hw">שפּראָך</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%A8%D7%90%D6%B8%D7%A0%D7%98%D7%A9%D7%99%D7%A7/"><span class="hw">שפּראָנטשיק</span><span class="gl">‘buckle’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%A8%D7%90%D6%B8%D7%A5/"><span class="hw">שפּראָץ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%A8%D7%90%D6%B8%D7%A6%D7%9F/"><span class="hw">שפּראָצן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%A8%D7%99%D7%99%D7%98%D7%9F/"><span class="hw">שפּרייטן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%A8%D7%99%D7%9B%D7%95%D7%95%D7%90%D6%B8%D7%A8%D7%98/"><span class="hw">שפּריכוואָרט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%A8%D7%99%D7%A0%D7%92%D7%A2%D7%9F/"><span class="hw">שפּרינגען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%A8%D7%99%D7%A0%D7%92%D7%A2%D7%A8/"><span class="hw">שפּרינגער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%A8%D7%99%D7%A0%D7%A6%D7%A2/"><span class="hw">שפּרינצע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%A8%D7%A2%D7%9B%D7%9F/"><span class="hw">שפּרעכן</span><span class="gl">‘to speak’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%A8%D7%A2%D7%A0%D7%92%D7%A2%D7%9F/"><span class="hw">שפּרענגען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%A8%D7%A2%D7%A0%D7%A7%D7%9C/"><span class="hw">שפּרענקל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%A8%D7%B2%D6%B7%D7%96%201/"><span class="hw">שפּרײַז 1</span><span class="gl">‘step, stride; interval, gap’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%A8%D7%B2%D6%B7%D7%96%202/"><span class="hw">שפּרײַז 2</span><span class="gl">‘wooden bar’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%B2%D6%B7%D7%96/"><span class="hw">שפּײַז</span><span class="gl">‘food’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%B2%D6%B7%D7%96%D7%90%D6%B7%D7%A8%D7%A0%D7%99%D7%A2/"><span class="hw">שפּײַזאַרניע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%B2%D6%B7%D7%96%D7%A6%D7%99%D7%9E%D7%A2%D7%A8/"><span class="hw">שפּײַזצימער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%B2%D6%B7%D7%9B%D7%9C/"><span class="hw">שפּײַכל</span><span class="gl">‘saliva, spit’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%B2%D6%B7%D7%9B%D7%9C%D7%A2%D7%A8/"><span class="hw">שפּײַכלער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%B2%D6%B7%D7%A2%D7%9B%D7%A5/"><span class="hw">שפּײַעכץ</span><span class="gl">‘spittle, spit, saliva’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BC%D7%B2%D6%B7%D7%A2%D7%9F/"><span class="hw">שפּײַען</span><span class="gl">‘to spit’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A4%D6%BF%D7%97%D7%94/"><span class="hw">שפֿחה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A7%D7%90%D6%B7%D7%98%D7%95%D7%9C%D7%A7%D7%A2/"><span class="hw">שקאַטולקע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A7%D7%90%D6%B7%D7%A4%D6%BC%D7%A2/"><span class="hw">שקאַפּע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A7%D7%90%D6%B7%D7%A8%D7%A4%D6%BC%D7%A2%D7%98%D7%A7%D7%A2/"><span class="hw">שקאַרפּעטקע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A7%D7%90%D6%B8%D7%9C%D7%A0%D7%99%D7%A7/"><span class="hw">שקאָלניק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A7%D7%90%D6%B8%D7%A4%D6%BC%D7%99%D7%A7/"><span class="hw">שקאָפּיק</span><span class="gl">‘paper cone’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A7%D7%90%D6%B8%D7%A8%D7%9E%D7%99%D7%A5/"><span class="hw">שקאָרמיץ</span><span class="gl">‘paper cone; paper bag’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A7%D7%95%D7%9C/"><span class="hw">שקול</span><span class="gl">‘equal, comparable’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A7%D7%9C/"><span class="hw">שקל</span><span class="gl">‘shekel’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A7%D7%9C%D7%90%D6%BE%D7%95%D7%98%D7%A8%D7%99%D7%90/"><span class="hw">שקלא־וטריא</span><span class="gl">‘discussion, deliberation’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A7%D7%A2%D7%98%D7%A2%D7%9C%D7%A2/"><span class="hw">שקעטעלע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A7%D7%A8/"><span class="hw">שקר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A7%D7%A8%D7%9F/"><span class="hw">שקרן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A8%D7%90%D6%B7%D7%9D/"><span class="hw">שראַם</span><span class="gl">‘scar’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A8%D7%90%D6%B7%D7%A4%D6%BC%D7%A0%D7%A2%D7%9C/"><span class="hw">שראַפּנעל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A8%D7%92%D7%90/"><span class="hw">שרגא</span><span class="gl">‘Shraga (man's name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A8%D7%95%D7%99%D7%98/"><span class="hw">שרויט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A8%D7%95%D7%99%D7%A3/"><span class="hw">שרויף</span><span class="gl">‘screw’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A8%D7%95%D7%9C%D7%A7%D7%A2%D7%A1/"><span class="hw">שרולקעס</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A8%D7%95%D7%9E%D7%A4%D6%BC%D7%9F/"><span class="hw">שרומפּן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A8%D7%95%D7%A0%D7%98/"><span class="hw">שרונט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A8%D7%99%D7%98/"><span class="hw">שריט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A8%D7%A2%D7%98%D7%9C/"><span class="hw">שרעטל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A8%D7%A2%D7%A7/"><span class="hw">שרעק</span><span class="gl">‘fear, terror’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A8%D7%A2%D7%A7%D7%9C%D7%A2%D7%9A/"><span class="hw">שרעקלעך</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A8%D7%A2%D7%A7%D7%9F/"><span class="hw">שרעקן</span><span class="gl">‘to scare’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A8%D7%A2%D7%A7%D7%A2%D7%93%D7%99%D7%A7/"><span class="hw">שרעקעדיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A8%D7%A5/"><span class="hw">שרץ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A8%D7%B2%D6%B7%D7%91%D7%9F/"><span class="hw">שרײַבן</span><span class="gl">‘to write’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A8%D7%B2%D6%B7%D7%91%D7%A2%D7%A8/"><span class="hw">שרײַבער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A8%D7%B2%D6%B7%D7%A2%D7%9F/"><span class="hw">שרײַען</span><span class="gl">‘to scream’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%A8%D7%B2%D6%B7%D7%A2%D7%A8/"><span class="hw">שרײַער</span><span class="gl">‘screamer; noise-maker’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%AA/"><span class="hw">שת</span><span class="gl">‘Seth (brother of Cain and Abel)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%AA%D6%BC%D7%93%D7%9C%D7%9F/"><span class="hw">שתּדלן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%AA%D6%BC%D7%99%D7%94/"><span class="hw">שתּיה</span><span class="gl">‘drinking’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%AA%D6%BC%D7%99%D7%A7%D7%94/"><span class="hw">שתּיקה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%AA%D7%99%D7%A2%D7%A0%D7%A2%D7%9F/"><span class="hw">שתיענען</span><span class="gl">‘to drink, booze’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%B2%D6%B7%D7%98/"><span class="hw">שײַט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%B2%D6%B7%D7%9B%D7%95%D7%AA/"><span class="hw">שײַכות</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%B2%D6%B7%D7%A0%D7%A2%D7%9F/"><span class="hw">שײַנען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%B2%D6%B7%D7%A1%D7%94%D7%95%D7%99%D7%96/"><span class="hw">שײַסהויז</span><span class="gl">‘shit house, bathroom’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%B2%D6%B7%D7%A1%D7%9F/"><span class="hw">שײַסן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%B2%D6%B7%D7%A1%D7%A2%D7%A8/"><span class="hw">שײַסער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%B2%D6%B7%D7%A2%D7%9F/"><span class="hw">שײַען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A9%D7%B2%D6%B7%D7%A2%D7%A8/"><span class="hw">שײַער</span></a></li>
+
+</ul>
+
+</main>
+<footer>
+  Yiddish Dialect Dictionary &nbsp;·&nbsp; 10,034 entries
+</footer>
+<script>const BASE_URL = '/Yiddish-Dialect-Dictionary';</script>
+<script>
+(function() {
+  let index = null;
+  const input = document.getElementById('search-input');
+  const results = document.getElementById('search-results');
+  if (!input) return;
+
+  async function loadIndex() {
+    if (index) return;
+    try {
+      const r = await fetch(BASE_URL + '/search-index.json');
+      index = await r.json();
+    } catch(e) { console.error('Could not load search index', e); }
+  }
+
+  function search(q) {
+    q = q.trim().toLowerCase();
+    if (!q || !index) return [];
+    return index
+      .filter(e =>
+        e.hw.toLowerCase().includes(q) ||
+        (e.gl && e.gl.toLowerCase().includes(q))
+      )
+      .slice(0, 20);
+  }
+
+  function renderResults(items, q) {
+    if (!items.length) {
+      results.innerHTML = '<div class="search-no-results">No results found.</div>';
+      results.classList.add('show');
+      return;
+    }
+    results.innerHTML = items.map(e => `
+      <a class="search-result-item" href="${e.url}">
+        <span class="search-result-hw">${e.hw}</span>
+        ${e.gl ? `<span class="search-result-gloss">'${e.gl}'</span>` : ''}
+      </a>`).join('');
+    results.classList.add('show');
+  }
+
+  let timer;
+  input.addEventListener('input', async () => {
+    clearTimeout(timer);
+    const q = input.value;
+    if (!q.trim()) { results.classList.remove('show'); return; }
+    await loadIndex();
+    timer = setTimeout(() => renderResults(search(q), q), 120);
+  });
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.header-search')) results.classList.remove('show');
+  });
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { results.classList.remove('show'); input.blur(); }
+  });
+})();
+</script>
+</body>
+</html>

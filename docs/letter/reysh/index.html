@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="yi" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reysh (ר) – Yiddish Dialect Dictionary</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #faf9f6;
+  --surface: #ffffff;
+  --border: #e0ddd5;
+  --text: #1c1b18;
+  --muted: #6b6860;
+  --accent: #1a4480;
+  --accent-light: #e8eef7;
+  --link: #1a4480;
+  --link-hover: #0d2a52;
+  --hebrew-font: 'Ezra SIL', 'SBL Hebrew', 'David', 'Frank Ruehl CLM', serif;
+  --body-font: Georgia, 'Times New Roman', serif;
+  --ui-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+body {
+  font-family: var(--body-font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  font-size: 16px;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--link-hover); text-decoration: underline; }
+
+/* ── Header ── */
+.site-header {
+  background: var(--accent);
+  color: white;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0,0,0,.25);
+}
+.site-header a { color: white; font-family: var(--ui-font); font-size: .9rem; }
+.site-header a.home { font-weight: 700; font-size: 1rem; white-space: nowrap; }
+.site-header a:hover { text-decoration: underline; }
+
+/* search in header */
+.header-search {
+  flex: 1;
+  max-width: 480px;
+  position: relative;
+}
+.header-search input {
+  width: 100%;
+  padding: .45rem .9rem .45rem 2.2rem;
+  border: none;
+  border-radius: 4px;
+  font-family: var(--ui-font);
+  font-size: .95rem;
+  background: rgba(255,255,255,.15);
+  color: white;
+  outline: none;
+}
+.header-search input::placeholder { color: rgba(255,255,255,.65); }
+.header-search input:focus { background: rgba(255,255,255,.25); }
+.header-search .icon {
+  position: absolute;
+  left: .6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: .7;
+  pointer-events: none;
+}
+.search-results {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.15);
+  max-height: 360px;
+  overflow-y: auto;
+  z-index: 200;
+}
+.search-results.show { display: block; }
+.search-result-item {
+  display: block;
+  padding: .6rem 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.search-result-item:last-child { border-bottom: none; }
+.search-result-item:hover { background: var(--accent-light); }
+.search-result-hw {
+  font-size: 1.1rem;
+  font-family: var(--hebrew-font);
+  direction: rtl;
+  display: inline-block;
+  margin-right: .5rem;
+}
+.search-result-gloss { color: var(--muted); font-style: italic; }
+.search-no-results { padding: .8rem 1rem; color: var(--muted); font-family: var(--ui-font); }
+
+/* ── Layout ── */
+.page-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+/* ── Alphabet nav (homepage + letter pages) ── */
+.alphabet-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin: 1.5rem 0;
+}
+.alphabet-nav a {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: .5rem .75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  text-decoration: none;
+  min-width: 52px;
+  transition: background .15s, border-color .15s;
+}
+.alphabet-nav a:hover, .alphabet-nav a.active {
+  background: var(--accent-light);
+  border-color: var(--accent);
+}
+.alphabet-nav a .heb {
+  font-family: var(--hebrew-font);
+  font-size: 1.4rem;
+  line-height: 1;
+  direction: rtl;
+}
+.alphabet-nav a .translit {
+  font-family: var(--ui-font);
+  font-size: .65rem;
+  color: var(--muted);
+  margin-top: .2rem;
+}
+
+/* ── Homepage ── */
+.hero {
+  text-align: center;
+  padding: 2.5rem 0 1.5rem;
+}
+.hero h1 {
+  font-size: 2.2rem;
+  color: var(--accent);
+  margin-bottom: .5rem;
+}
+.hero p {
+  color: var(--muted);
+  font-family: var(--ui-font);
+  font-size: 1rem;
+}
+.section-label {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 2rem 0 .75rem;
+}
+
+/* ── Letter page ── */
+.letter-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: .75rem;
+}
+.letter-header .heb-big {
+  font-family: var(--hebrew-font);
+  font-size: 3rem;
+  direction: rtl;
+  line-height: 1;
+  color: var(--accent);
+}
+.letter-header .info {
+  font-family: var(--ui-font);
+}
+.letter-header .translit-big { font-size: 1.4rem; font-weight: 600; }
+.letter-header .count { color: var(--muted); font-size: .9rem; }
+
+.entry-list {
+  list-style: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface);
+}
+.entry-list li {
+  border-bottom: 1px solid var(--border);
+}
+.entry-list li:last-child { border-bottom: none; }
+.entry-list a {
+  display: flex;
+  align-items: baseline;
+  gap: .75rem;
+  padding: .65rem 1rem;
+  color: var(--text);
+  text-decoration: none;
+}
+.entry-list a:hover { background: var(--accent-light); }
+.entry-list .hw {
+  font-family: var(--hebrew-font);
+  font-size: 1.15rem;
+  direction: rtl;
+  flex-shrink: 0;
+}
+.entry-list .gl {
+  font-style: italic;
+  color: var(--muted);
+  font-size: .9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Entry page ── */
+.entry-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--accent);
+}
+.entry-headword {
+  font-family: var(--hebrew-font);
+  font-size: 2.6rem;
+  direction: rtl;
+  line-height: 1.2;
+  color: var(--text);
+}
+.entry-gloss {
+  font-style: italic;
+  color: var(--muted);
+  font-size: 1.05rem;
+  margin-top: .3rem;
+}
+
+.entry-body h2 {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 1.8rem 0 .6rem;
+  padding-bottom: .3rem;
+  border-bottom: 1px solid var(--border);
+}
+.entry-body h3 {
+  font-family: var(--ui-font);
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin: 1rem 0 .4rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.entry-body p {
+  margin-bottom: .8rem;
+  line-height: 1.7;
+}
+.entry-body ul, .entry-body ol {
+  margin: .5rem 0 .8rem 1.5rem;
+}
+.entry-body li { margin-bottom: .3rem; }
+.entry-body audio {
+  display: block;
+  margin: .75rem 0;
+  max-width: 100%;
+}
+.entry-body img {
+  max-width: 100%;
+  height: auto;
+  margin: .75rem 0;
+  border-radius: 4px;
+}
+.entry-body blockquote {
+  border-left: 3px solid var(--border);
+  padding-left: 1rem;
+  color: var(--muted);
+  margin: .5rem 0;
+}
+
+/* back/nav bar above entry */
+.entry-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.entry-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .3rem .7rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--text);
+}
+.entry-nav a:hover {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  text-decoration: none;
+}
+
+/* ── Footer ── */
+footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  margin-top: 3rem;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .hero h1 { font-size: 1.6rem; }
+  .alphabet-nav a { min-width: 44px; padding: .4rem .55rem; }
+  .alphabet-nav a .heb { font-size: 1.2rem; }
+  .entry-headword { font-size: 2rem; }
+  .header-search { max-width: none; }
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <a href="/Yiddish-Dialect-Dictionary/" class="home">Yiddish Dialect Dictionary</a>
+  <div class="header-search">
+    <svg class="icon" width="16" height="16" fill="white" viewBox="0 0 16 16">
+      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.868-3.834zm-5.242 1.406a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+    </svg>
+    <input type="search" id="search-input" placeholder="Search entries…" autocomplete="off">
+    <div id="search-results" class="search-results"></div>
+  </div>
+</header>
+<main class="page-wrap">
+
+<div class="letter-header">
+  <span class="heb-big">ר</span>
+  <div class="info">
+    <div class="translit-big">Reysh</div>
+    <div class="count">305 entries</div>
+  </div>
+</div>
+<ul class="entry-list">
+<li><a href="/Yiddish-Dialect-Dictionary/entry/Reysh%20%D7%A8%D7%99%D7%A9/"><span class="hw">Reysh ריש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%27%20Reb/"><span class="hw">ר' Reb</span><span class="gl">‘Reb, mister’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B7%D7%91%D7%99%D7%A0%D7%A2/"><span class="hw">ראַבינע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B7%D7%91%D7%A2/"><span class="hw">ראַבע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B7%D7%91%D7%A2%D7%95%D7%95%D7%A2%D7%9F/"><span class="hw">ראַבעווען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B7%D7%92%D7%B2%D6%B7%D7%A9%D7%A2/"><span class="hw">ראַגײַשע</span><span class="gl">‘roll made with potato and flower, baked on maple leaves’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B7%D7%93%D7%96%D7%A9%D7%A2%D7%95%D7%95%D7%95%D6%BC%D7%9C%D7%A7%D7%A2/"><span class="hw">ראַדזשעוווּלקע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B7%D7%96%D7%99%D7%A8%D7%9F/"><span class="hw">ראַזירן</span><span class="gl">‘to shave’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B7%D7%98/"><span class="hw">ראַט</span><span class="gl">‘rat’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B7%D7%98%D7%96%D7%90%D6%B7%D7%9D/"><span class="hw">ראַטזאַם</span><span class="gl">‘advisable’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B7%D7%98%D7%A2/"><span class="hw">ראַטע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B7%D7%98%D7%A2%D7%95%D7%95%D7%A2%D7%9F/"><span class="hw">ראַטעווען</span><span class="gl">‘to rescue’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B7%D7%98%D7%A9%D7%95%D7%99%D7%A0%D7%93%D7%96/"><span class="hw">ראַטשוינדז</span><span class="gl">‘Raciąż (town in central Poland)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B7%D7%98%D7%A9%D7%A7%D7%90%D6%B8%D7%9D/"><span class="hw">ראַטשקאָם</span><span class="gl">‘face-down’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B7%D7%99%D7%90%D6%B8%D7%9F/"><span class="hw">ראַיאָן</span><span class="gl">‘area’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B7%D7%99%D7%94/"><span class="hw">ראַיה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B7%D7%9D%201/"><span class="hw">ראַם 1</span><span class="gl">‘frame’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B7%D7%9D%202/"><span class="hw">ראַם 2</span><span class="gl">‘cream’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B7%D7%9E%D7%A2%D7%9F/"><span class="hw">ראַמען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B7%D7%A0%D7%92%D7%9C%D7%A2%D7%9F%20%D7%96%D7%99%D7%9A/"><span class="hw">ראַנגלען זיך</span><span class="gl">‘struggle’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B7%D7%A0%D7%93/"><span class="hw">ראַנד</span><span class="gl">‘border, edge, fringe’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B7%D7%A1%D7%9F/"><span class="hw">ראַסן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B7%D7%A4%D6%BC%D7%98%D7%90%D6%B8%D7%95%D7%95%D7%A0%D7%A2/"><span class="hw">ראַפּטאָוונע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B7%D7%A4%D6%BC%D7%98%D7%A2%D7%9D/"><span class="hw">ראַפּטעם</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B7%D7%A5/"><span class="hw">ראַץ</span><span class="gl">‘rat’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B7%D7%A6%D7%9F/"><span class="hw">ראַצן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B7%D7%A7/"><span class="hw">ראַק</span><span class="gl">‘crayfish; cancer’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B7%D7%A7%D7%A2%D7%9D/"><span class="hw">ראַקעם</span><span class="gl">‘face-down’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B7%D7%A8/"><span class="hw">ראַר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B8%D7%91/"><span class="hw">ראָב</span><span class="gl">‘raven’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B8%D7%91%D7%A2%D7%9C%D7%A2%20%3F/"><span class="hw">ראָבעלע ?</span><span class="gl">‘wheelbarrow’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B8%D7%92%D7%90%D6%B7%D7%98%D7%A9%D7%90%D6%B8%D7%95%D7%95/"><span class="hw">ראָגאַטשאָוו</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B8%D7%92%D7%90%D6%B8%D7%95%D7%95%D7%A7%D7%A2/"><span class="hw">ראָגאָווקע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B8%D7%93/"><span class="hw">ראָד</span><span class="gl">‘wheel; circle’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B8%D7%93%D7%A2/"><span class="hw">ראָדע</span><span class="gl">‘Rode (female name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B8%D7%93%D7%A2%D7%9D/"><span class="hw">ראָדעם</span><span class="gl">‘Radom (city in east-central Poland)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B8%D7%95%D7%93/"><span class="hw">ראָוד</span><span class="gl">‘road’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B8%D7%95%D7%95%D7%A2%D7%A8/"><span class="hw">ראָווער</span><span class="gl">‘bicycle’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B8%D7%95%D7%95%D7%A2%D7%A8%D7%9F/"><span class="hw">ראָווערן</span><span class="gl">‘to bike’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B8%D7%95%D7%99/"><span class="hw">ראָוי</span><span class="gl">‘worthy’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B8%D7%96%D7%A9%D7%99%D7%A0%D7%A7%D7%A2/"><span class="hw">ראָזשינקע</span><span class="gl">‘raisin’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B8%D7%96%D7%B2%D6%B7%D7%9F/"><span class="hw">ראָזײַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B8%D7%98%D7%94%D7%95%D7%99%D7%96/"><span class="hw">ראָטהויז</span><span class="gl">‘city hall’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B8%D7%98%D7%9F/"><span class="hw">ראָטן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B8%D7%9A/"><span class="hw">ראָך</span><span class="gl">‘rook’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B8%D7%A1%D7%98%202/"><span class="hw">ראָסט 2</span><span class="gl">‘grate in oven through which ashes fall’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B8%D7%A1%D7%98%D7%99%D7%A7/"><span class="hw">ראָסטיק</span><span class="gl">‘rusty’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B8%D7%A1%D7%9C/"><span class="hw">ראָסל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B8%D7%A1%D7%9C%D7%A4%D6%BF%D7%9C%D7%99%D7%99%D7%A9/"><span class="hw">ראָסלפֿלייש</span><span class="gl">‘pot roast; soup meat; beet soup meat’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B8%D7%A4%D6%BC%D7%A2/"><span class="hw">ראָפּע</span><span class="gl">‘pus’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B8%D7%A5/"><span class="hw">ראָץ</span><span class="gl">‘snot’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B8%D7%A6%D7%A0%D7%90%D6%B8%D7%96/"><span class="hw">ראָצנאָז</span><span class="gl">‘runny nose; snot-nosed child’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B8%D7%A6%D7%A2%D7%A8/"><span class="hw">ראָצער</span><span class="gl">‘snotnose; child’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B8%D7%A7/"><span class="hw">ראָק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B8%D7%A8/"><span class="hw">ראָר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B8%D7%A9/"><span class="hw">ראָש</span><span class="gl">‘chief’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B8%D7%A9%D6%BE%D7%94%D7%A7%D7%94%D7%9C/"><span class="hw">ראָש־הקהל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B8%D7%A9%D6%BE%D7%94%D7%A9%D7%A0%D7%94/"><span class="hw">ראָש־השנה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B8%D7%A9%D6%BE%D7%97%D7%95%D7%93%D7%A9/"><span class="hw">ראָש־חודש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B8%D7%A9%D6%BE%D7%99%D7%A9%D7%99%D7%91%D6%BF%D7%94/"><span class="hw">ראָש־ישיבֿה</span><span class="gl">‘head of yeshiva’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B8%D7%A9%D7%98%D7%A9%D7%99%D7%A0%D7%A2/"><span class="hw">ראָשטשינע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D6%B8%D7%A9%D7%99%D6%BE%D7%A4%D6%BC%D7%A8%D7%A7%D7%99%D7%9D/"><span class="hw">ראָשי־פּרקים</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D7%94/"><span class="hw">ראה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D7%95%D7%91%D6%BF%D7%9F/"><span class="hw">ראובֿן</span><span class="gl">‘Reuven (one of the twelve tribes)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D7%A9%D7%95%D7%9F/"><span class="hw">ראשון</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D7%A9%D7%95%D7%A0%D7%99%D7%9D/"><span class="hw">ראשונים</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%90%D7%A9%D7%99%D7%AA/"><span class="hw">ראשית</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%91/"><span class="hw">רב</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%91%D6%BF%201/"><span class="hw">רבֿ 1</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%91%D6%BF%202/"><span class="hw">רבֿ 2</span><span class="gl">‘Rav (epithet for the amora Abba Arikha in the Talmud)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%91%D6%BF%D7%99%D7%A2%D7%99/"><span class="hw">רבֿיעי</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%91%D6%BF%D7%A7%D7%94/"><span class="hw">רבֿקה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%91%D7%95%D7%A0%D7%95%D6%BE%D7%A9%D7%9C%D6%BE%D7%A2%D7%95%D7%9C%D7%9D/"><span class="hw">רבונו־של־עולם</span><span class="gl">‘God’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%91%D7%95%D7%AA%D7%99/"><span class="hw">רבותי</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%91%D7%99%201/"><span class="hw">רבי 1</span><span class="gl">‘rabbi’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%91%D7%99%202/"><span class="hw">רבי 2</span><span class="gl">‘epithet of the tanna Yehudah HaNasi, editor of the Mishnah, who lived from about 135 to 217 CE’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%91%D7%99%D7%9D/"><span class="hw">רבים</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%91%D7%99%D7%A0%D7%95%20%D7%94%D7%A7%D7%93%D7%95%D7%A9/"><span class="hw">רבינו הקדוש</span><span class="gl">‘Our Holy Rabbi, epithet of Judah ha-Nasi, the compiler of the Mishnah’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%91%D7%99%D7%A0%D7%95%20%D7%AA%D6%BC%D7%9D/"><span class="hw">רבינו תּם</span><span class="gl">‘Rabbeinu Tam, Jacob ben Meir’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%91%D7%99%D7%A1%D7%98%D7%95%D7%95%D7%A2/"><span class="hw">רביסטווע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%91%D7%99%D7%A6%D7%99%D7%9F/"><span class="hw">רביצין</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%91%D7%99%D7%A6%D7%99%D7%A0%D7%98%D7%A2/"><span class="hw">רביצינטע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%92%D7%99%D7%9C%D7%95%D7%AA/"><span class="hw">רגילות</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%92%D7%9C/"><span class="hw">רגל</span><span class="gl">‘foot’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%92%D7%A2/"><span class="hw">רגע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%92%D7%A9/"><span class="hw">רגש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95/"><span class="hw">רו</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%90%D7%94/"><span class="hw">רואה</span><span class="gl">‘see’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%91%D6%BF/"><span class="hw">רובֿ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%91%D7%9C/"><span class="hw">רובל</span><span class="gl">‘ruble’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%92%D7%96/"><span class="hw">רוגז</span><span class="gl">‘anger’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%93%D7%A2%D7%A8/"><span class="hw">רודער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%93%D7%A2%D7%A8%D7%9F/"><span class="hw">רודערן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%95%D7%97/"><span class="hw">רווח</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%96%D7%A9%D7%A2%D6%BE%D7%91%D7%95%D7%96%D7%A9%D7%A2/"><span class="hw">רוזשע־בוזשע</span><span class="gl">‘tumult’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%97/"><span class="hw">רוח</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%97%D6%BE%D7%94%D7%A7%D7%95%D7%93%D7%A9/"><span class="hw">רוח־הקודש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%97%D6%BE%D7%97%D7%99%D7%99%D7%9D/"><span class="hw">רוח־חיים</span><span class="gl">‘breath of life’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%97%D6%BE%D7%98%D7%9E%D7%90/"><span class="hw">רוח־טמא</span><span class="gl">‘unclean spirit’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%97%D6%BE%D7%A8%D7%A2%D7%94/"><span class="hw">רוח־רעה</span><span class="gl">‘evil spirit’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%97%D7%9E%D7%94/"><span class="hw">רוחמה</span><span class="gl">‘Ruchama (woman's name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%97%D7%A0%D7%99%D7%95%D7%AA/"><span class="hw">רוחניות</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%98/"><span class="hw">רוט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%98%D7%A9%D7%90%D6%B7%D7%A7/"><span class="hw">רוטשאַק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%98%D7%A9%D7%9F/"><span class="hw">רוטשן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%99/"><span class="hw">רוי</span><span class="gl">‘raw’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%99%D6%B4%D7%A7/"><span class="hw">רויִק</span><span class="gl">‘quiet, peaceful’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%99%D7%91/"><span class="hw">רויב</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%99%D7%91%D7%9F/"><span class="hw">רויבן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%99%D7%91%D7%A2%D7%A8/"><span class="hw">רויבער</span><span class="gl">‘robber, bandit’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%99%D7%91%D7%A4%D6%BF%D7%95%D7%99%D7%92%D7%9C/"><span class="hw">רויבפֿויגל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%99%D7%92/"><span class="hw">רויג</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%99%D7%95%D7%95%D7%90%D6%B7%D7%A8%D7%92/"><span class="hw">רויוואַרג</span><span class="gl">‘raw material’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%99%D7%96/"><span class="hw">רויז</span><span class="gl">‘rose’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%99%D7%98/"><span class="hw">רויט</span><span class="gl">‘red’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%99%D7%9A/"><span class="hw">רויך</span><span class="gl">‘smoke’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%99%D7%9B%D7%96%D7%B2%D6%B7%D7%9C/"><span class="hw">רויכזײַל</span><span class="gl">‘pillar of smoke’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%99%D7%9B%D7%A4%D6%BF%D7%90%D6%B7%D7%A0%D7%92/"><span class="hw">רויכפֿאַנג</span><span class="gl">‘chimney’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%99%D7%9D/"><span class="hw">רוים</span><span class="gl">‘Rome’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%99%D7%9E%D7%A2%D7%9F/"><span class="hw">רוימען</span><span class="gl">‘to whisper (a secret in somebody's ear)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%99%D7%A9%D7%9F/"><span class="hw">רוישן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%9C%D7%A2%D7%98/"><span class="hw">רולעט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%9E%D7%A2%D7%A0%D7%99%D7%A9/"><span class="hw">רומעניש</span><span class="gl">‘Romanian’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%9E%D7%A2%D7%A0%D7%A2%D7%A8/"><span class="hw">רומענער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%9E%D7%A4%D6%BC%D7%9C/"><span class="hw">רומפּל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%9E%D7%A4%D6%BC%D7%9C%D7%A0%D7%90%D6%B7%D7%9B%D7%98/"><span class="hw">רומפּלנאַכט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%9E%D7%A4%D6%BC%D7%9C%D7%A2%D7%9F/"><span class="hw">רומפּלען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%A0%D7%93%D7%99%D7%A7/"><span class="hw">רונדיק</span><span class="gl">‘round’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%A0%D7%93%D7%A2/"><span class="hw">רונדע</span><span class="gl">‘round’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%A0%D7%A6%D7%9C%D7%93%D7%99%D7%A7/"><span class="hw">רונצלדיק</span><span class="gl">‘wrinkled, wrinkly’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%A0%D7%A6%D7%9C%D7%A2%D7%9F/"><span class="hw">רונצלען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%A1%201/"><span class="hw">רוס 1</span><span class="gl">‘Russian’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%A1%202/"><span class="hw">רוס 2</span><span class="gl">‘soot’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%A1%D7%99%D7%A7/"><span class="hw">רוסיק</span><span class="gl">‘sooty’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%A1%D7%99%D7%A9/"><span class="hw">רוסיש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%A1%D7%9C%D7%90%D6%B7%D7%A0%D7%93/"><span class="hw">רוסלאַנד</span><span class="gl">‘Russia’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%A2%D7%9F/"><span class="hw">רוען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%A3/"><span class="hw">רוף</span><span class="gl">‘call’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%A4%D6%BC%D7%A2%D7%9F/"><span class="hw">רופּען</span><span class="gl">‘to be anxious about’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%A4%D6%BF%D7%90/"><span class="hw">רופֿא</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%A4%D6%BF%D7%9F/"><span class="hw">רופֿן</span><span class="gl">‘to call’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%A6%D7%97/"><span class="hw">רוצח</span><span class="gl">‘murderer’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%A7%D7%96%D7%90%D6%B7%D7%A7/"><span class="hw">רוקזאַק</span><span class="gl">‘backpack, rucksack’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%A7%D7%9F%201/"><span class="hw">רוקן 1</span><span class="gl">‘back’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%A7%D7%A2/"><span class="hw">רוקע</span><span class="gl">‘mouth of an oven’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%A9%D7%98/"><span class="hw">רושט</span><span class="gl">‘furnace grate’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%A9%D7%98%D7%90%D6%B8%D7%95%D7%95%D7%90%D6%B7%D7%A0%D7%99%D7%A2/"><span class="hw">רושטאָוואַניע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%A9%D7%9D/"><span class="hw">רושם</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%95%D7%AA/"><span class="hw">רות</span><span class="gl">‘Ruth (woman's name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%96%D7%99%D7%90%D7%9C/"><span class="hw">רזיאל</span><span class="gl">‘Raziel (name of an angel)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%97%22%D7%A9/"><span class="hw">רח"ש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%97%D7%91%D6%BF%D7%95%D7%AA%D7%93%D7%99%D7%A7/"><span class="hw">רחבֿותדיק</span><span class="gl">‘spacious, roomy’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%97%D7%95%D7%A7/"><span class="hw">רחוק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%97%D7%9C/"><span class="hw">רחל</span><span class="gl">‘Rachel (name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%97%D7%9E%D7%9F/"><span class="hw">רחמן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%97%D7%9E%D7%A0%D7%90%D6%BE%D7%9C%D7%A6%D7%9C%D7%9F/"><span class="hw">רחמנא־לצלן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%97%D7%9E%D7%A0%D7%95%D7%AA/"><span class="hw">רחמנות</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%91/"><span class="hw">ריב</span><span class="gl">‘turnip’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%91%D7%90%D7%B2%D6%B7%D7%96%D7%9F/"><span class="hw">ריבאײַזן</span><span class="gl">‘iron (for clothing); grater’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%91%D7%95%D7%A0%D7%95%D6%BE%D7%A9%D7%9C%D6%BE%D7%A2%D7%95%D7%9C%D7%9D/"><span class="hw">ריבונו־של־עולם</span><span class="gl">‘Master of the Universe, God’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%91%D7%99%D7%96%D7%9C/"><span class="hw">ריביזל</span><span class="gl">‘currant’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%91%D7%99%D7%A9%D7%95%D7%99%D7%95%D7%95/"><span class="hw">ריבישויוו</span><span class="gl">‘Hrubieszów (town in southeastern Poland)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%91%D7%A2%D7%A1%D7%9C%D7%A2%D7%9A/"><span class="hw">ריבעסלעך</span><span class="gl">‘currants’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%92%D7%9C/"><span class="hw">ריגל</span><span class="gl">‘latch, bolt’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%92%D7%A2/"><span class="hw">ריגע</span><span class="gl">‘Riga (city, capital of Latvia)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%93%D7%9C/"><span class="hw">רידל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%96/"><span class="hw">ריז</span><span class="gl">‘giant’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%96%D7%99%D7%A7/"><span class="hw">ריזיק</span><span class="gl">‘giant, huge’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%96%D7%99%D7%A7%D7%90%D6%B8%D7%95%D7%95%D7%A0%D7%A2/"><span class="hw">ריזיקאָוונע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%96%D7%9C%D7%A2%D7%9F/"><span class="hw">ריזלען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%97/"><span class="hw">ריח</span><span class="gl">‘odor, scent’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%97%D6%BE%D7%A0%D7%99%D7%97%D7%95%D7%97/"><span class="hw">ריח־ניחוח</span><span class="gl">‘fragrance, scent’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%99/"><span class="hw">ריי</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%99%D7%93/"><span class="hw">רייד</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%99%D7%98%D7%9C%D7%A2%D7%9F%202/"><span class="hw">רייטלען 2</span><span class="gl">‘rubella’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%99%D7%9B%D7%A2%D7%A8%D7%9F/"><span class="hw">רייכערן</span><span class="gl">‘to smoke’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%99%D7%9F/"><span class="hw">ריין</span><span class="gl">‘clean, pure’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%99%D7%A0%D7%99%D7%A7%D7%99%D7%99%D7%98/"><span class="hw">רייניקייט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%99%D7%A0%D7%99%D7%A7%D7%9F/"><span class="hw">רייניקן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%99%D7%A0%D7%A2%D7%A8%D7%94%D7%99%D7%99%D7%98/"><span class="hw">ריינערהייט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%99%D7%A0%D7%A7%D7%99%D7%99%D7%98/"><span class="hw">ריינקייט</span><span class="gl">‘cleanliness’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%99%D7%A0%D7%A9%D7%90%D6%B7%D7%A4%D6%BF%D7%98/"><span class="hw">ריינשאַפֿט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%99%D7%A1%D7%98%D7%9C/"><span class="hw">רייסטל</span><span class="gl">‘meat sauce mixed with flower’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%99%D7%A1%D7%98%D7%9F%20%5B%3F%5D/"><span class="hw">רייסטן [?]</span><span class="gl">‘to roast’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%99%D7%A3/"><span class="hw">רייף</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%99%D7%A5/"><span class="hw">רייץ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%99%D7%A6%D7%9F/"><span class="hw">רייצן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%99%D7%A9%D7%A2/"><span class="hw">ריישע</span><span class="gl">‘Rzeszów  (city in southeastern Poland)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%99%D7%A9%D7%A2%D7%9B%D7%A5/"><span class="hw">ריישעכץ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%9B%D7%98%D7%95%D7%A0%D7%92/"><span class="hw">ריכטונג</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%9B%D7%98%D7%99%D7%A7/"><span class="hw">ריכטיק</span><span class="gl">‘correct’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%9B%D7%98%D7%9F/"><span class="hw">ריכטן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%9B%D7%98%D7%A2%D7%95%D7%95%D7%A2%D7%9F/"><span class="hw">ריכטעווען</span><span class="gl">‘to adjust, steer, operate’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%9E%D7%A2%D7%9F%202/"><span class="hw">רימען 2</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%9E%D7%A2%D7%A8/"><span class="hw">רימער</span><span class="gl">‘saddler’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%9F/"><span class="hw">רין</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%A0%D7%92/"><span class="hw">רינג</span><span class="gl">‘ring’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%A0%D7%92%D7%A4%D6%BF%D7%99%D7%A0%D7%92%D7%A2%D7%A8/"><span class="hw">רינגפֿינגער</span><span class="gl">‘ring finger’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%A0%D7%93/"><span class="hw">רינד</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%A0%D7%93%202/"><span class="hw">רינד 2</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%A0%D7%93%D7%A2%D7%A8%D7%9F/"><span class="hw">רינדערן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%A0%D7%95%D7%95%D7%A2/"><span class="hw">רינווע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%A0%D7%A2/"><span class="hw">רינע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%A0%D7%A2%D7%9F/"><span class="hw">רינען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%A0%D7%A9%D7%98%D7%90%D6%B8%D7%A7/"><span class="hw">רינשטאָק</span><span class="gl">‘gutter’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%A1%D7%A2%D7%A1/"><span class="hw">ריסעס</span><span class="gl">‘turmoil’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%A1%D7%A7%D7%90%D6%B7%D7%9C/"><span class="hw">ריסקאַל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%A2%D7%9C%20%D7%A2%D7%A1%D7%98%D7%99%D7%99%D7%98/"><span class="hw">ריעל עסטייט</span><span class="gl">‘real estate’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%A4%D6%BC/"><span class="hw">ריפּ</span><span class="gl">‘rib’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%A7%D7%A2/"><span class="hw">ריקע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%A8%D7%9F/"><span class="hw">רירן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%99%D7%A9%D7%A2%D7%95%D7%AA/"><span class="hw">רישעות</span><span class="gl">‘wickedness’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%9B%D7%95%D7%A9/"><span class="hw">רכוש</span><span class="gl">‘property’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%9B%D7%99%D7%9C%D7%95%D7%AA/"><span class="hw">רכילות</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%9E%22%D7%90/"><span class="hw">רמ"א</span><span class="gl">‘Rabbi Moses Isserles (1530-1572)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%9E%D7%90%D6%B8%D7%95%D7%AA/"><span class="hw">רמאָות</span><span class="gl">‘fraud, deception’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%9E%D7%91%22%D7%9D/"><span class="hw">רמב"ם</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%9E%D7%91%22%D7%9F/"><span class="hw">רמב"ן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%9E%D7%96/"><span class="hw">רמז</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2/"><span class="hw">רע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%90%D6%B7%D7%A7%D7%A6%D7%99%D7%A2/"><span class="hw">רעאַקציע</span><span class="gl">‘reaction’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%92%D7%99%D7%A8%D7%95%D7%A0%D7%92/"><span class="hw">רעגירונג</span><span class="gl">‘government’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%92%D7%9F/"><span class="hw">רעגן</span><span class="gl">‘rain’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%92%D7%9F%D6%BE%D7%A9%D7%99%D7%A8%D7%A2%D7%9D/"><span class="hw">רעגן־שירעם</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%92%D7%A2%D7%A0%D7%A2%D7%9F/"><span class="hw">רעגענען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%92%D7%A2%D7%A8/"><span class="hw">רעגער</span><span class="gl">‘heron’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%93%D7%90%D6%B7%D7%A7%D7%98%D7%90%D6%B8%D7%A8/"><span class="hw">רעדאַקטאָר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%93%D7%99%D7%A1%D7%A7%D7%A2/"><span class="hw">רעדיסקע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%93%D7%9C%D7%A2%D7%9F/"><span class="hw">רעדלען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%93%D7%9F/"><span class="hw">רעדן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%93%D7%A0%D7%A2%D7%A8/"><span class="hw">רעדנער</span><span class="gl">‘speaker’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%93%D7%A2/"><span class="hw">רעדע</span><span class="gl">‘speech’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%93%D7%A2%D7%9B%D7%A5/"><span class="hw">רעדעכץ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%94/"><span class="hw">רעה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%95%D7%95%D7%90%D6%B8%D7%9C%D7%95%D7%A6%D7%99%D7%A2/"><span class="hw">רעוואָלוציע</span><span class="gl">‘revolution’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%95%D7%95%D7%99%D7%96%D7%99%D7%A2/"><span class="hw">רעוויזיע</span><span class="gl">‘review’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%96%D7%A9%D7%99%D7%9D/"><span class="hw">רעזשים</span><span class="gl">‘regime’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%98%D7%9F/"><span class="hw">רעטן</span><span class="gl">‘to save’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%98%D7%A2%D7%9A/"><span class="hw">רעטעך</span><span class="gl">‘raddish’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%98%D7%A2%D7%A0%D7%99%D7%A9/"><span class="hw">רעטעניש</span><span class="gl">‘riddle’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%98%D7%A2%D7%A8/"><span class="hw">רעטער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%98%D7%A9%D7%99%D7%A9%D7%A0%D7%99%D7%A7/"><span class="hw">רעטשישניק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%98%D7%A9%D7%A2%D7%A0%D7%A2/"><span class="hw">רעטשענע</span><span class="gl">‘buckwheat (adjective)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%9B%D7%98/"><span class="hw">רעכט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%9B%D7%98%D7%A1/"><span class="hw">רעכטס</span><span class="gl">‘right (adverb)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%9B%D7%98%D7%A4%D6%BF%D7%90%D6%B7%D7%A8%D7%98%D7%99%D7%A7/"><span class="hw">רעכטפֿאַרטיק</span><span class="gl">‘just’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%9B%D7%98%D7%A4%D6%BF%D7%90%D6%B7%D7%A8%D7%98%D7%99%D7%A7%D7%99%D7%99%D7%98/"><span class="hw">רעכטפֿאַרטיקייט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%9B%D7%9F/"><span class="hw">רעכן</span><span class="gl">‘rake’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%9B%D7%A2%D7%A0%D7%A2%D7%9F/"><span class="hw">רעכענען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%9C%D7%99%D7%92%D7%99%D7%A2/"><span class="hw">רעליגיע</span><span class="gl">‘religion’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%9C%D7%99%D7%92%D7%99%D7%A2%D7%96/"><span class="hw">רעליגיעז</span><span class="gl">‘religious’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%9C%D7%A1%D7%9F/"><span class="hw">רעלסן</span><span class="gl">‘rails’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%A0%D7%93%D7%9C/"><span class="hw">רענדל</span><span class="gl">‘gold coin’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%A0%D7%98%D7%92%D7%A2%D7%9F/"><span class="hw">רענטגען</span><span class="gl">‘X-ray’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%A1%D7%98%D7%90%D6%B8%D7%A8%D7%90%D6%B7%D7%9F/"><span class="hw">רעסטאָראַן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%A1%D7%A4%D6%BC%D7%A2%D7%A7%D7%98%D7%99%D7%A8%D7%9F/"><span class="hw">רעספּעקטירן</span><span class="gl">‘to respect’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%A1%D7%A4%D6%BC%D7%A2%D7%A7%D7%98%D7%A4%D6%BF%D7%95%D7%9C/"><span class="hw">רעספּעקטפֿול</span><span class="gl">‘respectful’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%A4%D6%BC%D7%90%D6%B7%D7%A8%D7%99%D7%A8%D7%9F/"><span class="hw">רעפּאַרירן</span><span class="gl">‘to repair’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%A4%D6%BF%D7%90%D6%B8%D7%A8%D7%9D/"><span class="hw">רעפֿאָרם</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%A4%D6%BF%D7%98%D7%9C/"><span class="hw">רעפֿטל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%A4%D6%BF%D7%9C%D7%A2%D7%A7%D7%98%D7%99%D7%A8%D7%9F/"><span class="hw">רעפֿלעקטירן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%A6%D7%99%D7%98%D7%99%D7%A8%D7%9F/"><span class="hw">רעציטירן</span><span class="gl">‘to recite’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%A6%D7%A2%D7%A4%D6%BC%D7%98/"><span class="hw">רעצעפּט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%A7%D7%A2/"><span class="hw">רעקע</span><span class="gl">‘thick, rough slice of bread’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%A7%D7%A2%D7%A0%D7%A2%D7%9F/"><span class="hw">רעקענען</span><span class="gl">‘to slice bread in thick, rough slices’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%A8/"><span class="hw">רער</span><span class="gl">‘pipe’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%A9/"><span class="hw">רעש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%A9%D7%90%D6%B8%D7%98%D7%A7%D7%A2/"><span class="hw">רעשאָטקע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%A9%D7%98/"><span class="hw">רעשט</span><span class="gl">‘rest, remainder’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A2%D7%A9%D7%9F/"><span class="hw">רעשן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A4%D6%BF%D7%90%D7%9C/"><span class="hw">רפֿאל</span><span class="gl">‘Raphael (name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A4%D6%BF%D7%94/"><span class="hw">רפֿה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A4%D6%BF%D7%95%D7%90%D7%94/"><span class="hw">רפֿואה</span><span class="gl">‘remedy’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A6%D7%95%D7%9F/"><span class="hw">רצון</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A6%D7%97%D7%A0%D7%A2%D7%9F/"><span class="hw">רצחנען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A6%D7%99%D7%A3/"><span class="hw">רציף</span><span class="gl">‘continuous’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A7/"><span class="hw">רק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A9%22%D7%99/"><span class="hw">רש"י</span><span class="gl">‘Rashi, Rabbi Shlomo Yitzchaki (1040-1105), the most important Biblical and Talmudic commentator’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A9%D7%95%D7%AA/"><span class="hw">רשות</span><span class="gl">‘permission’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A9%D7%95%D7%AA%D6%BE%D7%94%D7%A8%D7%91%D7%99%D7%9D/"><span class="hw">רשות־הרבים</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A9%D7%99%D7%9E%D7%94/"><span class="hw">רשימה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A9%D7%A2/"><span class="hw">רשע</span><span class="gl">‘villain’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A9%D7%A2%D6%BE%D7%9E%D7%A8%D7%95%D7%A9%D7%A2/"><span class="hw">רשע־מרושע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A9%D7%A2%D7%95%D7%AA/"><span class="hw">רשעות</span><span class="gl">‘evil’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%A9%D7%A2%D7%98%D7%A2/"><span class="hw">רשעטע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%B2%D6%B7%D7%91%D7%91%D7%A8%D7%95%D7%99%D7%98/"><span class="hw">רײַבברויט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%B2%D6%B7%D7%91%D7%9F/"><span class="hw">רײַבן</span><span class="gl">‘to rub’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%B2%D6%B7%D7%91%D7%A1%D7%9F/"><span class="hw">רײַבסן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%B2%D6%B7%D7%91%D7%A2%D7%9B%D7%A5/"><span class="hw">רײַבעכץ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%B2%D6%B7%D7%91%D7%A2%D7%A8/"><span class="hw">רײַבער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%B2%D6%B7%D7%96/"><span class="hw">רײַז</span><span class="gl">‘rice’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%B2%D6%B7%D7%96%D7%A2/"><span class="hw">רײַזע</span><span class="gl">‘trip, voyage’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%B2%D6%B7%D7%96%D7%A2%D7%9F/"><span class="hw">רײַזען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%B2%D6%B7%D7%98%D7%95%D7%95%D7%90%D6%B8%D7%92%D7%9F/"><span class="hw">רײַטוואָגן</span><span class="gl">‘chariot’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%B2%D6%B7%D7%98%D7%9F/"><span class="hw">רײַטן</span><span class="gl">‘to ride’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%B2%D6%B7%D7%98%D7%A2%D7%A8/"><span class="hw">רײַטער</span><span class="gl">‘rider’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%B2%D6%B7%D7%9A%201/"><span class="hw">רײַך 1</span><span class="gl">‘rich, wealthy’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%B2%D6%B7%D7%9A%202/"><span class="hw">רײַך 2</span><span class="gl">‘Reich (German)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%B2%D6%B7%D7%9B%D7%98%D7%95%D7%9D/"><span class="hw">רײַכטום</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%B2%D6%B7%D7%9B%D7%A2%D7%A8/"><span class="hw">רײַכער</span><span class="gl">‘richer’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%B2%D6%B7%D7%9F%201/"><span class="hw">רײַן 1</span><span class="gl">‘frying pan’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%B2%D6%B7%D7%9F%202/"><span class="hw">רײַן 2</span><span class="gl">‘Rhine river’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%B2%D6%B7%D7%A1%D7%9F%201/"><span class="hw">רײַסן 1</span><span class="gl">‘to rip’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%B2%D6%B7%D7%A1%D7%9F%202/"><span class="hw">רײַסן 2</span><span class="gl">‘Belorussia, White Russia’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A8%D7%B2%D6%B7%D7%A6%D7%A2/"><span class="hw">רײַצע</span><span class="gl">‘Raytse (woman's name)’</span></a></li>
+
+</ul>
+
+</main>
+<footer>
+  Yiddish Dialect Dictionary &nbsp;·&nbsp; 10,034 entries
+</footer>
+<script>const BASE_URL = '/Yiddish-Dialect-Dictionary';</script>
+<script>
+(function() {
+  let index = null;
+  const input = document.getElementById('search-input');
+  const results = document.getElementById('search-results');
+  if (!input) return;
+
+  async function loadIndex() {
+    if (index) return;
+    try {
+      const r = await fetch(BASE_URL + '/search-index.json');
+      index = await r.json();
+    } catch(e) { console.error('Could not load search index', e); }
+  }
+
+  function search(q) {
+    q = q.trim().toLowerCase();
+    if (!q || !index) return [];
+    return index
+      .filter(e =>
+        e.hw.toLowerCase().includes(q) ||
+        (e.gl && e.gl.toLowerCase().includes(q))
+      )
+      .slice(0, 20);
+  }
+
+  function renderResults(items, q) {
+    if (!items.length) {
+      results.innerHTML = '<div class="search-no-results">No results found.</div>';
+      results.classList.add('show');
+      return;
+    }
+    results.innerHTML = items.map(e => `
+      <a class="search-result-item" href="${e.url}">
+        <span class="search-result-hw">${e.hw}</span>
+        ${e.gl ? `<span class="search-result-gloss">'${e.gl}'</span>` : ''}
+      </a>`).join('');
+    results.classList.add('show');
+  }
+
+  let timer;
+  input.addEventListener('input', async () => {
+    clearTimeout(timer);
+    const q = input.value;
+    if (!q.trim()) { results.classList.remove('show'); return; }
+    await loadIndex();
+    timer = setTimeout(() => renderResults(search(q), q), 120);
+  });
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.header-search')) results.classList.remove('show');
+  });
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { results.classList.remove('show'); input.blur(); }
+  });
+})();
+</script>
+</body>
+</html>

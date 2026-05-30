@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="yi" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tsadek (צ) – Yiddish Dialect Dictionary</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #faf9f6;
+  --surface: #ffffff;
+  --border: #e0ddd5;
+  --text: #1c1b18;
+  --muted: #6b6860;
+  --accent: #1a4480;
+  --accent-light: #e8eef7;
+  --link: #1a4480;
+  --link-hover: #0d2a52;
+  --hebrew-font: 'Ezra SIL', 'SBL Hebrew', 'David', 'Frank Ruehl CLM', serif;
+  --body-font: Georgia, 'Times New Roman', serif;
+  --ui-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+body {
+  font-family: var(--body-font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  font-size: 16px;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--link-hover); text-decoration: underline; }
+
+/* ── Header ── */
+.site-header {
+  background: var(--accent);
+  color: white;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0,0,0,.25);
+}
+.site-header a { color: white; font-family: var(--ui-font); font-size: .9rem; }
+.site-header a.home { font-weight: 700; font-size: 1rem; white-space: nowrap; }
+.site-header a:hover { text-decoration: underline; }
+
+/* search in header */
+.header-search {
+  flex: 1;
+  max-width: 480px;
+  position: relative;
+}
+.header-search input {
+  width: 100%;
+  padding: .45rem .9rem .45rem 2.2rem;
+  border: none;
+  border-radius: 4px;
+  font-family: var(--ui-font);
+  font-size: .95rem;
+  background: rgba(255,255,255,.15);
+  color: white;
+  outline: none;
+}
+.header-search input::placeholder { color: rgba(255,255,255,.65); }
+.header-search input:focus { background: rgba(255,255,255,.25); }
+.header-search .icon {
+  position: absolute;
+  left: .6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: .7;
+  pointer-events: none;
+}
+.search-results {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.15);
+  max-height: 360px;
+  overflow-y: auto;
+  z-index: 200;
+}
+.search-results.show { display: block; }
+.search-result-item {
+  display: block;
+  padding: .6rem 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.search-result-item:last-child { border-bottom: none; }
+.search-result-item:hover { background: var(--accent-light); }
+.search-result-hw {
+  font-size: 1.1rem;
+  font-family: var(--hebrew-font);
+  direction: rtl;
+  display: inline-block;
+  margin-right: .5rem;
+}
+.search-result-gloss { color: var(--muted); font-style: italic; }
+.search-no-results { padding: .8rem 1rem; color: var(--muted); font-family: var(--ui-font); }
+
+/* ── Layout ── */
+.page-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+/* ── Alphabet nav (homepage + letter pages) ── */
+.alphabet-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin: 1.5rem 0;
+}
+.alphabet-nav a {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: .5rem .75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  text-decoration: none;
+  min-width: 52px;
+  transition: background .15s, border-color .15s;
+}
+.alphabet-nav a:hover, .alphabet-nav a.active {
+  background: var(--accent-light);
+  border-color: var(--accent);
+}
+.alphabet-nav a .heb {
+  font-family: var(--hebrew-font);
+  font-size: 1.4rem;
+  line-height: 1;
+  direction: rtl;
+}
+.alphabet-nav a .translit {
+  font-family: var(--ui-font);
+  font-size: .65rem;
+  color: var(--muted);
+  margin-top: .2rem;
+}
+
+/* ── Homepage ── */
+.hero {
+  text-align: center;
+  padding: 2.5rem 0 1.5rem;
+}
+.hero h1 {
+  font-size: 2.2rem;
+  color: var(--accent);
+  margin-bottom: .5rem;
+}
+.hero p {
+  color: var(--muted);
+  font-family: var(--ui-font);
+  font-size: 1rem;
+}
+.section-label {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 2rem 0 .75rem;
+}
+
+/* ── Letter page ── */
+.letter-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: .75rem;
+}
+.letter-header .heb-big {
+  font-family: var(--hebrew-font);
+  font-size: 3rem;
+  direction: rtl;
+  line-height: 1;
+  color: var(--accent);
+}
+.letter-header .info {
+  font-family: var(--ui-font);
+}
+.letter-header .translit-big { font-size: 1.4rem; font-weight: 600; }
+.letter-header .count { color: var(--muted); font-size: .9rem; }
+
+.entry-list {
+  list-style: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface);
+}
+.entry-list li {
+  border-bottom: 1px solid var(--border);
+}
+.entry-list li:last-child { border-bottom: none; }
+.entry-list a {
+  display: flex;
+  align-items: baseline;
+  gap: .75rem;
+  padding: .65rem 1rem;
+  color: var(--text);
+  text-decoration: none;
+}
+.entry-list a:hover { background: var(--accent-light); }
+.entry-list .hw {
+  font-family: var(--hebrew-font);
+  font-size: 1.15rem;
+  direction: rtl;
+  flex-shrink: 0;
+}
+.entry-list .gl {
+  font-style: italic;
+  color: var(--muted);
+  font-size: .9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Entry page ── */
+.entry-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--accent);
+}
+.entry-headword {
+  font-family: var(--hebrew-font);
+  font-size: 2.6rem;
+  direction: rtl;
+  line-height: 1.2;
+  color: var(--text);
+}
+.entry-gloss {
+  font-style: italic;
+  color: var(--muted);
+  font-size: 1.05rem;
+  margin-top: .3rem;
+}
+
+.entry-body h2 {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 1.8rem 0 .6rem;
+  padding-bottom: .3rem;
+  border-bottom: 1px solid var(--border);
+}
+.entry-body h3 {
+  font-family: var(--ui-font);
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin: 1rem 0 .4rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.entry-body p {
+  margin-bottom: .8rem;
+  line-height: 1.7;
+}
+.entry-body ul, .entry-body ol {
+  margin: .5rem 0 .8rem 1.5rem;
+}
+.entry-body li { margin-bottom: .3rem; }
+.entry-body audio {
+  display: block;
+  margin: .75rem 0;
+  max-width: 100%;
+}
+.entry-body img {
+  max-width: 100%;
+  height: auto;
+  margin: .75rem 0;
+  border-radius: 4px;
+}
+.entry-body blockquote {
+  border-left: 3px solid var(--border);
+  padding-left: 1rem;
+  color: var(--muted);
+  margin: .5rem 0;
+}
+
+/* back/nav bar above entry */
+.entry-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.entry-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .3rem .7rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--text);
+}
+.entry-nav a:hover {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  text-decoration: none;
+}
+
+/* ── Footer ── */
+footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  margin-top: 3rem;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .hero h1 { font-size: 1.6rem; }
+  .alphabet-nav a { min-width: 44px; padding: .4rem .55rem; }
+  .alphabet-nav a .heb { font-size: 1.2rem; }
+  .entry-headword { font-size: 2rem; }
+  .header-search { max-width: none; }
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <a href="/Yiddish-Dialect-Dictionary/" class="home">Yiddish Dialect Dictionary</a>
+  <div class="header-search">
+    <svg class="icon" width="16" height="16" fill="white" viewBox="0 0 16 16">
+      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.868-3.834zm-5.242 1.406a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+    </svg>
+    <input type="search" id="search-input" placeholder="Search entries…" autocomplete="off">
+    <div id="search-results" class="search-results"></div>
+  </div>
+</header>
+<main class="page-wrap">
+
+<div class="letter-header">
+  <span class="heb-big">צ</span>
+  <div class="info">
+    <div class="translit-big">Tsadek</div>
+    <div class="count">339 entries</div>
+  </div>
+</div>
+<ul class="entry-list">
+<li><a href="/Yiddish-Dialect-Dictionary/entry/Tsadek%20%D7%A6%D7%93%D7%99%D7%A7/"><span class="hw">Tsadek צדיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A5%20/"><span class="hw">ץ </span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D6%B4%D7%93%D6%B0%D7%A7%D6%B4%D7%99%D6%B8%D6%BC%D7%94%D7%95%D6%BC/"><span class="hw">צִדְקִיָּהוּ</span><span class="gl">‘Zedekiah (king of Judah)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%90%D6%B7%D7%9D%201/"><span class="hw">צאַם 1</span><span class="gl">‘fence’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%90%D6%B7%D7%9D%202/"><span class="hw">צאַם 2</span><span class="gl">‘tame’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%90%D6%B7%D7%9E%D7%A2%D7%9F/"><span class="hw">צאַמען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%90%D6%B7%D7%A0%D7%A7%D7%A2%D7%9F/"><span class="hw">צאַנקען</span><span class="gl">‘to flicker’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%90%D6%B7%D7%A4%D6%BC%201/"><span class="hw">צאַפּ 1</span><span class="gl">‘he-goat’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%90%D6%B7%D7%A4%D6%BC%202/"><span class="hw">צאַפּ 2</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%90%D6%B7%D7%A4%D6%BC%D7%9C%D7%A2%D7%9F/"><span class="hw">צאַפּלען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%90%D6%B7%D7%A4%D6%BC%D7%9F%201/"><span class="hw">צאַפּן 1</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%90%D6%B7%D7%A4%D6%BC%D7%9F%202/"><span class="hw">צאַפּן 2</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%90%D6%B7%D7%A6%D7%A7%D7%A2/"><span class="hw">צאַצקע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%90%D6%B7%D7%A8/"><span class="hw">צאַר</span><span class="gl">‘tsar, czar, Russian emperor’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%90%D6%B7%D7%A8%D7%98%D7%9C/"><span class="hw">צאַרטל</span><span class="gl">‘(woman's name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%90%D6%B8%D7%9C/"><span class="hw">צאָל</span><span class="gl">‘number’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%90%D6%B8%D7%9C%D7%9F/"><span class="hw">צאָלן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%90%D6%B8%D7%9F/"><span class="hw">צאָן</span><span class="gl">‘tooth’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%90%D6%B8%D7%A0%D7%93%D7%90%D6%B8%D7%A7%D7%98%D7%A2%D7%A8/"><span class="hw">צאָנדאָקטער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%90%D6%B8%D7%A0%D7%95%D7%95%D7%99%D7%99%D7%98%D7%99%D7%A7/"><span class="hw">צאָנווייטיק</span><span class="gl">‘tooth ache’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%90%D6%B8%D7%A0%D7%A4%D6%BF%D7%9C%D7%99%D7%99%D7%A9/"><span class="hw">צאָנפֿלייש</span><span class="gl">‘gums’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%90%D6%B8%D7%A4%D6%BC/"><span class="hw">צאָפּ</span><span class="gl">‘braid’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%90%D6%B8%D7%A5/"><span class="hw">צאָץ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%90%D6%B8%D7%A8%D7%9F/"><span class="hw">צאָרן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%90%D7%99%D7%A0%D7%94%D6%BE%D7%95%D7%A8%D7%90%D7%99%D7%A0%D7%94/"><span class="hw">צאינה־וראינה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%91%D6%BF%D7%99/"><span class="hw">צבֿי</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%93/"><span class="hw">צד</span><span class="gl">‘side’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%93%D6%BE%D7%94%D7%A9%D7%95%D7%95%D7%94/"><span class="hw">צד־השווה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%93%D7%94/"><span class="hw">צדה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%93%D7%94%D6%BE%D7%9C%D7%93%D7%A8%D7%9A/"><span class="hw">צדה־לדרך</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%93%D7%95%D7%A7/"><span class="hw">צדוק</span><span class="gl">‘Sadducee’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%93%D7%99%D7%A7/"><span class="hw">צדיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%93%D7%A7%D7%94/"><span class="hw">צדקה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%93%D7%A7%D7%AA/"><span class="hw">צדקת</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95/"><span class="hw">צו</span><span class="gl">‘to’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%20%D7%9E%D7%90%D6%B8%D7%A8%D7%92%D7%A0%D7%A1/"><span class="hw">צו מאָרגנס</span><span class="gl">‘in the morning’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%20%D7%A2%D7%A8%D7%A9%D7%98/"><span class="hw">צו ערשט</span><span class="gl">‘first’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%20%D7%A4%D6%BF%D7%A8%D7%99/"><span class="hw">צו פֿרי</span><span class="gl">‘in the morning’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D6%BC%D7%95%D7%95%D7%90%D6%B7%D7%A8%D7%98%D7%9F/"><span class="hw">צוּוואַרטן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%90%D7%B2%D6%B7%D7%9C%D7%9F/"><span class="hw">צואײַלן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%91%D7%95%D7%99%D7%A2%D7%9F/"><span class="hw">צובויען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%91%D7%99%D7%A0%D7%93%D7%9F/"><span class="hw">צובינדן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%91%D7%A8%D7%A2%D7%A0%D7%92%D7%A2%D7%9F/"><span class="hw">צוברענגען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%91%D7%A8%D7%A2%D7%A0%D7%A2%D7%9F/"><span class="hw">צוברענען</span><span class="gl">‘to burn (perfective)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%91%D7%B2%D6%B7%D7%A1%D7%9F/"><span class="hw">צובײַסן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%92%201/"><span class="hw">צוג 1</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%92%202/"><span class="hw">צוג 2</span><span class="gl">‘train’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%92%D7%90%D6%B7%D7%A0%D7%92/"><span class="hw">צוגאַנג</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%92%D7%99%D7%99%D7%9F/"><span class="hw">צוגיין</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%92%D7%A0%D7%91%D6%BF%D7%A2%D7%A0%D7%A2%D7%9F/"><span class="hw">צוגנבֿענען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%92%D7%A2%D7%91%D7%9F/"><span class="hw">צוגעבן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%92%D7%A2%D7%95%D7%95%D7%99%D7%99%D7%A0%D7%A2%D7%9F/"><span class="hw">צוגעוויינען</span><span class="gl">‘to accustom’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%92%D7%A8%D7%99%D7%99%D7%98%D7%9F/"><span class="hw">צוגרייטן</span><span class="gl">‘to prepare’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%93%D7%95%D7%A9%D7%A2%D7%9F/"><span class="hw">צודושען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%93%D7%A2%D7%A7%D7%9F/"><span class="hw">צודעקן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%93%D7%A8%D7%99%D7%A7%D7%9F/"><span class="hw">צודריקן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%94%D7%90%D6%B7%D7%A8%D7%9F/"><span class="hw">צוהאַרן</span><span class="gl">‘to wait’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%94%D7%A2%D7%9C%D7%A4%D6%BF%D7%9F/"><span class="hw">צוהעלפֿן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%94%D7%A2%D7%A4%D6%BF%D7%98%D7%9F/"><span class="hw">צוהעפֿטן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%94%D7%A2%D7%A7%D7%9C%D7%A2%D7%9F/"><span class="hw">צוהעקלען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%94%D7%A2%D7%A8%D7%9F/"><span class="hw">צוהערן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%90%D6%B7%D7%9C%D7%A2%D7%95%D7%95%D7%A2%D7%9F/"><span class="hw">צוואַלעווען</span><span class="gl">‘seethe’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%90%D6%B7%D7%A0%D7%92%201/"><span class="hw">צוואַנג 1</span><span class="gl">‘tongs’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%90%D6%B7%D7%A0%D7%92%202/"><span class="hw">צוואַנג 2</span><span class="gl">‘force’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%90%D6%B7%D7%A0%D7%A6%D7%99%D7%A7/"><span class="hw">צוואַנציק</span><span class="gl">‘twenty’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%90%D6%B7%D7%A0%D7%A6%D7%99%D7%A7%D7%A1%D7%98/"><span class="hw">צוואַנציקסט</span><span class="gl">‘twentieth’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%90%D6%B7%D7%A0%D7%A6%D7%99%D7%A7%D7%A2%D7%A8/"><span class="hw">צוואַנציקער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%90%D6%B8%D7%92%D7%9F/"><span class="hw">צוואָגן</span><span class="gl">‘to wash (one's hair)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%90%D6%B8%D7%A8%D7%A2%D7%9A/"><span class="hw">צוואָרעך</span><span class="gl">‘cottage cheese, curd’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%90%D6%B8%D7%A8%D7%A2%D7%9A%D6%BE%D7%93%D7%A2%D7%9C%D7%A7%D7%9C%D7%A2%D7%9A/"><span class="hw">צוואָרעך־דעלקלעך</span><span class="gl">‘cheese pastry (for Shavuot)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%90%D7%94/"><span class="hw">צוואה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%90%D7%A8/"><span class="hw">צוואר</span><span class="gl">‘neck’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%99/"><span class="hw">צווי</span><span class="gl">‘commandment, order’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%99%D7%98%D7%A2%D7%9F/"><span class="hw">צוויטען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%99%D7%98%D7%A9/"><span class="hw">צוויטש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%99%D7%98%D7%A9%D7%A2%D7%A8%D7%9F/"><span class="hw">צוויטשערן</span><span class="gl">‘to chirp’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%99%D7%99/"><span class="hw">צוויי</span><span class="gl">‘two’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%99%D7%99%D6%BE%D7%92%D7%90%D6%B8%D7%A8%D7%A0%D7%93%D7%99%D7%A7/"><span class="hw">צוויי־גאָרנדיק</span><span class="gl">‘two-storey (adjective)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%99%D7%99%D6%BE%D7%9C%D7%95%D7%97%D7%95%D7%AA%D6%BE%D7%A9%D7%99%D7%9A/"><span class="hw">צוויי־לוחות־שיך</span><span class="gl">‘old-fashioned Hasidic men's shoes with tongue shaped like two tablets’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%99%D7%99%D7%98/"><span class="hw">צווייט</span><span class="gl">‘second’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%99%D7%99%D7%A2/"><span class="hw">צווייע</span><span class="gl">‘two o'clock’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%99%D7%99%D7%A2%D7%A8%D7%9C%D7%99%D7%99/"><span class="hw">צווייערליי</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%99%D7%99%D7%A4%D6%BF%D7%99%D7%A1%D7%99%D7%A7/"><span class="hw">צווייפֿיסיק</span><span class="gl">‘two-footed’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%99%D7%99%D7%A4%D6%BF%D7%9C/"><span class="hw">צווייפֿל</span><span class="gl">‘doubt’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%99%D7%99%D7%A9%D7%98%D7%90%D6%B8%D7%A7%D7%99%D7%A7/"><span class="hw">צוויישטאָקיק</span><span class="gl">‘two-story (adjective)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%99%D7%9C%D7%99%D7%A0%D7%92/"><span class="hw">צווילינג</span><span class="gl">‘twin’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%99%D7%9C%D7%99%D7%A0%D7%92%D6%BE%D7%9E%D7%90%D6%B7%D7%9B%D7%A2%D7%A8/"><span class="hw">צווילינג־מאַכער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%99%D7%A0%D7%98%D7%A2%D7%A8/"><span class="hw">צווינטער</span><span class="gl">‘cemetery (non-Jewish)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%99%D7%A0%D7%A7%D7%A2%D7%A8%D7%9F/"><span class="hw">צווינקערן</span><span class="gl">‘to blink, wink’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%99%D7%A7/"><span class="hw">צוויק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%99%D7%A7%D7%9F/"><span class="hw">צוויקן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%99%D7%A9%D7%9F%201/"><span class="hw">צווישן 1</span><span class="gl">‘between’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%99%D7%A9%D7%9F%202/"><span class="hw">צווישן 2</span><span class="gl">‘interval’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%99%D7%A9%D7%A0%D7%A9%D7%99%D7%99%D7%93/"><span class="hw">צווישנשייד</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%A2%D7%91%D7%9F/"><span class="hw">צוועבן</span><span class="gl">‘raisins’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%A2%D7%98%D7%A9%D7%A7%D7%9F/"><span class="hw">צוועטשקן</span><span class="gl">‘plums’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%A2%D7%9C/"><span class="hw">צוועל</span><span class="gl">‘tablecloth’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%A2%D7%9C%D7%A2%D7%95%D7%95%D7%A2/"><span class="hw">צוועלעווע</span><span class="gl">‘twelve o'clock’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%A2%D7%9C%D7%A3/"><span class="hw">צוועלף</span><span class="gl">‘twelve’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%A2%D7%9C%D7%A4%D6%BF%D7%98/"><span class="hw">צוועלפֿט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%A2%D7%A7/"><span class="hw">צוועק</span><span class="gl">‘purpose’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%A2%D7%A8%D7%92/"><span class="hw">צווערג</span><span class="gl">‘dwarf’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%A2%D7%A8%D7%9F/"><span class="hw">צווערן</span><span class="gl">‘sewing thread’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%95%D7%B2%D6%B7%D7%92/"><span class="hw">צווײַג</span><span class="gl">‘branch’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%96%D7%90%D6%B7%D7%9E%D7%A2%D7%9F/"><span class="hw">צוזאַמען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%96%D7%90%D6%B7%D7%9E%D7%A2%D7%A0%D6%BE/"><span class="hw">צוזאַמענ־</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%96%D7%90%D6%B7%D7%9E%D7%A2%D7%A0%D7%90%D6%B7%D7%A8%D7%91%D7%A2%D7%98/"><span class="hw">צוזאַמענאַרבעט</span><span class="gl">‘cooperation’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%96%D7%90%D6%B7%D7%9E%D7%A2%D7%A0%D7%91%D7%99%D7%A0%D7%93%D7%9F/"><span class="hw">צוזאַמענבינדן</span><span class="gl">‘to tie together’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%96%D7%90%D6%B7%D7%9E%D7%A2%D7%A0%D7%93%D7%A8%D7%99%D7%99%D7%A2%D7%9F/"><span class="hw">צוזאַמענדרייען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%96%D7%90%D6%B7%D7%9E%D7%A2%D7%A0%D7%94%D7%90%D6%B7%D7%9C%D7%98%D7%9F/"><span class="hw">צוזאַמענהאַלטן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%96%D7%90%D6%B7%D7%9E%D7%A2%D7%A0%D7%9C%D7%99%D7%99%D7%92%D7%9F/"><span class="hw">צוזאַמענלייגן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%96%D7%90%D6%B7%D7%9E%D7%A2%D7%A0%D7%A0%D7%A2%D7%9E%D7%A2%D7%9F/"><span class="hw">צוזאַמעננעמען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%96%D7%90%D6%B7%D7%9E%D7%A2%D7%A0%D7%A6%D7%99%D6%B4%D7%A2%D7%9F/"><span class="hw">צוזאַמענציִען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%96%D7%90%D6%B7%D7%9E%D7%A2%D7%A0%D7%A7%D7%95%D7%9E%D7%A2%D7%9F%20%D7%96%D7%99%D7%9A/"><span class="hw">צוזאַמענקומען זיך</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%96%D7%90%D6%B7%D7%9E%D7%A2%D7%A0%D7%A7%D7%A2%D7%9E%D7%A2%D7%9F/"><span class="hw">צוזאַמענקעמען</span><span class="gl">‘to comb’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%96%D7%90%D6%B7%D7%9E%D7%A2%D7%A0%D7%A8%D7%95%D7%A0%D7%A6%D7%9C%D7%A2%D7%9F/"><span class="hw">צוזאַמענרונצלען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%96%D7%90%D6%B7%D7%9E%D7%A2%D7%A0%D7%A8%D7%95%D7%A4%D6%BF%D7%9F/"><span class="hw">צוזאַמענרופֿן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%96%D7%90%D6%B7%D7%9E%D7%A2%D7%A0%D7%A8%D7%A2%D7%9B%D7%A2%D7%A0%D7%A2%D7%9F/"><span class="hw">צוזאַמענרעכענען</span><span class="gl">‘to add up’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%96%D7%90%D6%B7%D7%9E%D7%A2%D7%A0%D7%A9%D7%98%D7%A2%D7%9C%D7%9F/"><span class="hw">צוזאַמענשטעלן</span><span class="gl">‘to put together, construct’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%96%D7%90%D6%B7%D7%9E%D7%A2%D7%A0%D7%A9%D7%98%D7%A2%D7%A7%D7%9F/"><span class="hw">צוזאַמענשטעקן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%96%D7%90%D6%B8%D7%92/"><span class="hw">צוזאָג</span><span class="gl">‘promise’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%96%D7%A2%D7%9F/"><span class="hw">צוזען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%96%D7%A2%D7%A2%D7%A8/"><span class="hw">צוזעער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%98%D7%90%D6%B8%D7%9F/"><span class="hw">צוטאָן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%98%D7%A8%D7%95%D7%99/"><span class="hw">צוטרוי</span><span class="gl">‘trust, confidence’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%98%D7%A9%D7%A2%D7%A4%D6%BC%D7%A2%D7%9F/"><span class="hw">צוטשעפּען</span><span class="gl">‘to attach’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%99%D7%92/"><span class="hw">צויג</span><span class="gl">‘female dog, bitch’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%99%D7%96%D7%9E%D7%A2%D7%A8/"><span class="hw">צויזמער</span><span class="gl">‘Sandomierz (town in south-eastern Poland)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%99%D7%9B%D7%9F/"><span class="hw">צויכן</span><span class="gl">‘wick’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%99%D7%9D%201/"><span class="hw">צוים 1</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%99%D7%9D%202/"><span class="hw">צוים 2</span><span class="gl">‘fence’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%9B%D7%90%D6%B7%D7%A4%D6%BC%D7%9F%20%D7%96%D7%99%D7%9A/"><span class="hw">צוכאַפּן זיך</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%9B%D7%98/"><span class="hw">צוכט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%9C%D7%90%D6%B8%D7%96%D7%9F/"><span class="hw">צולאָזן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%9C%D7%95%D7%99%D7%A4%D6%BF%D7%9F/"><span class="hw">צולויפֿן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%9C%D7%99%D7%91/"><span class="hw">צוליב</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%9C%D7%99%D7%99%D7%92%D7%9F/"><span class="hw">צולייגן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%9C%D7%A2%D7%A0%D7%A2%D7%9F/"><span class="hw">צולענען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%9C%D7%A2%D7%A8%D7%A0%D7%A2%D7%9F/"><span class="hw">צולערנען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%9D/"><span class="hw">צום</span><span class="gl">‘fast’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%9D%20%D7%92%D7%93%D7%9C%D7%99%D7%94/"><span class="hw">צום גדליה</span><span class="gl">‘the Fast of Gedaliah’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%9E%D7%99/"><span class="hw">צומי</span><span class="gl">‘pacifier’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%9E%D7%A2%D7%A1%D7%98%D7%9F/"><span class="hw">צומעסטן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A0%D7%90%D6%B7%D7%9E%D7%99/"><span class="hw">צונאַמי</span><span class="gl">‘tsunami’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A0%D7%92/"><span class="hw">צונג</span><span class="gl">‘tongue’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A0%D7%95%D7%99%D7%A3/"><span class="hw">צונויף</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A0%D7%95%D7%99%D7%A4%D6%BF%D7%A8%D7%A2%D7%93%D7%9F%20%D7%96%D7%99%D7%9A/"><span class="hw">צונויפֿרעדן זיך</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A0%D7%99%D7%99%D7%A2%D7%9F/"><span class="hw">צונייען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A0%D7%A2%D7%9E%D7%A2%D7%9F/"><span class="hw">צונעמען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A4%D6%BC/"><span class="hw">צופּ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A4%D6%BC%D7%95%D7%A6%D7%9F/"><span class="hw">צופּוצן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A4%D6%BC%D7%95%D7%A9%D7%9F/"><span class="hw">צופּושן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A4%D6%BC%D7%A8%D7%A2%D7%92%D7%9C%D7%A2%D7%9F/"><span class="hw">צופּרעגלען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A4%D6%BF%D7%90%D6%B7%D7%9C/"><span class="hw">צופֿאַל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A4%D6%BF%D7%95%D7%A1%D7%A0%28%D7%A1%29/"><span class="hw">צופֿוסנ(ס)</span><span class="gl">‘at the foot (of)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A4%D6%BF%D7%99%D7%A7%D7%A1%D7%9F/"><span class="hw">צופֿיקסן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A4%D6%BF%D7%99%D7%A8%D7%9F/"><span class="hw">צופֿירן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A4%D6%BF%D7%A2%D7%9C%D7%99%D7%A7/"><span class="hw">צופֿעליק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A4%D6%BF%D7%A8%D7%99%D7%93%D7%9F/"><span class="hw">צופֿרידן</span><span class="gl">‘satisfied, glad’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A4%D6%BF%D7%A8%D7%99%D7%A8%D7%9F/"><span class="hw">צופֿרירן</span><span class="gl">‘to freeze’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A6%D7%99%D7%A7/"><span class="hw">צוציק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A7%D7%90%D6%B8%D7%A4%D6%BC%D7%A0%28%D7%A1%29/"><span class="hw">צוקאָפּנ(ס)</span><span class="gl">‘at the head (of)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A7%D7%95%D7%9E%D7%A2%D7%9F/"><span class="hw">צוקומען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A7%D7%9F/"><span class="hw">צוקן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A7%D7%A0%D7%A2%D7%A4%D6%BC%D7%9C%D7%A2%D7%9F/"><span class="hw">צוקנעפּלען</span><span class="gl">‘to button’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A7%D7%A2%D7%9E%D7%A2%D7%9F/"><span class="hw">צוקעמען</span><span class="gl">‘to comb (perfective)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A7%D7%A2%D7%A8/"><span class="hw">צוקער</span><span class="gl">‘sugar’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A7%D7%A2%D7%A8%D6%BE%D7%94%D7%90%D6%B7%D7%9C%D7%98%D7%A2%D7%A8/"><span class="hw">צוקער־האַלטער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A7%D7%A2%D7%A8%D6%BE%D7%A4%D6%BC%D7%95%D7%A9%D7%A7%D7%A2/"><span class="hw">צוקער־פּושקע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A7%D7%A2%D7%A8%D7%91%D7%99%D7%A7%D7%A1/"><span class="hw">צוקערביקס</span><span class="gl">‘sugar bowl’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A7%D7%A2%D7%A8%D7%9C/"><span class="hw">צוקערל</span><span class="gl">‘candy’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A7%D7%A2%D7%A8%D7%A0%D7%99%D7%A6%D7%A2/"><span class="hw">צוקערניצע</span><span class="gl">‘sugar bowl’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A8/"><span class="hw">צור</span><span class="gl">‘Tyre (ancient city in southern Lebanon)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A8%D7%90%D6%B7%D7%9E%D7%A2%D7%9F/"><span class="hw">צוראַמען</span><span class="gl">‘clean up, tidy up’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A8%D7%94/"><span class="hw">צורה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A8%D7%95%D7%A7%D7%9F/"><span class="hw">צורוקן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A8%D7%99%D7%92%D7%9C%D7%A2%D7%9F/"><span class="hw">צוריגלען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A8%D7%99%D7%9B%D7%98%D7%9F/"><span class="hw">צוריכטן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A8%D7%99%D7%A7/"><span class="hw">צוריק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A8%D7%99%D7%A7%20%D7%A6%D7%95%20%D7%95%D7%95%D7%A2%D7%92%D7%A1/"><span class="hw">צוריק צו וועגס</span><span class="gl">‘backwards’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A8%D7%99%D7%A7%D7%91%D7%9C%D7%B2%D6%B7%D7%91%D7%9F/"><span class="hw">צוריקבלײַבן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A8%D7%99%D7%A7%D7%92%D7%99%D7%99%D7%9F/"><span class="hw">צוריקגיין</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A8%D7%99%D7%A7%D7%92%D7%A2%D7%91%D7%9F/"><span class="hw">צוריקגעבן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A8%D7%99%D7%A7%D7%95%D7%95%D7%90%D6%B7%D7%A8%D7%A4%D6%BF%D7%9F/"><span class="hw">צוריקוואַרפֿן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A8%D7%99%D7%A7%D7%A4%D6%BF%D7%90%D6%B8%D7%A8%D7%9F/"><span class="hw">צוריקפֿאָרן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A8%D7%99%D7%A7%D7%A6%D7%99%D6%B4%D7%A2%D7%9F/"><span class="hw">צוריקציִען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A8%D7%99%D7%A7%D7%A7%D7%95%D7%9E%D7%A2%D7%9F/"><span class="hw">צוריקקומען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A8%D7%99%D7%A8%D7%9F/"><span class="hw">צורירן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A8%D7%9A/"><span class="hw">צורך</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A8%D7%A2%D7%93%D7%9F/"><span class="hw">צורעדן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A9%D7%95%D7%95%D7%A2%D7%A8%D7%9F/"><span class="hw">צושווערן</span><span class="gl">‘to swear’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A9%D7%98%D7%90%D6%B8%D7%A4%D6%BC%D7%9F/"><span class="hw">צושטאָפּן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A9%D7%98%D7%99%D7%A7%D7%9F/"><span class="hw">צושטיקן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A9%D7%98%D7%A2%D7%9C%D7%9F/"><span class="hw">צושטעלן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A9%D7%98%D7%A2%D7%A4%D6%BC%D7%9F/"><span class="hw">צושטעפּן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A9%D7%98%D7%A2%D7%A7%D7%9F/"><span class="hw">צושטעקן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A9%D7%98%D7%B2%D6%B7%D7%A2%D7%A8/"><span class="hw">צושטײַער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A9%D7%A0%D7%90%D6%B8%D7%9C%D7%9F/"><span class="hw">צושנאָלן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A9%D7%A0%D7%95%D7%A8%D7%A2%D7%95%D7%95%D7%A2%D7%9F/"><span class="hw">צושנורעווען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A9%D7%A4%D6%BC%D7%90%D6%B7%D7%A8%D7%9F/"><span class="hw">צושפּאַרן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A9%D7%A4%D6%BC%D7%99%D7%9C%D7%99%D7%A2%D7%9F/"><span class="hw">צושפּיליען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A9%D7%A4%D6%BC%D7%B2%D6%B7%D7%96/"><span class="hw">צושפּײַז</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%D7%A9%D7%A8%D7%B2%D6%B7%D7%91%D7%9F/"><span class="hw">צושרײַבן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%95%E2%80%8F%D7%9E%D7%90%D6%B7%D7%9B%D7%9F/"><span class="hw">צו‏מאַכן</span><span class="gl">‘to close’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%201/"><span class="hw">צי 1</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%202/"><span class="hw">צי 2</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%20%D7%94%D7%A2%D7%A8%D7%A1%D7%98%D7%95%3F/"><span class="hw">צי הערסטו?</span><span class="gl">‘you (pronoun; said in modesty to one's wife); wife (noun)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D6%B4%D7%A2%D7%9F/"><span class="hw">ציִען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%91%D7%95%D7%A8/"><span class="hw">ציבור</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%91%D7%A2%D7%9C%D7%A2/"><span class="hw">ציבעלע</span><span class="gl">‘onion’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%91%D7%A2%D7%A7/"><span class="hw">ציבעק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%92/"><span class="hw">ציג</span><span class="gl">‘goat (f.)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%92%D7%90%D6%B7%D7%A8/"><span class="hw">ציגאַר</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%92%D7%9C/"><span class="hw">ציגל</span><span class="gl">‘brick’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%92%D7%B2%D6%B7%D7%A0%D7%A2%D7%A8/"><span class="hw">ציגײַנער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%93%D7%A7%D7%95%D7%AA/"><span class="hw">צידקות</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%95%D7%95%D7%99%D7%9C/"><span class="hw">ציוויל</span><span class="gl">‘civil’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%95%D7%9F/"><span class="hw">ציון</span><span class="gl">‘grave of a Hasidic rabbi, gravestone’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%95%D7%A0%D7%95%D7%AA/"><span class="hw">ציונות</span><span class="gl">‘Zionism’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%95%D7%A0%D7%99/"><span class="hw">ציוני</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%95%D7%A0%D7%99%D7%A1%D7%98/"><span class="hw">ציוניסט</span><span class="gl">‘Zionist’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%98%D7%A2%D7%A8%D7%9F/"><span class="hw">ציטערן</span><span class="gl">‘to tremble’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%98%D7%A2%D7%A8%D7%A0%D7%99%D7%A9/"><span class="hw">ציטערניש</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%98%D7%A8%D7%99%D7%9F/"><span class="hw">ציטרין</span><span class="gl">‘lemon’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%99%D7%98%D7%9C/"><span class="hw">צייטל</span><span class="gl">‘Tseytl (name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%99%D7%9B%D7%9F/"><span class="hw">צייכן</span><span class="gl">‘sign’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%99%D7%9C%D7%9F/"><span class="hw">ציילן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%9A/"><span class="hw">ציך</span><span class="gl">‘pillowcase’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%9B%D7%98%D7%99%D7%A7/"><span class="hw">ציכטיק</span><span class="gl">‘neat, tidy (adjective/adverb)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%9C/"><span class="hw">ציל</span><span class="gl">‘goal’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%9C%D7%9F/"><span class="hw">צילן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%9C%D7%A2/"><span class="hw">צילע</span><span class="gl">‘Tsile/Tsilke (woman's name)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%9C%D7%A2%D7%95%D7%95%D7%A2%D7%9F/"><span class="hw">צילעווען</span><span class="gl">‘to aim’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%9C%D7%A7%D7%A2%203/"><span class="hw">צילקע 3</span><span class="gl">‘legging’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%9E%D7%A2%D7%A1/"><span class="hw">צימעס</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%9E%D7%A2%D7%A8/"><span class="hw">צימער</span><span class="gl">‘room’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%9E%D7%A8%D7%99%D7%A0%D7%92/"><span class="hw">צימרינג</span><span class="gl">‘cinnamon’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%9F/"><span class="hw">צין</span><span class="gl">‘tin’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%A0%D7%93%D7%94%D7%90%D6%B8%D7%9C%D7%A5/"><span class="hw">צינדהאָלץ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%A0%D7%93%D7%9F/"><span class="hw">צינדן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%A0%D7%93%D7%A2%D7%A8/"><span class="hw">צינדער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%A0%D7%A7/"><span class="hw">צינק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%A4%D6%BC/"><span class="hw">ציפּ</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%A6%D7%94/"><span class="hw">ציצה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%A6%D7%94%D6%BE%D7%9B%D6%BC%D7%A0%D7%A4%D6%BF%D7%95%D7%AA/"><span class="hw">ציצה־כּנפֿות</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%A6%D7%99%D7%AA/"><span class="hw">ציצית</span><span class="gl">‘ritual undergarment’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%A6%D7%A2/"><span class="hw">ציצע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%A7%D7%90%D6%B8%D7%A8%D7%99%D7%A2/"><span class="hw">ציקאָריע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%A7%D7%A2%D7%9F%20%D7%96%D7%99%D7%9A/"><span class="hw">ציקען זיך</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%A8%D7%95%D7%9C%D7%A0%D7%99%D7%A7/"><span class="hw">צירולניק</span><span class="gl">‘barber’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%A8%D7%95%D7%A0%D7%92/"><span class="hw">צירונג</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%A8%D7%99/"><span class="hw">צירי</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%A8%D7%99%20%D7%A6%D7%95%D7%95%D7%99%D7%99%20%D7%99%D7%95%D7%93%D7%9F/"><span class="hw">צירי צוויי יודן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%99%D7%A8%D7%A7%D7%9C/"><span class="hw">צירקל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%9C%D7%9D%201/"><span class="hw">צלם 1</span><span class="gl">‘cross’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%9C%D7%9D%202/"><span class="hw">צלם 2</span><span class="gl">‘town in Burgenland (Austria, formerly Hungary; German Deutschkreutz)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%9E%D7%97/"><span class="hw">צמח</span><span class="gl">‘vegetation’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A0%D7%95%D7%A2%D7%94/"><span class="hw">צנועה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A0%D7%99%D7%A2%D7%95%D7%AA/"><span class="hw">צניעות</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A0%D7%99%D7%A2%D7%95%D7%AA%D7%93%D7%99%D7%A7/"><span class="hw">צניעותדיק</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2/"><span class="hw">צע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%91%D7%90%D6%B7%D7%9C%D7%A2%D7%95%D7%95%D7%A2%D7%9F/"><span class="hw">צעבאַלעווען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%91%D7%A2%D7%A8/"><span class="hw">צעבער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%91%D7%A2%D7%A8%D7%A9%D7%98%D7%9F/"><span class="hw">צעבערשטן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%91%D7%A8%D7%99%D7%A7%D7%A2%D7%9F/"><span class="hw">צעבריקען</span><span class="gl">‘to kick’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%91%D7%A8%D7%A2%D7%9B%D7%9F/"><span class="hw">צעברעכן</span><span class="gl">‘to break’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%91%D7%A8%D7%A2%D7%A7%D7%9C%D7%A2%D7%9F/"><span class="hw">צעברעקלען</span><span class="gl">‘to crumble’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%92%D7%99%D7%99%D7%9F/"><span class="hw">צעגיין</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%93%D7%95%D7%9C%D7%9F/"><span class="hw">צעדולן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%93%D7%A8%D7%99%D7%99%D7%98/"><span class="hw">צעדרייט</span><span class="gl">‘crazy’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%94%D7%90%D6%B7%D7%A7%D7%9F/"><span class="hw">צעהאַקן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%94%D7%90%D6%B8%D7%A6%D7%A7%D7%A2%D7%9F/"><span class="hw">צעהאָצקען</span><span class="gl">‘crazy’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%95%D7%95%D7%99%D7%99%D7%A0%D7%A2%D7%9F%20%D7%96%D7%99%D7%9A/"><span class="hw">צעוויינען זיך</span><span class="gl">‘burst into tears’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%95%D7%95%D7%99%D7%9C%D7%93%D7%A2%D7%95%D7%95%D7%A2%D7%9F/"><span class="hw">צעווילדעווען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%96%D7%A2%D7%92%D7%9F/"><span class="hw">צעזעגן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%97%D7%95%D7%A9%D7%98/"><span class="hw">צעחושט</span><span class="gl">‘stunned’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%98%D7%90%D6%B8%D7%A4%D6%BC%D7%99%D7%A2%D7%9F/"><span class="hw">צעטאָפּיען</span><span class="gl">‘to melt’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%98%D7%95%D7%9E%D7%9C%D7%98/"><span class="hw">צעטומלט</span><span class="gl">‘confused’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%98%D7%99%D7%99%D7%9C%D7%9F/"><span class="hw">צעטיילן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%98%D7%9C/"><span class="hw">צעטל</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%98%D7%A2%D7%9C%D7%A2/"><span class="hw">צעטעלע</span><span class="gl">‘slip of paper, memorandum, reminder note’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%9C/"><span class="hw">צעל</span><span class="gl">‘cell (biological)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%9C%201/"><span class="hw">צעל 1</span><span class="gl">‘cell (biological)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%9C%D7%90%D6%B8%D7%98%D7%A9%D7%A2%D7%98/"><span class="hw">צעלאָטשעט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%9C%D7%99%D7%99%D7%92%D7%9F/"><span class="hw">צעלייגן</span><span class="gl">‘to spread’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%9C%D7%A2%D7%9B%D7%A2%D7%A8%D7%9F/"><span class="hw">צעלעכערן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%9E%D7%99%D7%A9%D7%98/"><span class="hw">צעמישט</span><span class="gl">‘confused’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%9E%D7%99%D7%A9%D7%9F/"><span class="hw">צעמישן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%9E%D7%99%D7%A9%D7%A2%D7%A0%D7%99%D7%A9/"><span class="hw">צעמישעניש</span><span class="gl">‘confusion, bewilderment; jumble’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%9E%D7%A2%D7%A0%D7%98/"><span class="hw">צעמענט</span><span class="gl">‘cement’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%9F/"><span class="hw">צען</span><span class="gl">‘ten’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%A0%D7%96%D7%95%D7%A8/"><span class="hw">צענזור</span><span class="gl">‘censor’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%A0%D7%98/"><span class="hw">צענט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%A0%D7%98%D7%A2%D7%A8%D7%A4%D6%BC%D7%95%D7%A0%D7%A7%D7%98/"><span class="hw">צענטערפּונקט</span><span class="gl">‘central point’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%A0%D7%A2%D7%9E%D7%A2%D7%9F/"><span class="hw">צענעמען</span><span class="gl">‘to take apart’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%A0%D7%A2%E2%80%8F/"><span class="hw">צענע‏</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%A4%D6%BC%D7%90%D6%B7%D7%98%D7%9C%D7%A2%D7%9F/"><span class="hw">צעפּאַטלען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%A4%D6%BC%D7%95%D7%93%D7%9C%D7%A2%D7%9F/"><span class="hw">צעפּודלען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%A4%D6%BC%D7%99%D7%A2%D7%A9%D7%98%D7%A9%D7%A2%D7%9F/"><span class="hw">צעפּיעשטשען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%A4%D6%BC%D7%9C%D7%90%D6%B7%D7%A6%D7%9F/"><span class="hw">צעפּלאַצן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%A4%D6%BC%D7%9C%D7%90%D6%B8%D7%A9%D7%A2%D7%98/"><span class="hw">צעפּלאָשעט</span><span class="gl">‘unkempt, uncombed’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%A4%D6%BF%D7%9C%D7%99%D6%B4%D7%A2%D7%9F/"><span class="hw">צעפֿליִען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%A7%D7%94/"><span class="hw">צעקה</span><span class="gl">‘yell’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%A7%D7%95%D7%95%D7%A2%D7%98%D7%A9%D7%9F/"><span class="hw">צעקוועטשן</span><span class="gl">‘to squash’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%A7%D7%A8%D7%99%D7%92%D7%9F/"><span class="hw">צעקריגן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%A7%D7%B2%D6%B7%D7%A2%D7%9F/"><span class="hw">צעקײַען</span><span class="gl">‘to chew up’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%A8/"><span class="hw">צער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%A8%D6%BE%D7%91%D7%A0%D7%99%D7%9D/"><span class="hw">צער־בנים</span><span class="gl">‘צער בנים איז ערגער ווי צער־לחם’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%A8%D6%BE%D7%91%D7%A2%D7%9C%D7%99%D6%BE%D7%97%D7%99%D7%99%D7%9D/"><span class="hw">צער־בעלי־חיים</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%A8%D7%90%D6%B7%D7%98%D7%A2/"><span class="hw">צעראַטע</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%A8%D7%95%D7%A0%D7%A6%D7%9C%D7%A2%D7%9F/"><span class="hw">צערונצלען</span><span class="gl">‘to wrinkle’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%A8%D7%99%D7%A0%D7%A2%D7%9F/"><span class="hw">צערינען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%A8%D7%9F/"><span class="hw">צערן</span><span class="gl">‘to go on a diet’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%A8%D7%A2%D7%95%D7%95%D7%A2%D7%9F/"><span class="hw">צערעווען</span><span class="gl">‘to darn’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%A8%D7%A7%D7%95%D7%95%D7%A2/"><span class="hw">צערקווע</span><span class="gl">‘church (Eastern Orthodox)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%A8%D7%B2%D6%B7%D7%91%D7%9F/"><span class="hw">צערײַבן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%A8%D7%B2%D6%B7%D7%A1%D7%9F/"><span class="hw">צערײַסן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%A9%D7%90%D6%B8%D7%A7%D7%9C%D7%98/"><span class="hw">צעשאָקלט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%A9%D7%95%D7%99%D7%91%D7%A2%D7%A8%D7%9F/"><span class="hw">צעשויבערן</span><span class="gl">‘dishevel’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%A9%D7%98%D7%A8%D7%95%D7%99%D7%91%D7%9C%D7%98/"><span class="hw">צעשטרויבלט</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%A9%D7%99%D7%98%D7%9F/"><span class="hw">צעשיטן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%A9%D7%9C%D7%90%D6%B8%D7%92%D7%9F/"><span class="hw">צעשלאָגן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%A9%D7%A4%D6%BC%D7%90%D6%B7%D7%9C%D7%98%D7%9F/"><span class="hw">צעשפּאַלטן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%A9%D7%A4%D6%BC%D7%A8%D7%99%D7%99%D7%98%D7%9F/"><span class="hw">צעשפּרייטן</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%A9%D7%A4%D6%BC%D7%A8%D7%99%D7%A0%D7%92%D7%A2%D7%9F/"><span class="hw">צעשפּרינגען</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A2%D7%A9%D7%A8%D7%95%D7%99%D7%A4%D6%BF%D7%9F/"><span class="hw">צעשרויפֿן</span><span class="gl">‘unscrew’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A4%D6%BF%D7%95%D7%9F/"><span class="hw">צפֿון</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A4%D6%BF%D7%A8%D7%93%D7%A2/"><span class="hw">צפֿרדע</span><span class="gl">‘frog’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A8%D7%94/"><span class="hw">צרה</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A8%D7%A2%D7%AA/"><span class="hw">צרעת</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%A8%D7%A4%D6%BF%D7%AA/"><span class="hw">צרפֿת</span><span class="gl">‘Tsarfat (Jewish name for Northern France in the Middle Ages)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%B2%D6%B7%D7%92/"><span class="hw">צײַג</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%B2%D6%B7%D7%92%D7%9F/"><span class="hw">צײַגן</span><span class="gl">‘to show’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%B2%D6%B7%D7%92%D7%A2%D7%A8/"><span class="hw">צײַגער</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%B2%D6%B7%D7%92%D7%A4%D6%BF%D7%99%D7%A0%D7%92%D7%A2%D7%A8/"><span class="hw">צײַגפֿינגער</span><span class="gl">‘index finger’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%B2%D6%B7%D7%98/"><span class="hw">צײַט</span><span class="gl">‘time; since (conjunction)’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%B2%D6%B7%D7%98%D7%95%D7%95%D7%B2%D6%B7%D7%9C%D7%99%D7%A7/"><span class="hw">צײַטווײַליק</span><span class="gl">‘temporary’</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%B2%D6%B7%D7%98%D7%95%D7%A0%D7%92/"><span class="hw">צײַטונג</span></a></li>
+<li><a href="/Yiddish-Dialect-Dictionary/entry/%D7%A6%D7%B2%D6%B7%D7%98%D7%99%D7%A7%D7%9F/"><span class="hw">צײַטיקן</span><span class="gl">‘to ripen’</span></a></li>
+
+</ul>
+
+</main>
+<footer>
+  Yiddish Dialect Dictionary &nbsp;·&nbsp; 10,034 entries
+</footer>
+<script>const BASE_URL = '/Yiddish-Dialect-Dictionary';</script>
+<script>
+(function() {
+  let index = null;
+  const input = document.getElementById('search-input');
+  const results = document.getElementById('search-results');
+  if (!input) return;
+
+  async function loadIndex() {
+    if (index) return;
+    try {
+      const r = await fetch(BASE_URL + '/search-index.json');
+      index = await r.json();
+    } catch(e) { console.error('Could not load search index', e); }
+  }
+
+  function search(q) {
+    q = q.trim().toLowerCase();
+    if (!q || !index) return [];
+    return index
+      .filter(e =>
+        e.hw.toLowerCase().includes(q) ||
+        (e.gl && e.gl.toLowerCase().includes(q))
+      )
+      .slice(0, 20);
+  }
+
+  function renderResults(items, q) {
+    if (!items.length) {
+      results.innerHTML = '<div class="search-no-results">No results found.</div>';
+      results.classList.add('show');
+      return;
+    }
+    results.innerHTML = items.map(e => `
+      <a class="search-result-item" href="${e.url}">
+        <span class="search-result-hw">${e.hw}</span>
+        ${e.gl ? `<span class="search-result-gloss">'${e.gl}'</span>` : ''}
+      </a>`).join('');
+    results.classList.add('show');
+  }
+
+  let timer;
+  input.addEventListener('input', async () => {
+    clearTimeout(timer);
+    const q = input.value;
+    if (!q.trim()) { results.classList.remove('show'); return; }
+    await loadIndex();
+    timer = setTimeout(() => renderResults(search(q), q), 120);
+  });
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.header-search')) results.classList.remove('show');
+  });
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { results.classList.remove('show'); input.blur(); }
+  });
+})();
+</script>
+</body>
+</html>

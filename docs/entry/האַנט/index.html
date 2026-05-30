@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="yi" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>האַנט – Yiddish Dialect Dictionary</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #faf9f6;
+  --surface: #ffffff;
+  --border: #e0ddd5;
+  --text: #1c1b18;
+  --muted: #6b6860;
+  --accent: #1a4480;
+  --accent-light: #e8eef7;
+  --link: #1a4480;
+  --link-hover: #0d2a52;
+  --hebrew-font: 'Ezra SIL', 'SBL Hebrew', 'David', 'Frank Ruehl CLM', serif;
+  --body-font: Georgia, 'Times New Roman', serif;
+  --ui-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+body {
+  font-family: var(--body-font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  font-size: 16px;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--link-hover); text-decoration: underline; }
+
+/* ── Header ── */
+.site-header {
+  background: var(--accent);
+  color: white;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0,0,0,.25);
+}
+.site-header a { color: white; font-family: var(--ui-font); font-size: .9rem; }
+.site-header a.home { font-weight: 700; font-size: 1rem; white-space: nowrap; }
+.site-header a:hover { text-decoration: underline; }
+
+/* search in header */
+.header-search {
+  flex: 1;
+  max-width: 480px;
+  position: relative;
+}
+.header-search input {
+  width: 100%;
+  padding: .45rem .9rem .45rem 2.2rem;
+  border: none;
+  border-radius: 4px;
+  font-family: var(--ui-font);
+  font-size: .95rem;
+  background: rgba(255,255,255,.15);
+  color: white;
+  outline: none;
+}
+.header-search input::placeholder { color: rgba(255,255,255,.65); }
+.header-search input:focus { background: rgba(255,255,255,.25); }
+.header-search .icon {
+  position: absolute;
+  left: .6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: .7;
+  pointer-events: none;
+}
+.search-results {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.15);
+  max-height: 360px;
+  overflow-y: auto;
+  z-index: 200;
+}
+.search-results.show { display: block; }
+.search-result-item {
+  display: block;
+  padding: .6rem 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.search-result-item:last-child { border-bottom: none; }
+.search-result-item:hover { background: var(--accent-light); }
+.search-result-hw {
+  font-size: 1.1rem;
+  font-family: var(--hebrew-font);
+  direction: rtl;
+  display: inline-block;
+  margin-right: .5rem;
+}
+.search-result-gloss { color: var(--muted); font-style: italic; }
+.search-no-results { padding: .8rem 1rem; color: var(--muted); font-family: var(--ui-font); }
+
+/* ── Layout ── */
+.page-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+/* ── Alphabet nav (homepage + letter pages) ── */
+.alphabet-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin: 1.5rem 0;
+}
+.alphabet-nav a {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: .5rem .75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  text-decoration: none;
+  min-width: 52px;
+  transition: background .15s, border-color .15s;
+}
+.alphabet-nav a:hover, .alphabet-nav a.active {
+  background: var(--accent-light);
+  border-color: var(--accent);
+}
+.alphabet-nav a .heb {
+  font-family: var(--hebrew-font);
+  font-size: 1.4rem;
+  line-height: 1;
+  direction: rtl;
+}
+.alphabet-nav a .translit {
+  font-family: var(--ui-font);
+  font-size: .65rem;
+  color: var(--muted);
+  margin-top: .2rem;
+}
+
+/* ── Homepage ── */
+.hero {
+  text-align: center;
+  padding: 2.5rem 0 1.5rem;
+}
+.hero h1 {
+  font-size: 2.2rem;
+  color: var(--accent);
+  margin-bottom: .5rem;
+}
+.hero p {
+  color: var(--muted);
+  font-family: var(--ui-font);
+  font-size: 1rem;
+}
+.section-label {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 2rem 0 .75rem;
+}
+
+/* ── Letter page ── */
+.letter-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: .75rem;
+}
+.letter-header .heb-big {
+  font-family: var(--hebrew-font);
+  font-size: 3rem;
+  direction: rtl;
+  line-height: 1;
+  color: var(--accent);
+}
+.letter-header .info {
+  font-family: var(--ui-font);
+}
+.letter-header .translit-big { font-size: 1.4rem; font-weight: 600; }
+.letter-header .count { color: var(--muted); font-size: .9rem; }
+
+.entry-list {
+  list-style: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface);
+}
+.entry-list li {
+  border-bottom: 1px solid var(--border);
+}
+.entry-list li:last-child { border-bottom: none; }
+.entry-list a {
+  display: flex;
+  align-items: baseline;
+  gap: .75rem;
+  padding: .65rem 1rem;
+  color: var(--text);
+  text-decoration: none;
+}
+.entry-list a:hover { background: var(--accent-light); }
+.entry-list .hw {
+  font-family: var(--hebrew-font);
+  font-size: 1.15rem;
+  direction: rtl;
+  flex-shrink: 0;
+}
+.entry-list .gl {
+  font-style: italic;
+  color: var(--muted);
+  font-size: .9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Entry page ── */
+.entry-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--accent);
+}
+.entry-headword {
+  font-family: var(--hebrew-font);
+  font-size: 2.6rem;
+  direction: rtl;
+  line-height: 1.2;
+  color: var(--text);
+}
+.entry-gloss {
+  font-style: italic;
+  color: var(--muted);
+  font-size: 1.05rem;
+  margin-top: .3rem;
+}
+
+.entry-body h2 {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 1.8rem 0 .6rem;
+  padding-bottom: .3rem;
+  border-bottom: 1px solid var(--border);
+}
+.entry-body h3 {
+  font-family: var(--ui-font);
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin: 1rem 0 .4rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.entry-body p {
+  margin-bottom: .8rem;
+  line-height: 1.7;
+}
+.entry-body ul, .entry-body ol {
+  margin: .5rem 0 .8rem 1.5rem;
+}
+.entry-body li { margin-bottom: .3rem; }
+.entry-body audio {
+  display: block;
+  margin: .75rem 0;
+  max-width: 100%;
+}
+.entry-body img {
+  max-width: 100%;
+  height: auto;
+  margin: .75rem 0;
+  border-radius: 4px;
+}
+.entry-body blockquote {
+  border-left: 3px solid var(--border);
+  padding-left: 1rem;
+  color: var(--muted);
+  margin: .5rem 0;
+}
+
+/* back/nav bar above entry */
+.entry-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.entry-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .3rem .7rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--text);
+}
+.entry-nav a:hover {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  text-decoration: none;
+}
+
+/* ── Footer ── */
+footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  margin-top: 3rem;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .hero h1 { font-size: 1.6rem; }
+  .alphabet-nav a { min-width: 44px; padding: .4rem .55rem; }
+  .alphabet-nav a .heb { font-size: 1.2rem; }
+  .entry-headword { font-size: 2rem; }
+  .header-search { max-width: none; }
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <a href="/Yiddish-Dialect-Dictionary/" class="home">Yiddish Dialect Dictionary</a>
+  <div class="header-search">
+    <svg class="icon" width="16" height="16" fill="white" viewBox="0 0 16 16">
+      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.868-3.834zm-5.242 1.406a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+    </svg>
+    <input type="search" id="search-input" placeholder="Search entries…" autocomplete="off">
+    <div id="search-results" class="search-results"></div>
+  </div>
+</header>
+<main class="page-wrap">
+
+<div class="entry-nav">
+  <a href="/Yiddish-Dialect-Dictionary/letter/hey/">← Hey</a>
+  <a href="/Yiddish-Dialect-Dictionary/">Home</a>
+</div>
+<div class="entry-header">
+  <div class="entry-headword" dir="rtl">האַנט</div>
+  <div class="entry-gloss">‘hand’</div>
+</div>
+<div class="entry-body" dir="auto">
+<p>האַנט<br />
+הענט<br />
+די <br />
+'hand'</p>
+<h2>ETYMOLOGY</h2>
+<p 466_="466," 467="467" Fliciński="Fliciński">Got. handus, ON hǫnd, OE hond, OS hand, OHG hant; from PGmc ✱handu-; from PIE ✱(k̂)ont-ú-, from the root ✱k̂ent- 'to stab' (?)<br />
+{EWA 4: 814; Feist 244; Kroonen 2013: 207}<br />
+A11<br />
+הענטעלעך<br />
+Vowel 21, Proto-Yiddish ✱ɛ<br />
+{Katz 1982: 58}<br />
+The phrase פֿאַר דער האַנט 'by the hand' appears to be a calque of Polish za rękę.<br />
+The idiom אַראָפּנעמען ווי מיט דער האַנט 'to remove as if with one's hand (i.e., quickly and easily)' may to be a calque of (or inspired by) Polish jak ręką odjął 'as if one removed it by hand'.<br />
+{Fliciński 133}<br />
+The idiom ווי אויף דער האַנט 'as if on one's hand (i.e., clear, obvious)' may be a calque of Polish jak na dłoni (and cf. German auf der Hand liegen 'to be obvious').<br />
+The idiom געבן מיט אַ ברייטער האַנט 'to give generously' may be a calque of Polish dać hojną ręką.<br />
+{Fliciński 75}<br />
+The idiom געבן אַ פֿרײַע האַנט 'to give a free hand (freedom of action)' may be a calque of Polish dać komuś wolną rękę. Similarly, האָבן אַ פֿרײַע האַנט 'to have a free hand' and Polish mieć wolną rękę.<br />
+{Fliciński 78; 202}<br />
+The idiom האָבן צוויי לינקע הענט 'to have two left hands (i.e., be clumsy)' appears to be a calque of Polish mieć dwie lewe ręce (also compare Belarusian мець дзьве левыя рукі), which may itself be a calque of French avoir deux mains gauches. <br />
+{Fliciński 183}<br />
+The idiom אויף די פֿינגער פֿון איין האַנט אויסצוציילן 'can be counted on the fingers of one hand (i.e., few)' may be a calque of Polish można/móc policzyć coś/kogoś na palcach jednej ręki.<br />
+{Fliciński 208}<br />
+The idiom עס האָט נישט קיין הענט און נישט קיין פֿיס 'it has neither hands nor feet (i.e., badly put together)' appears to be a calque of Polish nie mieć rąk ani nóg.<br />
+{Fliciński 235, 237}<br />
+The idiom טראָגן אויף די הענט 'carry on the hands (i.e., to celebrate, honor)' appears to be a calque of Polish nosić kogoś na rękach. Compare also Ukrainian носити на руках; Belarusian насіць на руках; Russian носить на руках [?]. <br />
+{Fliciński 250}<br />
+The idiom רעכטע האַנט 'right hand (i.e., close subordinate, right-hand man)' appears to be a calque of Polish prawa ręka.<br />
+{Fliciński 322}<br />
+The idiom זיצן מיט פֿאַרלייגטע הענט 'to sit with one's hands folded (i.e., to sit idly by)' appears to be a calque of Polish siedzieć z założonymi rękami.<br />
+{Fliciński 370}<br />
+The idiom אָפּוואַשן זיך די הענט פֿון 'to wash one's hands of (i.e., to take no responsibility for)' might be a calque of Polish umywać / umyć ręce.<br />
+{Fliciński 437}<br />
+The idiom אַרײַפֿאַלן צו עמעצן אין די הענט 'to fall into someone's hands (i.e., come into possession)' appears to be a calque of Polish wpaść / wpadać komuś w ręce.<br /></p>
+<p><img alt="" src="https://archive.org/download/shprakhatlas/ShprakhatlasKarte73-Optimized.jpg" /><br />
+{Yiddish Language Atlas of the Soviet Union 1931, map 73}<br />
+<img alt="" src="https://archive.org/download/Yiddish-Dialect-Maps/Herzog5-68-70-HantHajntHotHojtShlofnShtrofn-LengthVsNon-lengthAreas-199.jpg" /></p>
+<h2>WESTERN</h2>
+<h3>Old Literary Yiddish (ca. 1100-1800)</h3>
+<p 1696_="1696," 308="308" מעשׂה="מעשׂה" ניקלסבורג="ניקלסבורג">אזו האט ער דען שטיין אויף גיהובין מיט אלי צווייא הענד<br />
+'so he lifted up the stone with both his hands'<br /></p>
+<p>Wünsch dir in a Hand un thu dir in die andere, wos ist mehr.<br />
+{Maißim un Schnokes vun e Handelewos, LEIPZIG 1845: 42}<br />
+-   Gebenscht die Händ die sich elan nemen. {43}<br />
+-   Geb' n den Finger will er die ganze Hand. {45}<br />
+-   Bind mir die Händ un warf mich unter de Meine. {45}<br />
+-   An Hand wascht die andere. {46}</p>
+<p>Das Kol von Jáakev und die Händ' von Eesev! <br />
+{FRANKFURT, Tendlau №10}<br />
+-   Die Schmue hot nit Hand un nit Fuß! {№84}</p>
+<h3>Holland (Netherlands)</h3>
+<p>hend (pl.) [HOLLAND, Beem, Jerosche]<br />
+-   Ledege hend bekleksen alle wend. 'Empty hands daub all walls.' {Jerosche №334}<br />
+Bernst. 72 - Lejdige hend machen kalje (= kapot) die Wend. <br />
+Megillas Winz. 1614 has the expression: "Mit leidiger hend" [DATIVE SINGULAR?]</p>
+<h3>Alsace (France)</h3>
+<p>hɛnt 'hands'  {ALSACE, Zuckerman 1969, 44}<br />
+-   tʰɛnt (&lt; di hɛnt) 'the hands' {40}</p>
+<p>əʁ- hɔd šdaʁ-gi hɛnd ער האָט שטאַרקע הענט {ALSACE, 47075 Mulhouse, 026-060}<br />
+- ɩn sajni šdarɩ-gi hɛnd אין זײַנע שטאַרקע הענט {q027-010}<br />
+- di ɔfəni hand די אָפֿענע האַנט 'palm of hand' {027-050}</p>
+<h3>Oyberland (West Transcarpathian)</h3>
+<p>də hant {WTCP, Dunajská Streda, 47179}<br />
+-   zæj hand ɩ štark זײַן האַנט איז שטאַרק<br />
+-   štarkʲə hand שטאַרקע האַנט<br />
+-   hɛntʲləx הענטלעך {ɴᴏᴛᴇ: מיט ט}</p>
+<ul>
+<li>deˑ jɩ́dənə hɔt gɔ́ldənə hɛntlɔx די ייִדענע האָט גאָלדענע הענטלעך</li>
+<li>ə broˑxə in iˑə hand אַ ברכה אין איר האַנט</li>
+<li>ɩx vɩl mɔ də hɛnd vašn איך וויל מיר די הענט וואַשן</li>
+<li>doˑz gɛˑt mα əzɔj lajᵊxt yntə də hand ɔviˑ ə hoα a˰uz dø milᵊx דאָס גייט מיר אַזוי לײַכט אונטער די האַנט ווי אַ האָר אויס די מילך </li>
+<li>doˑz hɔm də gabóˑjəm gʲəhalt͡n̩ in də hɛnt דאָס האָבן די גבאָים געהאַלטן אין די הענט</li>
+</ul>
+<p>də hant {WTCP, Vác, 47197}<br />
+-   də hant iz ə štarkʲə די האַנט איז אַ שטאַרקע, איז שטאַרק<br />
+-   mɩt štarkʲə hɛnt מיט שטאַרקע הענט<br />
+-   ɛʀ/r hɔ́t štarkʲə hɛnt ער האָט שטאַרקע הענט<br />
+-   ɩx hɛt mɩr gɛˑrn  dɩ hant õˑŋgəvašn איך העט מיר גערן די האַנט אָפּגעוואַשן<br />
+-   probíˑr cy róˑtn vos ixɔ́b in dər hant פּראָביר צו ראָטן וואָס איך האָב אין דער האַנט</p>
+<p>də hant ɩz͜ štark די האַנט איז שטאַרק {WTCP, Berettyó-Újfalu, 47212}<br />
+-   štarkʲə hɛnt hɔt ər שטאַרקע הענט האָט ער<br />
+-   tɔpši-tɔpši-hɛntalax טאָפּשי טאָפּשי הענטעלעך (children's song)<br />
+-   prəbiˑr áˑjncytrɛfɱ voˑs ɩx hɔb in də hant פּראָביר אײַנצוטרעפֿן וואָס איך האָב אין די האַנט</p>
+<h2>CENTRAL</h2>
+<ul>
+<li>hentl הענטל</li>
+<li>hentlec, hentlex הענטלעך</li>
+</ul>
+<h3>Unterland (East Transcarpathian)</h3>
+<p>hant 'Hand' {ETCP, Beranek 1941}</p>
+<p>dejs ɩz ə hant דעיס איז אַ האַנט {ETCP, Sîg Felső Szek, 47223}<br />
+-   dɩ hant ɩs štark די האַנט איז שטאַרק<br />
+-   er hɔt štarkʲə hɛnt ער האָט שטאַרקע הענט<br />
+-   gəvɛlt upvašn də hɛnt געוועלט אָפּוואַשן די הענט<br />
+-   ruət vuəs əx hɔb ɩn hant ראָט וואָס איך האָב אין האַנט 'guess what I have in my hand'</p>
+<p>filə hant מיט אַ פֿולע האַנט {ETCP, near Sighet, 47228}</p>
+<p>dɪ hant {ETCP, Mukachevo, 48226}<br />
+-   er hot a štarkə hant ער האָט אַ שטאַרקע האַנט</p>
+<p>a štarkʲə hant אַ שטאַרקע האַמנט {ETCP, Nyzhnya Apsha, 48233}<br />
+-   ɩx vɩl məx dɩ hɛnt ópvašn איך וויל מיך די הענט אָפּוואַשן</p>
+<p>hant {POLAND, Wolbrom, 50196}<br />
+-   ɩx víl mɛ vášʲn̩ də hɛ́nt איך וויל מיר וואַשן די הענט</p>
+<p>m-ɔt-ᵻnts ɔf-dɛ hant arãɲgiɛbrɛɲk't' ᵻn dᵻ baːn arã מע האָט אונדז אויף דער האַנט אַרײַנגעברענגט אין די באַן אַרײַן {Warsaw, Geller 2001: 193}<br />
+a hant {POLAND, Warsaw, 52211}<br />
+-   erot štarkɩ hent ער האָט שטאַרקע הענט<br />
+-   xvɩl ub=vašn dɩ hent איך וויל אָפּוואַשן די הענט<br />
+-   priˑf cə trefn vus ɩx ob ɩn də hant פּרוּוו צו טרעפֿן וואָס איך האָב אין די האַנט</p>
+<p><audio controls src="https://archive.org/download/MiriamHoffman/Miriam%20Hoffman%2025%20August%202018%20-%20di%20toyte%20hant.mp3"></audio><br />
+AUDIO Miriam Hoffman [parents from Łódź, POLAND] 25 August 2018<br />
+hant<br />
+די טויטע האַנט</p>
+<h2>HASIDIC</h2>
+<h3>AMERICA</h3>
+<p>ɔf dan ˈajgənə hant אויף דײַן אייגענע האַנט<br />
+gɔt zɔl dɩx hitn̩ far jɩdɩšə maːlər ɩn far gɔjɩšə hɛnt גאָט זאָל דיך היטן פֿאַר ייִדישע מײַלער און פֿאַר גוייִשע הענט<br />
+vɛn mɛ hajpt hɛnt, hajpt mɛn fiˑs ווען מע הייבט הענט, הייבט מען פֿיס (i.e., run away)</p>
+<h3>EUROPE</h3>
+<p>vɛn huʀ gajt vaksn̩ ɔf maˑnə hɛnt ווען האָר גייט וואַקסן אויף מײַנע הענט (i.e., never) [Vienna, Eidel Malowicki]</p>
+<h2>NORTHEASTERN</h2>
+<p>ענטל ~ הענטל [סוּוואַלק]<br />
+{מאַרק, "אונדזער ליטווישער ייִדיש" (1951): 444}<br />
+ווען אַ קינד האָט געוואָלט אַ סטראַשע טאָן, אַז ער קען אויך דערלאַנגען, האָט ער געזאָגט: "מײַנע הענט, מיינסטו, ליגן אין קימפּעט?" {ז' 461}</p>
+<h3>Lithuania</h3>
+<p>hant, ɦant {LITHUANIA, Vilnius, 54257}<br />
+-   afɱ hant<br />
+-   pruf tʀɛfɱ vɔs̀ ixɔ́b ɩn ɦánt פּרוּוו טרעפֿן וואָס איך האָב אין האַנט</p>
+<p>𝐈𝐒𝐑𝐀𝐄𝐋𝐈 𝐇𝐀𝐑𝐄𝐃𝐈 [Dalit Assouline]<br />
+ant, ent<br />
+סע שטײט אַז בתיה האָט אויסגעשטרעקט איר האַנט, און איר האַנט אי' געװאָרן לאַנג און זי אי' געװען װײַט פֿון די תּיבֿה, איר האַנט אי' געװאָרן לאַנג, "ותשלח את אמתה", און זי איז אָנגעקומען צו דעם קינד.<br />
+si šteyt, az bátyo ot oysgeštrekt ir ant un ir ant i givorn lang, un zi i given vayt fun di téyve, ir ant i givorn lang, vatíšlax es amóso - un zi iz ongikumen cu dem kind.<br />
+ צװײ הענט, מיט צען פֿינגער<br />
+cvey ent, mit cen finger</p>
+<h2>SOUTHEASTERN</h2>
+<p>Aweknemin di Hant fin im Harts(n). אַוועקנעמען די האַנט פֿונעם האַרץ 'Freigebig werden. Ebenso Beil 6, 125. 362. Dagegen bei MM'S in der Bedeutung: sich offen, freimütig aussprechen.' {EAST GALICIA, Brody, Landau 1923, №47}</p>
+<p>dɩ hant {ROMANIA, Brăila, 45273}<br />
+-   zaːn hɔnt ɩz a štarke זײַן האַנט איז אַ שטאַרקע<br />
+-   ær ɔ́t štarkʲɩ hent ער האָט שטאַרקע הענט<br />
+-   ex vɩl mər ŭvašn dɩ hent איך וויל מיר אָפּוואַשן די הענט</p>
+<p><audio controls src="https://archive.org/download/MangerLexicon/Manger%20-%20A%20Lid%20Vegn%20Eliyohu%20Hanovi%20-%20in%20der%20hant%20fun%20ayedn%20yid.mp3"></audio><br />
+AUDIO Itzik Manger [Czernowitz / Chernivtsi, BUKOVINA]<br />
+hant<br />
+אין דער האַנט פֿון אַיעדן ייִד<br />
+<audio controls src="https://archive.org/download/MangerLexicon/Manger%20-%20Der%20Shnayder-gezeln%20Note%20Manger%20-%20un%20shrayb%20es%20teykef%20unter%20mit%20dayne%20eygene%20hent.mp3"></audio><br />
+hent<br />
+און שרײַב עס תּיכּף אונטער מיט דײַנע אייגענע הענט</p>
+</div>
+
+</main>
+<footer>
+  Yiddish Dialect Dictionary &nbsp;·&nbsp; 10,034 entries
+</footer>
+<script>const BASE_URL = '/Yiddish-Dialect-Dictionary';</script>
+<script>
+(function() {
+  let index = null;
+  const input = document.getElementById('search-input');
+  const results = document.getElementById('search-results');
+  if (!input) return;
+
+  async function loadIndex() {
+    if (index) return;
+    try {
+      const r = await fetch(BASE_URL + '/search-index.json');
+      index = await r.json();
+    } catch(e) { console.error('Could not load search index', e); }
+  }
+
+  function search(q) {
+    q = q.trim().toLowerCase();
+    if (!q || !index) return [];
+    return index
+      .filter(e =>
+        e.hw.toLowerCase().includes(q) ||
+        (e.gl && e.gl.toLowerCase().includes(q))
+      )
+      .slice(0, 20);
+  }
+
+  function renderResults(items, q) {
+    if (!items.length) {
+      results.innerHTML = '<div class="search-no-results">No results found.</div>';
+      results.classList.add('show');
+      return;
+    }
+    results.innerHTML = items.map(e => `
+      <a class="search-result-item" href="${e.url}">
+        <span class="search-result-hw">${e.hw}</span>
+        ${e.gl ? `<span class="search-result-gloss">'${e.gl}'</span>` : ''}
+      </a>`).join('');
+    results.classList.add('show');
+  }
+
+  let timer;
+  input.addEventListener('input', async () => {
+    clearTimeout(timer);
+    const q = input.value;
+    if (!q.trim()) { results.classList.remove('show'); return; }
+    await loadIndex();
+    timer = setTimeout(() => renderResults(search(q), q), 120);
+  });
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.header-search')) results.classList.remove('show');
+  });
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { results.classList.remove('show'); input.blur(); }
+  });
+})();
+</script>
+</body>
+</html>

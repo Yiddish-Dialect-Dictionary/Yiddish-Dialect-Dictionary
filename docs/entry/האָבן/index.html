@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="yi" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>האָבן – Yiddish Dialect Dictionary</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #faf9f6;
+  --surface: #ffffff;
+  --border: #e0ddd5;
+  --text: #1c1b18;
+  --muted: #6b6860;
+  --accent: #1a4480;
+  --accent-light: #e8eef7;
+  --link: #1a4480;
+  --link-hover: #0d2a52;
+  --hebrew-font: 'Ezra SIL', 'SBL Hebrew', 'David', 'Frank Ruehl CLM', serif;
+  --body-font: Georgia, 'Times New Roman', serif;
+  --ui-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+body {
+  font-family: var(--body-font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  font-size: 16px;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--link-hover); text-decoration: underline; }
+
+/* ── Header ── */
+.site-header {
+  background: var(--accent);
+  color: white;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0,0,0,.25);
+}
+.site-header a { color: white; font-family: var(--ui-font); font-size: .9rem; }
+.site-header a.home { font-weight: 700; font-size: 1rem; white-space: nowrap; }
+.site-header a:hover { text-decoration: underline; }
+
+/* search in header */
+.header-search {
+  flex: 1;
+  max-width: 480px;
+  position: relative;
+}
+.header-search input {
+  width: 100%;
+  padding: .45rem .9rem .45rem 2.2rem;
+  border: none;
+  border-radius: 4px;
+  font-family: var(--ui-font);
+  font-size: .95rem;
+  background: rgba(255,255,255,.15);
+  color: white;
+  outline: none;
+}
+.header-search input::placeholder { color: rgba(255,255,255,.65); }
+.header-search input:focus { background: rgba(255,255,255,.25); }
+.header-search .icon {
+  position: absolute;
+  left: .6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: .7;
+  pointer-events: none;
+}
+.search-results {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.15);
+  max-height: 360px;
+  overflow-y: auto;
+  z-index: 200;
+}
+.search-results.show { display: block; }
+.search-result-item {
+  display: block;
+  padding: .6rem 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.search-result-item:last-child { border-bottom: none; }
+.search-result-item:hover { background: var(--accent-light); }
+.search-result-hw {
+  font-size: 1.1rem;
+  font-family: var(--hebrew-font);
+  direction: rtl;
+  display: inline-block;
+  margin-right: .5rem;
+}
+.search-result-gloss { color: var(--muted); font-style: italic; }
+.search-no-results { padding: .8rem 1rem; color: var(--muted); font-family: var(--ui-font); }
+
+/* ── Layout ── */
+.page-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+/* ── Alphabet nav (homepage + letter pages) ── */
+.alphabet-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin: 1.5rem 0;
+}
+.alphabet-nav a {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: .5rem .75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  text-decoration: none;
+  min-width: 52px;
+  transition: background .15s, border-color .15s;
+}
+.alphabet-nav a:hover, .alphabet-nav a.active {
+  background: var(--accent-light);
+  border-color: var(--accent);
+}
+.alphabet-nav a .heb {
+  font-family: var(--hebrew-font);
+  font-size: 1.4rem;
+  line-height: 1;
+  direction: rtl;
+}
+.alphabet-nav a .translit {
+  font-family: var(--ui-font);
+  font-size: .65rem;
+  color: var(--muted);
+  margin-top: .2rem;
+}
+
+/* ── Homepage ── */
+.hero {
+  text-align: center;
+  padding: 2.5rem 0 1.5rem;
+}
+.hero h1 {
+  font-size: 2.2rem;
+  color: var(--accent);
+  margin-bottom: .5rem;
+}
+.hero p {
+  color: var(--muted);
+  font-family: var(--ui-font);
+  font-size: 1rem;
+}
+.section-label {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 2rem 0 .75rem;
+}
+
+/* ── Letter page ── */
+.letter-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: .75rem;
+}
+.letter-header .heb-big {
+  font-family: var(--hebrew-font);
+  font-size: 3rem;
+  direction: rtl;
+  line-height: 1;
+  color: var(--accent);
+}
+.letter-header .info {
+  font-family: var(--ui-font);
+}
+.letter-header .translit-big { font-size: 1.4rem; font-weight: 600; }
+.letter-header .count { color: var(--muted); font-size: .9rem; }
+
+.entry-list {
+  list-style: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface);
+}
+.entry-list li {
+  border-bottom: 1px solid var(--border);
+}
+.entry-list li:last-child { border-bottom: none; }
+.entry-list a {
+  display: flex;
+  align-items: baseline;
+  gap: .75rem;
+  padding: .65rem 1rem;
+  color: var(--text);
+  text-decoration: none;
+}
+.entry-list a:hover { background: var(--accent-light); }
+.entry-list .hw {
+  font-family: var(--hebrew-font);
+  font-size: 1.15rem;
+  direction: rtl;
+  flex-shrink: 0;
+}
+.entry-list .gl {
+  font-style: italic;
+  color: var(--muted);
+  font-size: .9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Entry page ── */
+.entry-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--accent);
+}
+.entry-headword {
+  font-family: var(--hebrew-font);
+  font-size: 2.6rem;
+  direction: rtl;
+  line-height: 1.2;
+  color: var(--text);
+}
+.entry-gloss {
+  font-style: italic;
+  color: var(--muted);
+  font-size: 1.05rem;
+  margin-top: .3rem;
+}
+
+.entry-body h2 {
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 1.8rem 0 .6rem;
+  padding-bottom: .3rem;
+  border-bottom: 1px solid var(--border);
+}
+.entry-body h3 {
+  font-family: var(--ui-font);
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin: 1rem 0 .4rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.entry-body p {
+  margin-bottom: .8rem;
+  line-height: 1.7;
+}
+.entry-body ul, .entry-body ol {
+  margin: .5rem 0 .8rem 1.5rem;
+}
+.entry-body li { margin-bottom: .3rem; }
+.entry-body audio {
+  display: block;
+  margin: .75rem 0;
+  max-width: 100%;
+}
+.entry-body img {
+  max-width: 100%;
+  height: auto;
+  margin: .75rem 0;
+  border-radius: 4px;
+}
+.entry-body blockquote {
+  border-left: 3px solid var(--border);
+  padding-left: 1rem;
+  color: var(--muted);
+  margin: .5rem 0;
+}
+
+/* back/nav bar above entry */
+.entry-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  font-family: var(--ui-font);
+  font-size: .9rem;
+}
+.entry-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .3rem .7rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--text);
+}
+.entry-nav a:hover {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  text-decoration: none;
+}
+
+/* ── Footer ── */
+footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  font-family: var(--ui-font);
+  font-size: .8rem;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  margin-top: 3rem;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .hero h1 { font-size: 1.6rem; }
+  .alphabet-nav a { min-width: 44px; padding: .4rem .55rem; }
+  .alphabet-nav a .heb { font-size: 1.2rem; }
+  .entry-headword { font-size: 2rem; }
+  .header-search { max-width: none; }
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <a href="/Yiddish-Dialect-Dictionary/" class="home">Yiddish Dialect Dictionary</a>
+  <div class="header-search">
+    <svg class="icon" width="16" height="16" fill="white" viewBox="0 0 16 16">
+      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.868-3.834zm-5.242 1.406a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+    </svg>
+    <input type="search" id="search-input" placeholder="Search entries…" autocomplete="off">
+    <div id="search-results" class="search-results"></div>
+  </div>
+</header>
+<main class="page-wrap">
+
+<div class="entry-nav">
+  <a href="/Yiddish-Dialect-Dictionary/letter/hey/">← Hey</a>
+  <a href="/Yiddish-Dialect-Dictionary/">Home</a>
+</div>
+<div class="entry-header">
+  <div class="entry-headword" dir="rtl">האָבן</div>
+  <div class="entry-gloss">‘to have’</div>
+</div>
+<div class="entry-body" dir="auto">
+<p>האָבן<br />
+געהאַט<br />
+'to have'</p>
+<p><img alt="" src="https://archive.org/download/Yiddish-Dialect-Maps/Herzog4-76-78-IzOrHotGeshlofnGegagenGezesn-148.jpg" /><br />
+<img alt="" src="https://archive.org/download/Yiddish-Dialect-Maps/Herzog5-68-70-HantHajntHotHojtShlofnShtrofn-LengthVsNon-lengthAreas-199.jpg" /></p>
+<p>MHG hân<br />
+hobn<br />
+A13</p>
+<p>NEY /hobm/<br />
+CY /hubm/</p>
+<h2>WESTERN</h2>
+<p 1597_="1597," 2="2" Cracow="Cracow" Eyn="Eyn" groys="groys" lid="lid" ritershaft="ritershaft" sheyn="sheyn" un="un" אונ_="אונ'" איין="איין" גרוש="גרוש" ליד="ליד" ריטר="ריטר" שאפֿט_="שאפֿט," שוין="שוין">איך הוב זו פֿיל ערליטן<br />
+Approximate pronunciation /hob/<br /></p>
+<p>hob, hôbn {Schnitzler, Prager Judendeutsch, 18-19}<br />
+-   hot האָט<br />
+habn, hobn, hab'n; hob; houstu; hestu 'hättest du', ha'n (3rd person pl.) {Sprach-Meister 1742}<br />
+-   Ich hob; hostu האָסטו, hosts האָסט עס; </p>
+<p>hobben {EAST FRIESLAND, Aurich, Schulenrufen 1902}</p>
+<h3>Holland (Netherlands)</h3>
+<p>hobben; hob; hot; gehot [HOLLAND, Beem, Jerosche]<br />
+-   Das hob isch (stress on isch). 'That must happen to me right now.' {Jerosche №350}<br />
+-   Was isch hob, hob isch. 'Blessed are those who possess.' {Jerosche №351}<br />
+-    Gehot is 'n arm man. '"Had" is a poor man. For someone who talks about the past tense, about what he has had. What one used to have does not help any more.' {Jerosche №236}</p>
+<h3>Alsace (France)</h3>
+<p>hɛn ɩm ˈvasəʁ- gəbaːdə זיי האָבן אין וואַסער געבאָדן {ALSACE, 47075 Mulhouse, 004-060}<br />
+- vɛn s gəbroɣ-ə hɔd kɛd ɩš əm besəʁ- vɔrə ווען עס געבראָכן האָט געהאַט, קעד איז אים בעסער וואָרן 'when the child had vomited, it calmed down' {q035-030}<br />
+- sɩ hɔd gaːr ka glaːdəʁ- kɛd זי האָט גאָר קיין קליידער געהאַט {q038-140}<br />
+-</p>
+<h3>Switzerland</h3>
+<p>am buːrəm hen ali midənand raxmoːnəs אַם פּורים האָבן אַלע מיטענאַנד רחתנות {Endingen, Isaak Guggenheim-Bloch, Fleischer 2005:74}<br />
+si hen fərʃtandə ts leːbə un ts gənisə זיי האָבן פֿאַרשטאַנען צו לעבן און צו געניסן {Endingen, Gustav Dreifuss, Fleischer 2005:83}<br />
+hõũ {SWITZERLAND, Fleischer 2005}<br />
+-   hemər האָבן מיר<br />
+-   i(ː)ç ha(b) איך האָב; (third person pl.) hen(d); ghet</p>
+<h3>Czechia</h3>
+<p>gəhat געהאַט {CZECHIA, Beranek 1936: 66}</p>
+<p>hoᵘt האָט {BURGENLAND, Stalek 1926: 271}</p>
+<h3>Oyberland (West Transcarpathian)</h3>
+<p>Habts ka stickl waiße Saf fa mér af maj Tisch gefüne? האָבטס קיין שטיקל ווײַסע זייף פֿאַר מיר אויף מײַן טיש געפֿונען {WTCP, Frauenkirchen, Fleischer and Schäfer 2014: 8}</p>
+<p>gęhăpt געהאַבט {WTCP, Budapest, Hutterer 1965: 135, 146}<br />
+-   hot האָט<br />
+-   hote mon zi begrōbn האָט מען זי באַגראָבן</p>
+<p>håt (3rd p. sg.) {WTCP, SOUTHWESTERN HUNGARY, Garvin 1965: 97}</p>
+<p>hobn̥, hot (2nd p. pl.) {WTCP, SOUTH-CENTRAL HUNGARY, Garvin 1965: 100, 102}<br />
+-   əx hō איך האָב</p>
+<p>hot (3rd p. sg.) {WTCP, NORTHWESTERN HUNGARIAN, Garvin 1965: 104}<br />
+-   ax håb איך האָב</p>
+<p>hobn̥ (3rd p. pl.) {WTCP, NORTHEASTERN HUNGARIAN, Garvin 1965: 107}<br />
+-   hot (3rd p. sg.)</p>
+<p>voˑs vilstə hoˑb͡m̩ fyn øm וואָס ווילסטו האָבן פֿון אים {WTCP, Dunajská Streda, 47179}<br />
+-   iᵊx vilʲ hob͡m daz zø zɔ́lʲn ɛsn איך וויל האָבן דאָס זיי זאָלן עסן <br />
+-   cɩgarɛ́tləx hɔ́mɔzɔx əláː gəmaxt ציגאַרעטלעך האָבן מיר זיך אַליין געמאַכט<br />
+-   dɛ́mòˑlc hɔmər əzɔ́j gəmaxt דעמאָלטס האָבן מיר אַזוי געמאַכט<br />
+-   ync hɔ́mərəs nɩ̀š gənýct אונדז האָבן מיר עס נישט גענוצט</p>
+<h2>CENTRAL</h2>
+<p>Es hört bald üf zu ſchneien, da werden wir ſchain Wetter haan. עס הערט באַלד אויף צו שנייען, דאַ ווערדען וויר שיין וועטער האַן {POLAND, Kobyla Góra, Wenkerbogen 09746 Kobylagora (dated 1881); Fleischer and Schäfer 2014: 29}<br />
+Hat ez nischt für mir an Stückel waaßer Saif auf man Tisch gefünnen? האָט עץ נישט פֿאַר מיר אַן שטיקל ווײַסער זייף אויף מײַן טיש געפֿונען {POLAND, Kobyl Góra, Fleischer and Schäfer 2014: 8}</p>
+<h3>Unterland (East Transcarpathian)</h3>
+<p>incomər gəhát ə mešuːrəs אונדז האָבן מיר געהאַט אַ משרת {ETCPN, Sîg Felső Szek, 47223}<br />
+-   majn mamə flejgci hubm əzɔ́lxə houbm מײַן מאַמע פֿלעג צו האָבן אַזאָלכע הויבן<br />
+-   zɩ hɔt nɩš gəhat kan klʲaːdər זי האָט נישט געהאַט קיין קליידער<br />
+-   zɔstúbm זאָלסט האָבן</p>
+<p>zot niš gat ka kʎajdɛ זי האָט נישט געהאַט קיין קליידער {POLAND, Wolbrom, 50196}<br />
+-   xɔ ništ ka bʀojt cɩm ɛsn כ'האָב נישט קיין ברויט צום עסן<br />
+-   xvoɫt mojʀɩ gat / gʰat כ'וואָלט מורא געהאַט<br />
+-   gát gɩgɛ́sn געהאַט געגעסן<br />
+-   g'át געהאַט<br />
+-   ![][gat]<br />
+-   mɔməˢnɩš gənɪ́ct מיר האָבן עס נישט געניצט<br />
+-   ɩfɫ ɔstə bacuˑlt dəfáˑ וויפֿל האָסטו באַצאָלט דערפֿאַר<br />
+-   ɩn vɩfɫ ɔstíˑ b. d.? און וויפֿל האָסטו באַצאָלט דערפֿאַר<br />
+-   os gʲɩniˑgʲ gɩgɛsn̩? האָסט גענוג געגעסן</p>
+<p>אָמאָ (מיר האָבן) {Warsaw, Hoffman,  (2007) שליסל צו ייִדיש, p. 429}<br />
+[hɔs] האָסט {Warsaw, Geller 2001: 72}<br />
+-   ᵻn aɬ-ɔm giɛhiɲg'iɛt און אַלע האָבן געהונגערט {p. 163}<br />
+-   ᵻx-ɔm nᵻʃ giɛlᵻtn aɬɛs jidiʃɛ איך האָב נישט געליטן אַלעס ייִדישע {p. 163}<br />
+-   kartɔfɬ ɔt-mɛ nᵻʃ gᵻxat קאַרטאָפֿל האָט מען נישט געהאַט {p. 167}<br />
+-   dᵻ kɔɬdrɛ, vɔ-xɔ-nɔx gᵻxat fᵻn varʃɛ די קאָלדרע, וואָס איך האָב נאָך געהאַט פֿון וואַרשע {p. 167}<br />
+-   nɔ-r-azɔj, v-ɛ-t gat tsi fᵻl, ᵻn tsi fᵻl tur-mɛ ɔːx nᵻʃ't-ubm נאָר אַזוי ווי ער האָט געהאַט צו פֿיל, און צו פֿיל טאָר מען אויך נישט האָבן {p. 173}<br />
+-   tsɛ andɛr ɔt-ɔ nᵻʃ' gat ka tsitrɔː צו אַנדערע האָט ער נישט געהאַט קיין צוטרוי {p. 173}<br />
+-   m-ɔt aːãgiɛʃ'pant a kiː, vu-si-jɛt gɛxat מע האָט אײַנגעשפּאַנט אַ קו, וואָס זי האָט געהאַט {p. 175}<br />
+-   xɔ gat zɛjɛ a sax ɬaːɬᵻxɛ איך האָב געהאַט זייער אַ סך לײַלעכער {p. 179}<br />
+-   ɛr-ɔt nᵻʃ' gaxat ka tsaːt tsɛ xarn ער האָט נישט געהאַט קיין צײַט צו האַרן {p. 185}<br />
+-   dɔrt-numᵻ-zɛ gᵻxat ɛpᵻs דאָרטן האָבן זיי געהאַט עפּעס {p. 209}<br />
+-   ɛx-ɔ gat-a bridɛ-ra kɔmunist איך האָב געהאַט אַ ברודער אַ קאָמוניסט {p. 211}<br />
+-   as xɔj-gɛat אַז איך האָב געהאַט {p. 227}<br />
+-   jɛ-xɔj gat איך האָב געהאַט {p. 245}<br />
+-   xa-ʃᵻ giɛxat tsvaj kindɛ איך האָב שוין געהאַט צוויי קינדער {p. 251}<br />
+-   x-ɛɬ arajn tsum s'uns'a-t, ɛ... s'uns'a-t ʃɔj nᵻʃ hum vus tsᵻ zugn איך וועל אַרײַן צום סונסיאַד, ע... סונסיאַד וועט שוין נישט האָבן וואָס צו זאָגן {p. 337}<br />
+-   naxɛ jɛx-ɔb xasᵻnɛ giɛhat, ᵻn gat dɔs ajgiɛnɛ נאַכער איך האָב חתונה געהאַט, און געהאַט דאָס אייגענע {p. 339}<br />
+hǫd īəᴿ kąin šdigə̥l w̥ąisə sąif fəʀ (..) mīəᴿ auf maĩn tiš gəfĩnən? האָט איר קיין שטיקל ווײַסע זייף פֿאַר (..) מיר אויף מײַן טיש געפֿונען {POLAND, Warsaw, Fleischer and Schäfer 2014: 8}<br />
+mrob͡m̩ / məromə gəgesn ɩn də sɩkə מיר האָבן געגעסן אין די סוכּה {POLAND, Warsaw, 52211}</p>
+<video controls src="https://archive.org/download/FilmLexicon/Dzigan-IkhHobImGezogt-MisterPrezidentIkhGebnDirMaynVortAzMirVelnDirOpgebnVenMirVelnHobn.mp4"></video>
+<p>VIDEO Shimon Dzigan [Łódź, Poland]<br />
+ˈhubm̩<br />
+איך האָב אים געזאָגט: מיסטער פּרעזידענט, איך גיב דיר מײַן וואָרט, אַז מיר וועלן דיר אָפּגעבן ווען מיר וועלן האָבן.</p>
+<p>gəhāt 'gehabt' {ETCP, Beranek 1941}</p>
+<p>hubm {ETCP, Nyzhnya Apsha, 48233}<br />
+-   zə ɔt nɩš gʲəhat kɩŋ klajdər זי האָט נישט געהאַט קיין קליידער</p>
+<h2>HASIDIC</h2>
+<h3>AMERICA</h3>
+<p>ˈhub͡m̥<br />
+daf mən jɔ ˈhub͡m̩ דאַרף מען יאָ האָבן<br />
+hɔc a ˈbɩsl̩ gəˈdɪld̥ האָטס אַ ביסל געדולד<br />
+hɔc ˈsajxl̩ האָטס שׂכל</p>
+<h3>ISRAEL</h3>
+<p>ɛm cɩ hɔbən ɔf a dinɛʀ אים צו האָבן אויף אַ דינער [Bnei Brak, Eli Benedict (Karlin)]</p>
+<h2>NORTHEASTERN</h2>
+<p 457="457" _1951_:="(1951):" _אונדזער="&quot;אונדזער" ייִדיש_="ייִדיש&quot;" ליטווישער="ליטווישער" מאַרק_="מאַרק,">איך האָב געשלאָפן (ניט איך בין געשלאָפן) , דער ביים האָט געוואַקסן, דער פּריץ האָט געריטן. ביי תּלמידים אין די העפטן פלעג איך טרעפן ווילקאָמיר און אין קאָוונע זייער אָפט אויך: איך האָב געגאַנגען, האָב געפאָרן, האָב געבליבן א"א, און דאָס זײַנען געווען חברה וואָס האָבן קיין ענגליש ניט געקענט און וואָס זייער יידיש איז געווען קערנדיק און באַטירלעך, אויף אונדז אַלעמען געזאָגט געוואָרן. בכן, איז דאָס פאַרבייטן דעם הילפסווערב "זײַן" דורך "האָבן" — אַ לעבעדיקער פּראָצעס אין אונדזערע מקומות.<br /></p>
+<h3>Lithuania</h3>
+<p>xob איך האָב {LITHUANIA, Vilnius, 54257}<br />
+-   ale bm máskɩm gɩvɛ́n c̀u kúmɛn אַלע האָבן מסכּים געווען צו קומען</p>
+<h3>ISRAEL</h3>
+<p>ci ubm צו האָבן [Bnei Brak, Eli Benedict (Karlin)]</p>
+<p>obm {Assouline 2017: 38}<br />
+obm, ot<br />
+zey obn gezogt זיי האָבן געזאָגט {JERUSALEMITE, Assouline 2017: 32}</p>
+<p>ale obm šix אַלע האָבן שיך</p>
+<p>di ost geat ale efšaruyót דו האָסט געהאַט אַלע אפֿשריות 'you had all possible options' {HASIDIC, Assouline 2017: 134}</p>
+<h2>SOUTHEASTERN</h2>
+<p>ex vet mojrɩ gʲəhɔ́t איך וואָלט מורא געהאַט {ROMANIA, Brăila, 45273}</p>
+</div>
+
+</main>
+<footer>
+  Yiddish Dialect Dictionary &nbsp;·&nbsp; 10,034 entries
+</footer>
+<script>const BASE_URL = '/Yiddish-Dialect-Dictionary';</script>
+<script>
+(function() {
+  let index = null;
+  const input = document.getElementById('search-input');
+  const results = document.getElementById('search-results');
+  if (!input) return;
+
+  async function loadIndex() {
+    if (index) return;
+    try {
+      const r = await fetch(BASE_URL + '/search-index.json');
+      index = await r.json();
+    } catch(e) { console.error('Could not load search index', e); }
+  }
+
+  function search(q) {
+    q = q.trim().toLowerCase();
+    if (!q || !index) return [];
+    return index
+      .filter(e =>
+        e.hw.toLowerCase().includes(q) ||
+        (e.gl && e.gl.toLowerCase().includes(q))
+      )
+      .slice(0, 20);
+  }
+
+  function renderResults(items, q) {
+    if (!items.length) {
+      results.innerHTML = '<div class="search-no-results">No results found.</div>';
+      results.classList.add('show');
+      return;
+    }
+    results.innerHTML = items.map(e => `
+      <a class="search-result-item" href="${e.url}">
+        <span class="search-result-hw">${e.hw}</span>
+        ${e.gl ? `<span class="search-result-gloss">'${e.gl}'</span>` : ''}
+      </a>`).join('');
+    results.classList.add('show');
+  }
+
+  let timer;
+  input.addEventListener('input', async () => {
+    clearTimeout(timer);
+    const q = input.value;
+    if (!q.trim()) { results.classList.remove('show'); return; }
+    await loadIndex();
+    timer = setTimeout(() => renderResults(search(q), q), 120);
+  });
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.header-search')) results.classList.remove('show');
+  });
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { results.classList.remove('show'); input.blur(); }
+  });
+})();
+</script>
+</body>
+</html>
